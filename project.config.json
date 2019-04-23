@@ -1,0 +1,71 @@
+{
+	"miniprogramRoot": "dist/",
+	"compileType": "miniprogram",
+	"setting": {
+		"newFeature": true,
+		"urlCheck": true,
+		"es6": false,
+		"postcss": true,
+		"minified": false,
+		"autoAudits": false
+	},
+	"appid": "wxe1ba157318c5ca8d",
+	"projectname": "%E8%81%9A%E4%BA%AB%E6%97%B6%E7%A9%BA",
+	"description": "A mpx project",
+	"simulatorType": "wechat",
+	"simulatorPluginLibVersion": {},
+	"condition": {
+		"search": {
+			"current": -1,
+			"list": []
+		},
+		"conversation": {
+			"current": -1,
+			"list": []
+		},
+		"plugin": {
+			"current": -1,
+			"list": []
+		},
+		"game": {
+			"list": []
+		},
+		"miniprogram": {
+			"current": 4,
+			"list": [
+				{
+					"id": -1,
+					"name": "home部分",
+					"pathName": "pages/home",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "publish",
+					"pathName": "pages/publish",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "企业发布",
+					"pathName": "pages/comPublish",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "需求发布详情",
+					"pathName": "pages/supportDetail",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "地区选择",
+					"pathName": "pages/chooseProvince",
+					"scene": null
+				}
+			]
+		}
+	}
+}

@@ -1,0 +1,57 @@
+<script>
+  // app.js
+  import mpx from '@mpxjs/core'
+  App({})
+</script>
+
+<style>
+   @import "../src/style/icon.wxss";
+   @import "../src/style/main.wxss";
+</style>
+
+<script type="application/json">
+  {
+    "pages": [
+      "./pages/index",
+      "./pages/publish",
+      "./pages/home",
+      "./pages/pubId",
+      "./pages/comPublish",
+      "./pages/supportDetail",
+      "./pages/chooseProvince"
+    ],
+    "window": {
+      "backgroundTextStyle": "light",
+      "navigationBarBackgroundColor": "#fff",
+      "navigationBarTitleText": "聚享时空",
+      "navigationBarTextStyle": "black"
+    },
+    "tabBar": {
+      "color": "#cccccc",
+      "borderStyle": "black",
+      "backgroundColor": "#ffffff",
+      "selectedColor": "#48CFE7",
+      "list": [
+        {
+          "pagePath": "pages/index",
+          "text": "主页",
+          "iconPath": "../src/images/主页  拷贝.png",
+          "selectedIconPath": "../src/images/主页 .png"
+        },
+        {
+          "pagePath": "pages/publish",
+          "text": "发布",
+          "iconPath": "../src/images/发布 .png",
+          "selectedIconPath": "../src/images/发布 .png"
+        },
+        {
+          "pagePath": "pages/home",
+          "text": "我的",
+          "iconPath": "../src/images/我的 (1).png",
+          "selectedIconPath": "../src/images/我的 (1) 拷贝.png"
+        }
+      ]
+    }
+    
+  }
+</script>

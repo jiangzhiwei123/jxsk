@@ -1,0 +1,113 @@
+<template>
+  <view class="comPublish">
+      <view class="list">
+            <navigator url="../pages/supportDetail" hover-class="navigator-hover">
+                <view class="support">
+                    <image src="../images/发布单子icon.png"></image>
+                    <view class="text">
+                        <view class="textTop">发布赞助需求</view>
+                        <view class="textBot">活动赞助、资金赞助等</view>
+                    </view>
+                    <image class="icon" src="../images/下拉按钮(公告）.png"></image>
+                </view>
+            </navigator>
+        <view class="support">
+            <image src="../images/发布单子icon.png"></image>
+            <view class="text">
+                <view class="textTop">发布单子需求</view>
+                <view class="textBot">APP注册单量等</view>
+            </view>
+            <image class="icon" src="../images/下拉按钮(公告）.png"></image>
+        </view>
+        <view class="support">
+            <image src="../images/发布单子icon.png"></image>
+            <view class="text">
+                <view class="textTop">发布活动需求</view>
+                <view class="textBot">承办校园活动等</view>
+            </view>
+            <image class="icon" src="../images/下拉按钮(公告）.png"></image>
+        </view>
+        <view class="support">
+            <image src="../images/发布单子icon.png"></image>
+            <view class="text">
+                <view class="textTop">其他需求</view>
+                <view class="textBot">提供优质服务</view>
+            </view>
+            <image class="icon" src="../images/下拉按钮(公告）.png"></image>
+        </view>
+      </view>
+  </view>
+</template>
+
+<script>
+  import { createPage } from '@mpxjs/core'
+
+  createPage({
+    data:{
+      check:true
+    },
+    methods: {
+    }
+  })
+</script>
+<style lang="less" scoped>
+  .comPublish{
+      width:750rpx;
+      height:1200rpx;
+      background: #f0f2f5;
+      padding-top: 20rpx;
+      .list{
+          width: 717rpx;
+          height: 444rpx;
+          margin:0 auto;
+          background: white;
+          padding: 0 17rpx;
+          border-radius: 10rpx;
+        .support{
+          display: flex;
+          padding-top:21rpx;
+          padding-bottom:21rpx;
+          border-bottom:1rpx solid #F0F0F0;
+          image{
+              width: 68rpx;
+              height: 68rpx;
+          }
+          .text{
+              flex:1;
+              margin-left: 20rpx;
+              display: flex;
+              flex-direction: column;
+              .textTop{
+                  font-size: 28rpx;
+                  color:#46595C;
+                  margin-bottom: 3rpx;
+              }
+              .textBot{
+                  font-size: 22rpx;
+                  color:#A7BABD;
+              }
+          }
+          .icon{
+              text-align: right;
+              width: 12rpx;
+              height: 20rpx;
+              border-radius: 2rpx;
+              margin:auto 20rpx;
+            //   line-height: 114rpx;
+          }
+        }
+      }
+  }
+</style>
+
+<script type="application/json">
+  {
+    "usingComponents": {
+      
+    },
+    "navigationBarTitleText": "请选择发布的类型",
+    "navigationBarBackgroundColor":"#48CFE7",
+    "navigationBarTextStyle":"white"
+  }
+  
+</script>

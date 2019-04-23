@@ -1,0 +1,293 @@
+<template>
+    <view class="detail">
+        <view class="content">
+            <!-- title部分 -->
+            <view class="title">
+                <image src="../images/发布单子icon.png"></image>
+                <view class="text">
+                    <view class="textTop">发布赞助需求</view>
+                    <view class="textBot">活动赞助、资金赞助等</view>
+                </view>
+                <!-- 查看范例 -->
+                <view class="look">查看案例</view>
+            </view>
+            <!-- 标题表单 -->
+            <view class="inputText">
+                 <input class="biaoti" type="text" placeholder="请输入合作标题" placeholder-style="font-size:28rpx;color:#A7BABD;">
+            </view>
+            <!-- 合作区域 -->
+            <navigator url="../pages/chooseProvince" hover-class="navigator-hover">
+                <view class="address">
+                    <view>合作区域</view>
+                    <image class="icon" src="../images/下拉按钮(公告）.png"></image>
+                </view>
+            </navigator>
+            <!-- 具体范围 -->
+            <view class="address" bindtap="iconClick">
+                <view class="{{isRotate?'on':''}}">具体范围</view>
+                <view class="icon {{isRotate?'showRotate':''}}"></view>
+            </view> 
+            <view class="{{isRotate?'show':'hide'}}">
+                <view class="pullCon">
+                    <checkbox-group>
+                        <label class="checkbox" wx:for="{{items}}" wx:key="{{index}}">
+                            <checkbox value="{{item.name}}" checked="{{item.checked}}" />
+                            {{item.value}}
+                        </label>
+                    </checkbox-group>
+                </view>
+            </view>
+            <!-- 需求资源说明 -->
+            <view class="explain">
+                <view class="inputTitle">需求资源说明</view>
+                <view class="inputAll">
+                    <view>  
+                        <input type="text" placeholder="1.需求资源描述:" placeholder-style="font-size:26rpx;color:#46595C;">
+                    </view>
+                    <view>
+                        <input type="text" placeholder="2.时间限制:" placeholder-style="font-size:26rpx;color:#46595C;">
+                    </view>
+                    <view>
+                        <input type="text" placeholder="3.学校限制:" placeholder-style="font-size:26rpx;color:#46595C;">
+                    </view>
+                    <view>
+                        <input type="text" placeholder="4.其他限制:" placeholder-style="font-size:26rpx;color:#46595C;">
+                    </view>
+                </view>
+            </view>
+            <!-- 资源图片选填 -->
+            <view class="imgUp">
+                <view class="inputTitle">资源图片(选填)</view>
+                <view class="imageBtn">
+                    <image src="../images/选择图片.png"></image>
+                </view>
+            </view>
+            <!-- 提供资源说明 -->
+             <view class="explain">
+                <view class="inputTitle">需求资源说明</view>
+                <view class="inputAll">
+                    <view>  
+                        <input type="text" placeholder="1.提供资源类型(资金或其他):" placeholder-style="font-size:26rpx;color:#46595C;">
+                    </view>
+                    <view>
+                        <input type="text" placeholder="2.其他补充:" placeholder-style="font-size:26rpx;color:#46595C;">
+                    </view>
+                </view>
+            </view>
+            <!-- 选择标签 -->
+            <view class="mack">
+                <view class="inputTitle">选择标签</view>
+                <view class="mackBox">
+                    <view class="{{index==markCurrent?'on':''}}" wx:for="{{4}}" wx:key="{{index}}" data-mack='{{index}}' bindtap='mackClick'>地下场地赞助</view>
+                </view>
+            </view>
+        </view>
+        <view class="publishBtn">保存并发布</view>
+    </view>
+</template>
+
+<script>
+  import { createPage } from '@mpxjs/core'
+
+  createPage({
+        data:{
+            markCurrent:Number,
+            isRotate:false,
+            isPull:false,
+            items:[
+                {name:'社会学校不限',value:'社会学校不限',checked:'true'},
+                {name:'仅限社会',value:'仅限社会'},
+                {name:'仅限学校',value:'仅限学校'}
+            ]
+        },
+        methods: {
+            iconClick(){
+                this.isRotate=!this.isRotate
+            },
+            mackClick(e){
+                this.markCurrent = e.target.dataset.mack
+            }
+        }
+  })
+</script>
+<style lang="less" scoped>
+    .inputTitle{
+        font-size: 30rpx;
+        color:#031316;
+        margin-bottom: 19rpx;
+    }
+  .detail{
+    background: #f0f2f5;
+    padding-top: 12rpx;
+    .content{
+        background: white;
+        width: 719rpx;
+        margin: 0 auto;
+        border-radius: 10rpx;
+        padding: 33rpx 26rpx;
+        box-sizing: border-box;
+        .title{
+          display: flex;
+          padding-bottom:21rpx;
+          border-bottom:1rpx solid #F0F0F0;
+          image{
+              width: 68rpx;
+              height: 68rpx;
+          }
+          .text{
+              flex:1;
+              margin-left: 20rpx;
+              display: flex;
+              flex-direction: column;
+              .textTop{
+                  font-size: 28rpx;
+                  color:#46595C;
+                  margin-bottom: 3rpx;
+              }
+              .textBot{
+                  font-size: 22rpx;
+                  color:#A7BABD;
+              }
+          }
+          .look{
+              font-size: 22rpx;
+              color:#6D8B91;
+              margin:auto 20rpx;;
+          }
+        }
+        .inputText{
+            .biaoti{
+            height: 90rpx;
+            padding:32rpx 0;
+            box-sizing: border-box;
+            border-bottom:1rpx solid #F0F0F0;
+        }  
+        }  
+        .address{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding:32rpx 10rpx 32rpx 0;
+            height: 90rpx;
+            border-bottom:1rpx solid #F0F0F0;
+            font-size: 30rpx;
+            color:#031316;
+            view{
+                &.on{
+                    color: #48CFE7;
+                }
+            }
+            .icon{
+              text-align: right;
+              width: 12rpx;
+              height: 23rpx;
+              background-image: url("../images/下拉按钮(公告）.png");
+              background-size: 100% 100%;
+            //   margin-right: 20rpx;
+              &.showRotate{
+                width: 23rpx;
+                height: 12rpx;
+                background-image: url("../images/下拉按钮 拷贝 3.png");
+              }
+            }
+        }
+        .explain{
+            padding-top: 30rpx;
+           .inputAll{
+               padding:20rpx 30rpx;
+               background: #F0F3F3;
+               border-radius: 10rpx;
+               width: 670rpx;
+               box-sizing: border-box;
+               margin-bottom: 20rpx;
+           }
+        }
+        .imgUp{
+            padding-bottom: 33rpx;
+            border-bottom:1rpx solid #F0F0F0;
+            .imageBtn{
+                width: 204rpx;
+                height: 204rpx;
+                box-sizing: border-box;
+                padding:75rpx;
+                background: #F0F3F3;
+                image{
+                    width: 54rpx;
+                    height:54rpx;
+                }
+            }
+        }
+        .mack{
+            .mackBox{
+                display: flex;
+                flex-wrap: wrap;
+                view{
+                    width: 177rpx;
+                    height: 42rpx;
+                    line-height: 42rpx;
+                    text-align: center;
+                    background: #F0F3F3;
+                    color:#A7BABD;
+                    font-size: 24rpx;
+                    margin-right: 30rpx;
+                    margin-bottom: 20rpx;
+                }
+                .on{
+                    color:white;
+                    background: #48CFE7;
+                }
+            }
+        }
+        .show{
+            z-index: 999;
+            width: 719rpx;
+            height: 1270rpx;
+            padding:42rpx;
+            position: absolute;
+            top:407rpx;
+            left: 16rpx;
+            background: white;
+            .pullCon{
+                height: 454rpx;
+                checkbox-group{
+                    display: flex;
+                    flex-direction: column;
+                    .checkbox{
+                        margin-bottom: 60rpx;
+                        font-size: 26rpx;
+                        color:#031316;
+                    }
+                    .checkbox .wx-checkbox-input{
+                        height: 26rpx;
+                        width: 26rpx;
+                    }
+                }
+            }
+        }
+        .hide{
+            display: none;
+        }
+    }
+    .publishBtn{
+        width: 700rpx;
+        height: 90rpx;
+        line-height: 90rpx;
+        text-align: center;
+        color: white;
+        font-size: 34rpx;
+        border-radius: 44rpx;
+        background: #48CFE7;
+        margin: 30rpx auto 30rpx;
+    }
+  }
+</style>
+
+<script type="application/json">
+  {
+    "usingComponents": {
+    },
+    "navigationBarTitleText": "发布赞助需求",
+    "navigationBarBackgroundColor":"#48CFE7",
+    "navigationBarTextStyle":"white"
+  }
+</script>

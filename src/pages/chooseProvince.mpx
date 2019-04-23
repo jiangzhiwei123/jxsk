@@ -1,0 +1,30 @@
+<template>
+  <province></province>
+</template>
+
+<script>
+import { createPage } from "@mpxjs/core";
+
+
+createPage({
+  data: {
+    check: true
+  }
+});
+</script>
+<style lang="less" scoped>
+</style>
+
+<script type="application/json">
+  {
+    "usingComponents": {  
+      "province":"../components/province"
+    },
+    "navigationBarTitleText": "地区选择",
+    "navigationBarBackgroundColor":"#48CFE7",
+    "navigationBarTextStyle":"white"
+  }
+    
+  
+</script>
+

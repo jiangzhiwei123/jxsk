@@ -1,0 +1,139 @@
+<template>
+  <view class="identity">
+    <!-- title部分 -->
+    <view class="title">请选择用户身份</view>
+    <view class="imgId">
+      <view class="imgPart">
+        <image src="../images/企业未选中状态 .png"></image>
+        <view id="text" bindtap="isClick" data-target="DialogModal" wx:class="{{ {on:current=='0'} }}" data-current='0'>我是企业</view>
+      </view>
+      <view class="imgPart">
+        <image src="../images/学生未选中状态.png"></image>
+        <view id="text" bindtap="isClick" wx:class="{{ {on:current=='1'} }}" data-current='1' data-target="DialogModal">我是学生</view>
+      </view >
+    </view>
+    <view class="cu-modal {{modalName=='DialogModal'?'show':''}}">
+      <view class="cu-dialog" style="width:505rpx;height:291rpx;">
+        <view class="cu-bar">
+          <view class="content" style="color:#46595C;font-weight: bold;">重要提示</view>
+        </view>
+        <view  style="color:#A7BABD;padding-bottom:80rpx;">
+          选中身份以后不能更改
+        </view>
+        <view class="button" style="height:74rpx;">
+          <view bindtap="hideModal" style="padding-top:16rpx;">取消</view>
+          <view bindtap="hideModal" style="padding-top:16rpx;">
+          <navigator
+            url="../pages/comPublish"
+            hover-class="navigator-hover"
+            >
+            确定
+          </navigator>
+          </view>
+        </view>
+      </view>
+      
+    </view>
+  </view>
+</template>
+
+<script>
+  import { createPage } from '@mpxjs/core'
+
+  createPage({
+    onLoad () {
+    },
+    data:{
+      current:Number,
+      imgIndex:null,
+      urlQi:"../images/企业未选中状态 .png",
+      clickUrlQi:"../images/企业选中状态.png",
+      urlSt:"../images/学生未选中状态.png",
+      clickUrlSt:"../images/学生选中状态 .png",
+      modalName:null
+      // url:"../images/学生未选中状态.png",
+      // hoverUrl:"../images/学生选中状态 .png"
+    },
+    methods: {
+      isClick(e){
+        
+          this.current = e.target.dataset.current;
+          this.modalName = e.currentTarget.dataset.target;
+          
+      },
+      hideModal(e) {
+         this.modalName = null
+      }
+    }
+  })
+</script>
+<style lang="less" scoped>
+  .identity{
+    padding: 129rpx 74rpx 0;
+    background: white;
+    height: 1112rpx;
+    .title{
+      font-size: 40rpx;
+      color:#48CFE7;
+      margin-left: 173rpx;
+      margin-bottom: 171rpx;
+    }
+    .imgId{
+      display: flex;
+        .imgPart{
+          flex:1;
+          display: flex;
+          flex-direction: column;
+          text-align: center;
+          image{
+            flex:1;
+            width: 262rpx;
+            height: 262rpx;
+            border-radius: 50%;
+            margin-bottom: 43rpx;
+          }
+          #text{
+            width: 202rpx;
+            height: 58rpx;
+            line-height: 58rpx;
+            text-align: center;
+            border-radius: 29rpx;
+            border: 1rpx solid #A7BABD;
+            color:#A7BABD;
+            margin-left:30rpx;
+            &.on{
+              color:white;
+              background: #48CFE7;
+              border: 1rpx solid #48CFE7;
+            }
+          }
+        }
+        .imgPart:nth-child(1){
+          margin-right: 68rpx;
+        }
+        
+      
+    }
+    .button{
+      display: flex;
+      view{
+        flex:1;
+        border-top:1px solid #E1E1E1;
+        &:nth-of-type(1){
+          border-right: 1rpx solid #E1E1E1;
+        }
+      }
+    } 
+  }
+</style>
+
+<script type="application/json">
+  {
+    "usingComponents": {
+      "list": "../components/list"
+    },
+    "navigationBarTitleText": "发布",
+    "navigationBarBackgroundColor":"#48CFE7",
+    "navigationBarTextStyle":"white"
+  }
+</script>
