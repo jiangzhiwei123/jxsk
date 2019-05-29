@@ -1,12 +1,39 @@
 <script>
   // app.js
   import mpx from '@mpxjs/core'
-  App({})
+  import store from '../src/store/general.js'
+  import promisify from '@mpxjs/promisify'
+
+  mpx.use(promisify)
+  mpx.createApp({
+    globalData: {
+      useridLength: false,
+      passwdLength: false,
+      wxLength: false,
+      tokenKey: '',
+      // 域名
+      realm: 'https://jxsk.juhi8.com'
+      // realm: 'http://47.101.56.46:8080'
+      // realm:'http://192.168.1.40:8080'
+    },
+    async onLaunch() {
+      const updateManager = wx.getUpdateManager()
+      updateManager.onCheckForUpdate(function (res) {
+        console.log('更新信息：', res)
+      })
+      updateManager.onUpdateReady(function () {
+        updateManager.applyUpdate()
+      })
+    },
+    computed: {
+      // ...store.mapState(["userType"])
+    }
+  })
 </script>
 
 <style>
-   @import "../src/style/icon.wxss";
-   @import "../src/style/main.wxss";
+  @import "../src/style/icon.wxss";
+  @import "../src/style/main.wxss";
 </style>
 
 <script type="application/json">
@@ -15,10 +42,19 @@
       "./pages/index",
       "./pages/publish",
       "./pages/home",
-      "./pages/pubId",
       "./pages/comPublish",
       "./pages/supportDetail",
-      "./pages/chooseProvince"
+      "./pages/chooseProvince",
+      "./pages/imformation",
+      "./pages/add",
+      "./pages/collect",
+      "./pages/service",
+      "./pages/cropper",
+      "./pages/login",
+      "./pages/identify",
+      "./pages/getPhone",
+      "./pages/task",
+      "./pages/regist"
     ],
     "window": {
       "backgroundTextStyle": "light",
@@ -52,6 +88,6 @@
         }
       ]
     }
-    
   }
+
 </script>

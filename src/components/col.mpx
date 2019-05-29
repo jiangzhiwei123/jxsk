@@ -1,0 +1,154 @@
+<template>
+    <view class="listBox">
+        <view class="list">
+          <!-- 头像 -->
+          <view class="userImg" style="width:74rpx;height:74rpx;border-radius:50%;"></view>
+          <view class="text">
+            <view class="title">【赞助】提供各种充场，寻沙龙峰会及各种嘞活动</view>
+            <view class="information">
+              <!-- 认证图片 -->
+              <image src="../images/认证(1).png" style="width:92rpx;height:28rpx;"></image>
+              <!-- 姓名 省份 日期 -->
+              <view class="person">
+                <view class="name">张三</view>
+                <view class="province">广东省</view>
+                <view class="time">04月11日</view>
+              </view>
+            </view>
+            <!-- 地址部分 -->
+            <view class="address">
+              <view>线下场地赞助</view>
+              <view>线下场地赞助</view>
+              <view>线下场地赞助</view>
+              <view>线下场地赞助</view>
+            </view>
+            <!-- 评论收藏部分 -->
+            <view class="collect">
+              <image style="width:37rpx;height:28rpx;" src="../images/浏览1(1).png" mode="widthFix"></image>
+              <view>400</view>
+              <image style="width:28rpx;height:28rpx;" src="../images/未选中收藏 (1).png" mode="widthFix"></image>
+              <view>收藏</view>
+            </view>
+          </view>
+        </view>
+        <view class="list">
+          <!-- 头像 -->
+          <view class="userImg" style="width:74rpx;height:74rpx;border-radius:50%;"></view>
+          <view class="text">
+            <view class="title">【赞助】提供各种充场，寻沙龙峰会及各种嘞活动</view>
+            <view class="information">
+              <!-- 认证图片 -->
+              <image src="../images/认证(1).png" style="width:92rpx;height:28rpx;"></image>
+              <!-- 姓名 省份 日期 -->
+              <view class="person">
+                <view class="name">张三</view>
+                <view class="province">广东省</view>
+                <view class="time">04月11日</view>
+              </view>
+            </view>
+            <!-- 地址部分 -->
+            <view class="address">
+              <view>线下场地赞助</view>
+              <view>线下场地赞助</view>
+              <view>线下场地赞助</view>
+              <view>线下场地赞助</view>
+            </view>
+            <!-- 评论收藏部分 -->
+            <view class="collect">
+              <image style="width:37rpx;height:28rpx;" src="../images/浏览1(1).png" mode="widthFix"></image>
+              <view>400</view>
+              <image style="width:28rpx;height:28rpx;" src="../images/未选中收藏 (1).png" mode="widthFix"></image>
+              <view>收藏</view>
+            </view>
+          </view>
+        </view>
+    </view>
+</template>
+
+<script>
+  import { createComponent } from '@mpxjs/core'
+
+  createComponent({
+    data:{
+    }
+  })
+</script>
+<style lang="less" scoped>
+   .listBox{
+      .list{
+        margin: 0 auto;
+        width: 718rpx;
+        background: white;
+        margin-top: 14rpx;
+        padding: 30rpx 27rpx 20rpx;
+        box-sizing: border-box;
+        display: flex;
+        .userImg{
+          margin-right: 21rpx;
+          background-image: url("../images/头像.jpg");
+          background-size: 100% 100%;
+        }
+        .text{
+          flex:1;
+          .title{
+            font-size: 28rpx;
+            color:#031316;
+            margin-bottom: 14rpx;
+          }
+          .information{
+            font-size: 20rpx;
+            color:#A7BABD;
+            display: flex;
+            margin-bottom: 20rpx;
+            image{
+              margin-right: 14rpx;
+            }
+            .person{
+              flex:1;
+              display: flex;
+              .name{
+                margin-right: 17rpx;
+              }
+              .province{
+                margin-right: 20rpx;
+              }
+            }
+            
+          }
+          .address{
+            display: flex;
+            flex-wrap: wrap;
+            view{
+              width: 178rpx;
+              height: 45rpx;
+              padding: 9rpx 16rpx 10rpx 19rpx;
+              box-sizing: border-box;
+              background:#F0F3F3;
+              color:#A7BABD;
+              font-size: 24rpx;
+              margin-right: 13rpx;
+              margin-bottom: 20rpx;
+            }
+          }
+          .collect{
+            display: flex;
+            align-items: center;
+            image{
+              margin-right: 16rpx;
+            }
+            view{
+              font-size: 20rpx;
+              margin-right: 32rpx;
+            }
+          }
+        }
+      }
+    }
+</style>
+
+<script type="application/json">
+  {
+    "usingComponents": { }
+  }
+  
+</script>

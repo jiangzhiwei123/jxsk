@@ -1,0 +1,60 @@
+<template>
+    <button open-type="getUserInfo" lang="zh_CN" bindgetuserinfo="regist" class="btn" style="top:{{toTop}}px;">
+      注册
+    </button>
+</template>
+
+<script>
+  import { createPage } from '@mpxjs/core'
+  import store from '../store/general.js'
+  // import  from ''
+  var app = getApp();
+  
+  createPage({
+    data:{
+      toTop:''
+    },
+    methods: {
+      ...store.mapActions(['fetchRegist'])
+    },
+    computed: {
+      // ...store.mapState(['token'])
+    },
+    regist() {
+      this.fetchRegist()   
+      console.log(11111111111111111111)
+    },
+    onLoad(){
+      this.getSys()
+    },
+    getSys(){
+      wx.getSystemInfo({
+        success: res => {
+          console.log(res.screenHeight)
+          this.toTop = res.screenHeight*0.6
+        }
+      })
+    }
+  })
+</script>
+<style lang="less" scoped>
+  .btn{
+    color:white;
+    background:#48CFE7;
+    position:absolute;
+    width:80%;
+    left:10%;
+    margin:0 auto;
+  }
+</style>
+
+<script type="application/json">
+  {
+    "usingComponents": {  
+    },
+    "navigationBarTitleText": "注册页面",
+    "navigationBarBackgroundColor":"#48CFE7",
+    "navigationBarTextStyle":"white"
+  }
+  
+</script>

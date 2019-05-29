@@ -37,20 +37,26 @@
       </view>    
     </view>
     <!-- tabs部分 -->
-    <view class="tabs">
+    <view class="tabs stickyClass" id="affix">
       <view class="tabLeft">
-        <view wx:class="{{ {on:currentTab==0} }}" data-current='0' bindtap="navClick">全部</view>
-        <view wx:class="{{ {on:currentTab==1} }}" data-current='1' bindtap="navClick">企业资源</view>
-        <view wx:class="{{ {on:currentTab==2} }}" data-current='2' bindtap="navClick">校园资源</view>
-        <view wx:class="{{ {on:currentTab==3} }}" data-current='3' catchtap="navClick">地区</view>
+        <view class="tabTop">
+            <view wx:class="{{ {on:currentTab==0} }}" data-current='0' bindtap="navClick">全部</view>
+            <view wx:class="{{ {on:currentTab==1} }}" data-current='1' bindtap="navClick">企业资源</view>
+            <view wx:class="{{ {on:currentTab==2} }}" data-current='2' bindtap="navClick">校园资源</view>
+        </view>
+        <view bindtap="navClick" class="diqu">
+          <view bindtap="changeclick" class="{{isClick?'on':''}}">地区</view>
+          <view bindtap="changeclick" class="pic {{isClick?'active':''}}"></view>
+        </view>
       </view> 
     </view>
+    <!-- 省份部分 -->
+    <province class="{{isClick?'show':'hide'}}"></province>
     <!-- 列表部分 -->
-    <view class="listBox">
-      <scroll-view scroll-y  style="height: 640rpx;overflow:auto;">
-        <view class="list">
+    <view class="listBox" bindtap="jupmDetail">
+        <view class="list" wx:for="{{3}}" wx:key="{{3}}" >
           <!-- 头像 -->
-          <image class="userImg" src="../images/头像.jpg" style="width:74rpx;height:74rpx;border-radius:50%;"></image>
+          <view class="userImg" style="width:74rpx;height:74rpx;border-radius:50%;"></view>
           <view class="text">
             <view class="title">【赞助】提供各种充场，寻沙龙峰会及各种嘞活动</view>
             <view class="information">
@@ -79,69 +85,6 @@
             </view>
           </view>
         </view>
-        <view class="list">
-          <!-- 头像 -->
-          <image class="userImg" src="../images/头像.jpg" style="width:74rpx;height:74rpx;border-radius:50%;"></image>
-          <view class="text">
-            <view class="title">【赞助】提供各种充场，寻沙龙峰会及各种嘞活动</view>
-            <view class="information">
-              <!-- 认证图片 -->
-              <image src="../images/认证(1).png" style="width:92rpx;height:28rpx;"></image>
-              <!-- 姓名 省份 日期 -->
-              <view class="person">
-                <view class="name">张三</view>
-                <view class="province">广东省</view>
-                <view class="time">04月11日</view>
-              </view>
-            </view>
-            <!-- 地址部分 -->
-            <view class="address">
-              <view>线下场地赞助</view>
-              <view>线下场地赞助</view>
-              <view>线下场地赞助</view>
-              <view>线下场地赞助</view>
-            </view>
-            <!-- 评论收藏部分 -->
-            <view class="collect">
-              <image style="width:37rpx;height:28rpx;" src="../images/浏览1(1).png" mode="widthFix"></image>
-              <view>400</view>
-              <image style="width:28rpx;height:28rpx;" src="../images/未选中收藏 (1).png" mode="widthFix"></image>
-              <view>收藏</view>
-            </view>
-          </view>
-        </view>
-        <view class="list">
-          <!-- 头像 -->
-          <image class="userImg" src="../images/头像.jpg" style="width:74rpx;height:74rpx;border-radius:50%;"></image>
-          <view class="text">
-            <view class="title">【赞助】提供各种充场，寻沙龙峰会及各种嘞活动</view>
-            <view class="information">
-              <!-- 认证图片 -->
-              <image src="../images/认证(1).png" style="width:92rpx;height:28rpx;"></image>
-              <!-- 姓名 省份 日期 -->
-              <view class="person">
-                <view class="name">张三</view>
-                <view class="province">广东省</view>
-                <view class="time">04月11日</view>
-              </view>
-            </view>
-            <!-- 地址部分 -->
-            <view class="address">
-              <view>线下场地赞助</view>
-              <view>线下场地赞助</view>
-              <view>线下场地赞助</view>
-              <view>线下场地赞助</view>
-            </view>
-            <!-- 评论收藏部分 -->
-            <view class="collect">
-              <image style="width:37rpx;height:28rpx;" src="../images/浏览1(1).png" mode="widthFix"></image>
-              <view>400</view>
-              <image style="width:28rpx;height:28rpx;" src="../images/未选中收藏 (1).png" mode="widthFix"></image>
-              <view>收藏</view>
-            </view>
-          </view>
-        </view>
-      </scroll-view>
     </view>
   </view>
 </template>
@@ -151,7 +94,10 @@
 
   createComponent({
     data: {
-      currentTab:0
+      currentTab:0,
+      isClick:false,
+      menuFixed:false,
+      menuTop:Number
     },
     methods: {
       navClick(e){
@@ -161,14 +107,33 @@
         }else{
           this.currentTab=e.target.dataset.current
         }
-      }     
+      },
+      changeclick(){
+        this.isClick = !this.isClick
+        console.log(this.isClick)
+      },
+      jupmDetail(){
+        wx.navigateTo({
+          url: '../pages/task'
+        })
+      }
     }
+        
+      
   })
 </script>
 
 <style lang="less" scoped>
+  .stickyClass{
+      position: sticky;
+      top: 0; //当menu元素距离可视窗口顶部<0时，menu由static定位切换为fixed定位
+      z-index: 999;
+  }
   .page{
     background: #F2F5F5;
+    .hide{
+      display: none;
+    }
     .headerBox{
       background: #48CFE7;
       width: 100%;
@@ -275,12 +240,13 @@
           background-size: 100% 100%;
         }
       }
-    }
+    } 
+    .fixed{position: fixed; top: 0;left:16rpx;z-index: 999; }
     .tabs{
       background: white;
-      display: flex;
+      // display: flex;
       width: 720rpx;
-      height: 88rpx;
+      height: 98rpx;
       margin: 0 auto;
       font-size: 28rpx;
       margin-top: 10rpx;
@@ -289,26 +255,32 @@
       border-radius: 10rpx;
       .tabLeft{
         display: flex;
-        justify-content: center;
         // margin-right: 130rpx;
-        view{
-          margin-right: 53rpx;
-          padding-bottom: 45rpx;
-          &:nth-child(4){
-            margin-right: 0rpx;
-            margin-left: 140rpx;
-            font-size: 24rpx;
-            position: relative;
-            &::after{
-              content:"";
-              background-image: url("../images/下拉按钮(地区）.png");
-              width: 23rpx;
-              height: 12rpx;
+        .tabTop{
+          display: flex;
+          view{
+            margin-right: 52rpx;
+            padding-bottom: 15rpx;
+          }
+        }
+        .diqu{
+          display: flex;
+          align-items: center;
+          flex:1;
+          margin-left: 120rpx;
+          margin-top: -10rpx;
+          .pic{
+              width: 12rpx;
+              height: 23rpx;
+              background-image: url("../images/下拉按钮(公告）.png");
               background-size: 100% 100%;
-              position: absolute;
-              left: 60rpx;
-              top: 10rpx;
-            }
+              margin-left: 15rpx;
+              &.active{
+                width: 23rpx;
+                height: 12rpx;
+                background-image: url("../images/下拉按钮 拷贝 3.png");
+                background-size: 100% 100%;
+              }
           }
         }
       }
@@ -325,6 +297,8 @@
         box-sizing: border-box;
         display: flex;
         .userImg{
+          background-image: url("../images/头像.jpg");
+          background-size: 100% 100%;
           margin-right: 21rpx;
         }
         .text{
@@ -394,6 +368,8 @@
 
 <script type="application/json">
   {
-    "component": true
+   "usingComponents": {  
+      "province":"../components/province"
+    }
   }
 </script>

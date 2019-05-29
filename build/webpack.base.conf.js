@@ -10,10 +10,12 @@ var webpackConf = {
     rules: [
       {
         test: /\.mpx$/,
+        // https://didi.github.io/mpx/compilationEnhance/#mpxwebpackpluginloader
         use: MpxWebpackPlugin.loader({
           transRpx: {
-            mode: 'only',
-            comment: 'use rpx',
+            mode: 'all',
+            comment: 'use px',
+            designWidth: 750,
             include: resolve('src')
           }
         })

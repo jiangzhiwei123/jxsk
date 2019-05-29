@@ -1,0 +1,551 @@
+<template>
+    <view class="formdetail">
+        <!-- 表单部分 -->
+        <view class="formCon">
+            <form bindsubmit="formSubmit">
+                <!-- 头像部分 -->
+                <view class="imgtitle" bindtap="upImg">
+                    <view class="titleText">头像</view>
+                    <image src="{{userIcon}}" style="background-size:100% 100%;"></image>
+                    <view class="point"></view>
+                </view>
+                <!-- 姓名部分 -->
+                <view class="nameBox"  data-target="showName">
+                    <view class="titleText">姓名</view>
+                    <view class="text">
+                        <view class="inputName">
+                            <input type="text" placeholder="请输入姓名" placeholder-style="color:#6D8B91;font-size:28rpx;"  name='name'
+                            value="{{form.name}}" bindblur="submitUser"/>
+                        </view>
+                        <!-- <view class="point"></view> -->
+                    </view>
+                </view>
+                <!-- 弹出框部分 -->
+                <!-- <view class="cu-modal {{isShowInput?'show':''}}" style="z-index:9999;">
+                    <view class="cu-dialog" style="margin-top:-200rpx;width:600rpx;">
+                        <view class="cu-bar bg-white justify-end">
+                        <view class="content">{{showTitle}}</view>
+                        <view class="action" bindtap="hideModal">
+                            <text class="icon-close text-red"></text>
+                        </view>
+                        </view>
+                        <view class="padding-xl">
+                            <input type="text" style="background:white;border:1rpx solid #48CFE7;height:50rpx;" wx:ref="infoValue" bindinput="userNameInput" bindfocus="inputFocus" bindblur="inputBlur" id="userName" />
+                        </view>
+                        <view class="cu-bar bg-white justify-end">
+                        <view class="action">
+                            <button class="cu-btn line-blue text-blue" bindtap="hideModal">取消</button>
+                            <button class="cu-btn bg-blue margin-left" bindtap="hideModal">确定</button>
+                        </view>
+                        </view>
+                    </view>
+                </view> -->
+                <!-- upPhoto部分   -->
+                <view class="{{isShowPhoto?'show':'hide'}}" style="height:{{screenHeight}}px;">
+                    <view class="photoBtn">
+                        <!-- <view class="take" bindtap="pic">拍摄照片</view> -->
+                        <view class="select" bindtap="pic">选择照片</view>
+                    </view>
+                    <button style="background:white;color:#48CFE7;height:88rpx;width:718rpx;margin:0 auto;" bindtap="cancle">取消</button>
+                </view>
+                <!-- 手机号部分 -->
+                <view class="nameBox">
+                    <view class="titleText">手机号</view>
+                    <view class="text">
+                        <view class="inputName">
+                            <input type="text" placeholder="13100631972" placeholder-style="color:#6D8B91;font-size:28rpx;"  value="{{form.phone}}" bindblur="submitPhone" name="phone"/>
+                        </view>
+                    </view>
+                </view>
+                <!-- 微信号部分 -->
+                <view class="nameBox"  data-target="showWx">
+                    <view class="titleText">微信号部分</view>
+                    <view class="text">
+                        <view class="inputName">
+                            <input type="text" placeholder="请输入微信号" placeholder-style="color:#6D8B91;font-size:28rpx;" wx:ref="wxRef" name='wx'
+                            value="{{form.wx}}" bindblur="submitWx"/>
+                        </view>
+                        <!-- <view class="point"></view> -->
+                    </view>
+                </view>
+                <!-- QQ号部分 -->
+                <view class="nameBox"  data-target="showQQ">
+                    <view class="titleText">QQ号部分</view>
+                    <view class="text">
+                        <view class="inputName">
+                            <input type="digit" placeholder="请输入qq号" placeholder-style="color:#6D8B91;font-size:28rpx;" name='qq'
+                            value="{{form.qqNum }}" bindblur="submitQQ"/>
+                        </view>
+                        <!-- <view class="point"></view> -->
+                    </view>
+                </view>     
+                <!-- 公司名称部分 -->
+                <view class="nameBox"  data-target="showCompany">
+                    <view class="titleText">公司名称部分 / 学校组织名称</view>
+                    <view class="text">
+                        <view class="inputName">
+                            <input type="text" placeholder="请输入机构名称" placeholder-style="color:#6D8B91;font-size:28rpx;" name='company'
+                            value="{{form.company}}" bindblur="submitCompany"/>
+                        </view>
+                        <!-- <view class="point"></view> -->
+                    </view>
+                </view>
+                <!-- 职位部分 -->
+                <view class="nameBox"  data-target="showPost">
+                    <view class="titleText">公司职位 / 组织职位</view>
+                    <view class="text">
+                        <view class="inputName">
+                            <input type="text" placeholder="请输入职位名称" placeholder-style="color:#6D8B91;font-size:28rpx;" name='post'
+                            value="{{form.post}}" bindblur="submitPost"/>
+                        </view>
+                        <!-- <view class="point"></view> -->
+                    </view>
+                </view>
+                <!-- 保存发布按钮 -->
+                <button type="default"
+                    size="{{defaultSize}}"
+                    loading="{{loading}}"
+                    plain="{{plain}}"
+                    formType="submit"
+                    hover-class="other-button-hover" class="btn">
+                保存并发布
+                    </button>
+            </form>
+        </view>    
+    </view>
+</template>
+
+<script>
+  import { createPage } from '@mpxjs/core';
+  import WxValidate from "../api/formCheck.js"; 
+  import store from '../store/general.js'
+  import Http from '../api/http.js'
+  var app = getApp();
+  createPage({
+    data: {
+        screenHeight:Number,
+        isShowPhoto:false,
+        disable:true,
+        isShowInput:false,
+        showTitle:'',
+        val:"",
+        userName_focus:false,
+        userName:'',
+        wx_focus:false,
+        wx:'',
+        // 是否跳转
+        isJump:false,
+        form:{
+            name:'',
+            wx:'',
+            qqNum:Number,
+            company:'',
+            post:'',
+            phone:Number
+        },
+        // 获取数据的数组
+        // dataList:[],
+        // 接收的id
+        changedId:'',
+        type:'',
+        userIcon:'',
+        // 上传的图片 如果用户修改了头像 那么值为上传的头像 如果没有修改传一个空过去
+        upPicture:'',
+        options:{}
+    },
+    async onLoad(options){
+        // 验证函数
+        this.initValidate()
+        // 写在上传到的图片后面
+         // 信息列表获取接口
+        this.options = options
+        console.log(111,this.options.userType)
+        await this.getImformation(options)
+        // this.updateUser(this.options)
+        // this.abcdef = await this.userMold
+        // console.log(555555555555555,this.abcdef)
+        // console.log(555555555555555,this.userMold)
+        // this.type = await wx.getStorageSync('type');
+    },
+    computed: {
+        ...store.mapState(['token','infoList','userMold']),
+    },
+    // 根据id查看用户信息
+    async getImformation(options){
+        // this.requestImfor()
+        console.log(1223343352)
+        // this.form.name =infoList.name
+        // console.log(this.infoList)
+        const res = await Http.get({url:'/user/loadUserInfo'})
+        console.log(res)
+            this.dataList = res.data
+            // console.log(this.dataList)
+            this.changedId = res.data.id
+            if(options.userIcon){
+                this.userIcon = options.userIcon
+            }else{
+                this.userIcon=res.data.userIcon
+            }
+            // this.userIcon = res.data.data.userIcon 
+            // console.log(this.dataList)
+            // console.log(this.changedId)
+            this.form={ 
+                name:res.data.userName,
+                wx:res.data.wechat,
+                company:res.data.rganization,
+                post:res.data.position,
+                phone:res.data.phone,
+                qqNum:res.data.qqNum        
+        }
+     // wx.request({
+        //     url: `${app.globalData.realm}/user/loadUserInfo`,
+        //     header:{
+        //         'Authorization' :this.token
+        //     },
+        //     success: res => {
+        //         // console.log(res)
+        //         this.dataList = res.data.data
+        //         // console.log(this.dataList)
+        //         this.changedId = res.data.id
+        //         if(options.userIcon){
+        //             this.userIcon = options.userIcon
+        //         }else{
+        //             this.userIcon=res.data.data.userIcon
+        //         }
+        //         // this.userIcon = res.data.data.userIcon 
+        //         // console.log(this.dataList)
+        //         // console.log(this.changedId)
+        //         this.form={ 
+        //             name:res.data.data.userName,
+        //             wx:res.data.data.wechat,
+        //             company:res.data.data.rganization,
+        //             post:res.data.data.position,
+        //             phone:res.data.data.phone,
+        //             qqNum:res.data.data.qqNum        
+        //         }
+
+        //     }
+        // })
+    },
+    //报错 
+    showModal(error) {
+        let  _this = this;
+      wx.showModal({
+        content: error.msg,
+        showCancel: false,
+        success(res) {
+            if (res.confirm) {
+                // console.log('用户点击确定')
+                if(_this.isJump){
+                    wx.navigateBack({
+                        delta: 1
+                    })
+                }
+            }
+        }
+      })
+    },
+    // 验证函数
+    initValidate() {
+        const rules = {
+            name: {
+                required: true,
+                // minlength:1
+                rangelength:[1,10]
+            },
+            wx: {
+                required: true,
+            },
+            qq: {
+                required: true,
+                digits:true,
+                rangelength:[5,10]
+
+            },
+            company: {
+            },
+            post: {
+            },
+            phone: {
+                required: true,
+                tel: true
+            }
+        }
+        const messages = {
+            name: {
+                required: '请填写姓名',
+                rangelength:'请输入正确的名称,1到10位'
+            },
+            wx: {
+                required: '请填写微信号'
+            },
+            qq: {
+                required: '请填写QQ号',
+                rangelength:'请输入正确的QQ号',
+                digits:"qq号只能由数字组成"
+            },
+            company: {
+            },
+            post: {
+            },
+            phone: {
+                required: '请输入11位手机号码',
+                tel: '请输入正确的手机号码'
+            }
+        
+        }
+        this.WxValidate = new WxValidate(rules, messages)
+    },
+    //调用验证函数
+    formSubmit(e) {
+        console.log(333333333,this.options.userType)
+        // console.log('form发生了submit事件，携带的数据为：', e.detail.value)
+        const params = e.detail.value
+        //校验表单
+        if (!this.WxValidate.checkForm(params)) {
+            const error = this.WxValidate.errorList[0]
+            this.showModal(error)
+            return false
+        }else{
+            //  console.log("this.upPicture"+this.upPicture)
+             if(this.options.userIcon==null){
+                 this.upPicture=this.userIcon
+             }else{
+                 this.upPicture = this.options.userIcon
+             }
+             if(this.options.userType==null){
+                this.type = this.userMold
+             } else{
+                this.type = this.options.userType
+             }
+             this.changeInforma({userName:this.form.name,wechat:this.form.wx,rganization:this.form.company,position:this.form.post,qqNum:this.form.qqNum,userIcon:this.upPicture,userType: this.type,phone:this.form.phone})
+             
+            //  wx.request({
+            //     url: `${app.globalData.realm}/user/updateUserInfo`,
+            //     method: "POST",
+            //     header: {
+            //     'content-type': 'application/x-www-form-urlencoded',
+            //     'Authorization' :this.token
+            //     },
+            //     data: {
+            //         'id':this.changedId,
+            //         'userName':this.form.name,
+            //         'wechat'  :this.form.wx,
+            //         'rganization'  :this.form.company,
+            //         'position'  :this.form.post,
+            //         'qqNum'  :this.form.qqNum,
+            //         'userIcon':this.upPicture,
+            //         'userType':this.options.userType
+            //         // 'userIcon':this.dataList.
+            //     },
+            //     success: res => {
+            //         console.log(res)
+            //     }
+            // })
+            this.isJump=true
+            // console.log(this.isJump)
+            this.showModal({
+                msg: '提交成功',
+            })
+        } 
+    },
+    methods: {
+        ...store.mapMutations(['updateUser']),
+        ...store.mapActions(['changeInforma','requestImfor']),
+        // 判断头像的值
+        // checkImage(options){
+        //     if(options.userIcon){
+        //         this.userIcon = options.userIcon
+        //     }
+        //     return this.userIcon
+        //     console.log("2423")
+        // },
+        submitUser(e){
+            this.form.name = e.detail.value
+        },
+        submitPhone(e){
+            this.form.phone = e.detail.value
+        },
+        submitWx(e){
+            this.form.wx = e.detail.value
+        },
+        submitQQ(e){
+            this.form.qqNum= e.detail.value
+        },
+        submitCompany(e){
+            this.form.company = e.detail.value
+        },
+        submitPost(e){
+            this.form.post = e.detail.value
+        },
+        // 点击提交的时候请求后台修改数据的接口
+        click(e){
+        //    console.log(e)
+        },       
+        upImg(){
+            var _this = this
+            // 获取系统信息
+            wx.getSystemInfo({
+            success(res) {
+                _this.screenHeight = res.windowHeight
+            }
+            }),
+            this.isShowPhoto=true
+        },
+        cancle(){
+            this.isShowPhoto=false
+        },
+        // 按钮是否能够点击   
+        userNameInput(e){
+            // 双向绑定输入框和提示的值
+            this.val = e.detail.value
+            if (e.detail.value.length > 0) {
+            app.globalData.useridLength = true
+            } else {
+            app.globalData.useridLength = false
+            } 
+            this.userName = e.detail.value,
+            this.notClick = !(app.globalData.useridLength),
+            this.opacity = !(app.globalData.useridLength) == true ? 0.4 : 0.9
+            // console.log(this.userName,this.disabled,this.opacity)
+        },
+        inputFocus: function (e) {
+            if (e.target.id == 'userName') {
+                this.userName_focus = true
+            } 
+        },
+        inputBlur: function (e) {
+            if (e.target.id == 'userName') {
+                this.userName_focus = true
+            } 
+        },
+        // 照片
+        pic: function (options) {
+            wx.chooseImage({
+                count: 1, // 默认9
+                sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+                sourceType: ['album'], // 可以指定来源是相册还是相机，默认二者都有
+                success: function (res) {
+                    // 返回选定照片的本地文件路径列表，tempFilePath可以作为img标签的src属性显示图片
+                    const src = res.tempFilePaths[0]
+                    wx.redirectTo({
+                    url: `../pages/cropper?src=${src}&imageType=log&page=add`
+                    })
+                }
+            })
+        },
+        fail: function (res) {
+            // console.log(res.errMsg)
+        }
+    }
+  })
+</script>
+<style lang="less" scoped>
+    .point{
+        background-image: url("../images/下拉按钮(公告）.png");
+        background-size: 100% 100%;
+        width:12rpx;
+        height: 24rpx;    
+    }
+    .titleText{
+        flex:1;
+        font-size: 30rpx;
+        color:#031316;
+        font-weight: Medium;
+        margin-bottom: 6rpx;
+    }
+  .formdetail{
+      .show{
+            width: 718rpx;
+            position: absolute;
+            top:0;
+            left:0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.2);
+            z-index: 999;
+            .photoBtn{
+                height: 130rpx;
+                width: 718rpx;
+                display: flex;
+                // flex-direction: column;
+                align-items: center;
+                border-radius: 20rpx;
+                background: white;
+                color:#48CFE7;
+                font-size: 30rpx;
+                text-align:center;
+                margin: 1000rpx auto 20rpx;
+                padding-top: 15rpx;
+                view{
+                    flex:1;
+                }
+            }
+      }
+      .hide{
+          display: none;
+      }
+      .formCon{
+            width: 718rpx;
+            height:1065rpx;
+            border-radius: 10rpx;
+            margin: 25rpx auto;
+            padding:15rpx 30rpx;
+            background: white;
+            .imgtitle{
+                display: flex;
+                align-items: center;
+                padding-bottom:25rpx;
+                border-bottom:1rpx solid #F0F0F0;
+                view{
+                    &:nth-of-type(1){
+                        flex:1;
+                        font-size: 30rpx;
+                        color:#031316;
+                        font-weight: Medium;
+                    }
+                }
+                image{
+                    margin-right: 15rpx;
+                    background-size: 100% 100%;
+                    width: 80rpx;
+                    height: 80rpx;
+                    border-radius: 50%;
+                }
+            }
+            .nameBox{
+                display: flex;
+                flex-direction: column;
+                padding-top: 39rpx;
+                padding-bottom: 20rpx;
+                border-bottom:1rpx solid #F0F0F0;
+                .text{
+                    display: flex;
+                    align-items: center;
+                    .inputName{
+                        flex:1;
+                    }
+                }
+            }
+      }
+      .btn{
+        width:669rpx;
+        height:88rpx;
+        background:rgba(72,207,231,1);
+        border-radius:44rpx;
+        color:white;
+        font-size: 34rpx;
+        margin-top: 60rpx;
+      }
+  }
+</style>
+
+<script type="application/json">
+  {
+    "usingComponents": {
+
+    },
+    "navigationBarTitleText": "账号信息",
+    "navigationBarBackgroundColor":"#48CFE7",
+    "navigationBarTextStyle":"white"
+  }
+</script>

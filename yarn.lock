@@ -87,6 +87,16 @@
     "@types/weixin-app" "^2.2.17"
     mobx "4.8.0"
 
+"@mpxjs/fetch@^1.1.5":
+  version "1.1.5"
+  resolved "https://registry.npm.taobao.org/@mpxjs/fetch/download/@mpxjs/fetch-1.1.5.tgz#ab76fad35d53758b81aabbafe0f0268cefa53b01"
+  integrity sha1-q3b6011TdYuBqruv4PAmjO+lOwE=
+
+"@mpxjs/promisify@^1.1.7":
+  version "1.1.7"
+  resolved "https://registry.npm.taobao.org/@mpxjs/promisify/download/@mpxjs/promisify-1.1.7.tgz#1a3a80f06f1ebfbe542afac7168c3c3914a55ef7"
+  integrity sha1-GjqA8G8ev75UKvrHFow8ORSlXvc=
+
 "@mpxjs/url-loader@^1.0.0":
   version "1.0.15"
   resolved "http://registry.npm.taobao.org/@mpxjs/url-loader/download/@mpxjs/url-loader-1.0.15.tgz#e5b199d440666b7fb6a721652935035637b41445"

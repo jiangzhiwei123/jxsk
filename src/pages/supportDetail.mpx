@@ -1,116 +1,453 @@
 <template>
-    <view class="detail">
-        <view class="content">
+    <form class="detail"  bindsubmit="formSubmit">
+        <view class="content {{isShowPhoto?'indexFixed':''}}" style="margin-top:20rpx;">
             <!-- title部分 -->
             <view class="title">
-                <image src="../images/发布单子icon.png"></image>
+                <image src="{{list.url}}"></image>
                 <view class="text">
-                    <view class="textTop">发布赞助需求</view>
-                    <view class="textBot">活动赞助、资金赞助等</view>
+                    <view class="textTop">{{list.text}}</view>
+                    <view class="textBot">{{list.content}}</view>
                 </view>
                 <!-- 查看范例 -->
-                <view class="look">查看案例</view>
+                <view class="look"  bindtap="showModal" data-target="Image">查看案例</view>
+            </view>
+            <!-- 案例部分 -->
+            <!-- modal框架部分 -->
+            <view class="cu-modal {{modalName=='Image'?'show':''}}" style="width:750rpx;position:absolute;left:0;top:0;height:1533rpx;">
+            <view class="cu-dialog" style="height:650px;">
+                <view class="bg-img {{typeCase}}" style="height:600px;">
+                <view class="cu-bar justify-end text-white">
+                    <view class="action" bindtap="hideModal">
+                    <text class="icon-close "></text>
+                    </view>
+                </view>
+                </view>
+                <view class="cu-bar bg-white">
+                <view class="action margin-0 flex-sub  solid-left" bindtap="hideModal">我知道了</view>
+                </view>
+            </view>
             </view>
             <!-- 标题表单 -->
             <view class="inputText">
-                 <input class="biaoti" type="text" placeholder="请输入合作标题" placeholder-style="font-size:28rpx;color:#A7BABD;">
+                 <input class="biaoti" type="text" placeholder="请输入合作标题" placeholder-style="font-size:28rpx;color:#A7BABD;" bindblur="submitTitle"/>
             </view>
             <!-- 合作区域 -->
-            <navigator url="../pages/chooseProvince" hover-class="navigator-hover">
+            <navigator url="../pages/chooseProvince" hover-class="none">
                 <view class="address">
                     <view>合作区域</view>
+                    <view></view>
                     <image class="icon" src="../images/下拉按钮(公告）.png"></image>
                 </view>
             </navigator>
             <!-- 具体范围 -->
-            <view class="address" bindtap="iconClick">
+            <!-- <view class="address" bindtap="iconClick">
+                <view>具体范围</view>
+                <view></view>
                 <view class="{{isRotate?'on':''}}">具体范围</view>
                 <view class="icon {{isRotate?'showRotate':''}}"></view>
-            </view> 
-            <view class="{{isRotate?'show':'hide'}}">
-                <view class="pullCon">
+            </view> -->
+            <!-- 具体范围2.0版本 -->
+            <!-- <view class="{{isRotate?'show':'hide'}}">
+                <view class="showTop">
+                    <view class="pullCon">
                     <checkbox-group>
                         <label class="checkbox" wx:for="{{items}}" wx:key="{{index}}">
                             <checkbox value="{{item.name}}" checked="{{item.checked}}" />
                             {{item.value}}
                         </label>
                     </checkbox-group>
+                    <input type="text" placeholder="请输入学校名字" placeholder-style="font-size:24rpx;color:#A7BABD;padding:22rpx 0;">
+                </view>
+                <view class="btns">
+                    <view class="redirt">重置</view>
+                    <view class="conf">确认</view>
+                </view>
+                </view>
+            </view> -->
+            <!-- 企业需求资源说明 -->
+            <view class="explain"  wx:if="{{userMold=='企业'}}">
+                <view class="inputTitle">需求资源说明</view>
+                <view id="desc-area">
+                  <view class="inputAll">
+                    <view wx:if="{{ descArea.length === 0}}">
+                      <view>1.需求资源描述</view>
+                      <view>2.时间限制</view>
+                      <view>3.学校限制</view>
+                      <view>4.其他限制</view>
+                    </view>
+                  </view>
+                  <textarea name=""  wx:model="{{descArea}}" id="" maxlength="-1" cols="30" rows="10" bindblur="subText" value="hahah"  style="color:black;"></textarea>
                 </view>
             </view>
-            <!-- 需求资源说明 -->
-            <view class="explain">
+            <!-- 学校需求资源说明 -->
+            <view class="explain"  wx:if="{{userMold=='学生'}}">
                 <view class="inputTitle">需求资源说明</view>
-                <view class="inputAll">
-                    <view>  
-                        <input type="text" placeholder="1.需求资源描述:" placeholder-style="font-size:26rpx;color:#46595C;">
+                <view id="desc-area">
+                  <view class="inputAll">
+                    <view wx:if="{{ descArea.length === 0}}">
+                      <view>1.需求资源描述</view>
+                      <view>2.时间期限</view>
+                      <view>3.学校限制</view>
+                      <view>4.其他描述</view>
                     </view>
-                    <view>
-                        <input type="text" placeholder="2.时间限制:" placeholder-style="font-size:26rpx;color:#46595C;">
-                    </view>
-                    <view>
-                        <input type="text" placeholder="3.学校限制:" placeholder-style="font-size:26rpx;color:#46595C;">
-                    </view>
-                    <view>
-                        <input type="text" placeholder="4.其他限制:" placeholder-style="font-size:26rpx;color:#46595C;">
-                    </view>
+                  </view>
+                  <textarea name=""  wx:model="{{descArea}}" id="" maxlength="-1" cols="30" rows="10" bindblur="subText" value="hahah"  style="color:black;"></textarea>
                 </view>
             </view>
             <!-- 资源图片选填 -->
-            <view class="imgUp">
+            <view class="imgUp" >
                 <view class="inputTitle">资源图片(选填)</view>
-                <view class="imageBtn">
-                    <image src="../images/选择图片.png"></image>
+                <!-- 图片展示部分 -->
+                <view style="display:flex;" bindtap="upImg">
+                    <image  wx:for="{{imgUrl}}" src="{{item}}" style="width:204rpx;
+                height:204rpx;background-size:100% 100%;"></image>
+                    <view class="imageBtn" style="position:relative;">
+                        <image src="../images/选择图片.png" style="position:absolute;left:0;right:0;top:0;bottom:0;margin:auto;"></image>
+                    </view>
                 </view>
             </view>
-            <!-- 提供资源说明 -->
-             <view class="explain">
-                <view class="inputTitle">需求资源说明</view>
-                <view class="inputAll">
-                    <view>  
-                        <input type="text" placeholder="1.提供资源类型(资金或其他):" placeholder-style="font-size:26rpx;color:#46595C;">
+            <!-- upPhoto部分   -->
+            <view class="{{isShowPhoto?'showImg':'hideImg'}}" style="padding-top:{{relHeight}}px">
+                <view class="photoBtn">
+                    <!-- <view class="take" bindtap="pic">拍摄照片</view> -->
+                    <view class="select" bindtap="pic">选择照片</view>
+                </view>
+                <button style="background:white;color:#48CFE7;height:88rpx;width:718rpx;margin:0 auto;" bindtap="cancle">取消</button>
+            </view>
+            <!-- 学生提供资源说明 -->
+             <view class="explain" wx:if="{{userMold=='学生'}}">
+                <view class="inputTitle">提供资源说明</view>
+                <view id="desc-sup">
+                  <view class="inputAll">
+                    <view wx:if="{{ descSup.length === 0}}">
+                      <view>1.活动内容</view>
+                      <view>2.其他补充</view>
                     </view>
-                    <view>
-                        <input type="text" placeholder="2.其他补充:" placeholder-style="font-size:26rpx;color:#46595C;">
+                  </view>
+                  <textarea name="" wx:model="{{descSup}}" maxlength="-1" id="" cols="30" rows="10" style="color:black;" bindblur="subSup"></textarea>
+                </view>
+            </view>
+            <!-- 企业提供资源说明 -->
+             <view class="explain" wx:if="{{userMold=='企业'}}">
+                <view class="inputTitle">提供资源说明</view>
+                <view id="desc-sup">
+                  <view class="inputAll">
+                    <view wx:if="{{ descSup.length === 0}}">
+                      <view>1.提供资源类型（资金或其他）</view>
+                      <view>2.其他补充</view>
                     </view>
+                  </view>
+                  <textarea name="" wx:model="{{descSup}}" maxlength="-1" id="" cols="30" rows="10" style="color:black;" bindblur="subSup"></textarea>
                 </view>
             </view>
             <!-- 选择标签 -->
             <view class="mack">
-                <view class="inputTitle">选择标签</view>
+                <view class="inputTitle" bindtap="aa">选择标签</view>
                 <view class="mackBox">
-                    <view class="{{index==markCurrent?'on':''}}" wx:for="{{4}}" wx:key="{{index}}" data-mack='{{index}}' bindtap='mackClick'>地下场地赞助</view>
+                    <view class="{{item.isCheck?'on':''}}" wx:for="{{label}}" wx:key="{{index}}" data-mack='{{index}}' bindtap='selectLabel(item.id)'>{{item.labelName}}</view>
                 </view>
             </view>
         </view>
-        <view class="publishBtn">保存并发布</view>
-    </view>
+        <button class="publishBtn" bindtap="submitData" formType="submit" wx:if="{{!isShowPhoto}}">保存并发布</button>
+    </form>
 </template>
 
 <script>
   import { createPage } from '@mpxjs/core'
-
+  import store from '../store/general.js'
+  import mpx, {watch} from '@mpxjs/core'
+  import Http from '../api/http.js'
+  var app =  getApp();
   createPage({
         data:{
-            markCurrent:Number,
+            // 案例类型
+            typeCase:'',
+            screenHeight:Number,
+            isShowPhoto:false,
+            descArea: '',
+            descSup: '',
+            // markCurrent:Number,
             isRotate:false,
             isPull:false,
             items:[
                 {name:'社会学校不限',value:'社会学校不限',checked:'true'},
                 {name:'仅限社会',value:'仅限社会'},
                 {name:'仅限学校',value:'仅限学校'}
-            ]
+            ],
+            list:[],
+            // 活动标题
+            activity_title:'',
+            // 需求描述
+            req_description:'',
+            // 提供资源说明
+            provide_description:'',
+            // 合作区域的id集合
+            codes:[],
+            // 活动选择的id标签集合
+            labelIds:[],
+            // 活动的图片集合
+            imageUrl:"",
+            isCanClick:false,
+            // 计数器
+            count:0,
+            modalName:'',
+            // 设备windows宽度
+            relHeight:'',
+            // 设备windows高度
+            winHeight:''
+
+        },
+        computed:{
+            ...store.mapState(['imgUrl','codeArr','label','idArr','token','codeArr','userMold','LabelArr']),
         },
         methods: {
+            ...store.mapMutations(['updateLabelArr']),
+            showModal(e){
+                this.modalName = e.currentTarget.dataset.target
+                console.log( this.modalName)
+            },
+            hideModal(){
+                this.modalName=''
+            },
+            aa(){
+                console.log(this.idArr)
+            },
+            // 提交以后清空状态值里面的图片
+            ...store.mapMutations(['clearImg','clearCode','selectLabel','clearId']),
+            ...store.mapActions(['fetchLabel']),
+            // 照片
+            pic: function (options) {
+                this.isShowPhoto=false
+                console.log(this.codeArr)
+                wx.chooseImage({
+                    count: 1, // 默认9
+                    sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+                    sourceType: ['album'], // 可以指定来源是相册还是相机，默认二者都有
+                    success: function (res) {
+                        // 返回选定照片的本地文件路径列表，tempFilePath可以作为img标签的src属性显示图片
+                        const src = res.tempFilePaths[0]
+                        wx.navigateTo({
+                        url: `../pages/cropper?src=${src}&imageType=image&page=support`
+                        })
+                    }
+                })
+            },
+            // 上传图片
+            upImg(){
+                this.count++
+                if(this.imgUrl.length==2 && this.count>2){
+                    wx.showModal({
+                        title: '提示',
+                            content: '最多只能只能上传两张图片',
+                            success(res) {
+                                if (res.confirm) {
+                                } else if (res.cancel) {
+                                // store.mutations.clearCode()
+                                    // _this.count--
+                                    // _this.isShowPhoto=false
+                                }
+                            }
+                    })
+                    return 
+                }
+                var _this = this
+                console.log(this.imgUrl.length)
+                // 获取系统信息
+                wx.getSystemInfo({
+                success(res) {
+                    _this.screenHeight = res.windowHeight
+                }
+                }),
+                this.isShowPhoto=true
+            },
+            cancle(){
+                this.isShowPhoto=false
+            },
+            // 合作标题失去焦点时
+            submitTitle(e){
+                if(e.detail.value==''){
+                    wx.showModal({
+                    title: '提示',
+                    content: '合作标题不能为空',
+                    success(res) {
+                        if (res.confirm) {
+                        console.log('用户点击确定')
+                        } else if (res.cancel) {
+                        console.log('用户点击取消')
+                        }
+                    }
+                    })
+                }else{
+                    this.activity_title=e.detail.value
+                }
+                console.log(this.activity_title)
+            },
+            subText(e){
+                console.log(e.detail)
+                this.req_description = e.detail.value
+            },
+            formSubmit(e){
+                console.log(e.detail)
+            },
+            subSup(e){
+                this.provide_description = e.detail.value
+                console.log(e.detail)
+            },
+            // 点击提交按钮
+            submitData(){
+                // 提醒用户是否发布
+                // 弹出提示框
+                this.count=0
+                var _this = this
+                wx.showModal({
+                    title: '提示',
+                    content: '是否发布',
+                    success(res) {
+                        //  var _this=this
+                        if (res.confirm) {
+                            _this.submit()
+                            _this.clearImg()
+                            _this.clearCode()
+                            _this.clearId()
+                            wx.showToast({
+                            title: '成功',
+                            icon: 'success'
+                            })
+                            wx.navigateBack({
+                                delta: 1
+                            })
+                            } else if (res.cancel) {
+                            console.log('用户点击取消')
+                        }
+                    }
+                })     
+            },
+            // 提交发布请求
+            submit(){
+                Http.post({
+                    url: `/activity/saveActivity`,
+                    // method: "POST",
+                    header: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        // 'Authorization' :this.token
+                    },
+                    data: {
+                        activityTitle:this.activity_title,
+                        reqDescription:this.req_description,
+                        provideDescription:this.provide_description,
+                        codes  :this.codeArr,
+                        labelIds:this.idArr,
+                        imageUrl:this.imgUrl,
+                        activityType:this.list.text
+                        // labeltype:this.list.text
+                    },
+                    success: res => {
+                        this.clearImg()
+                        this.clearCode()
+                        this.clearId()
+                        console.log(res.data)
+                        // wx.navigateBack({
+                        //     delta: 1
+                        // })
+                    }
+                })
+            },
             iconClick(){
                 this.isRotate=!this.isRotate
             },
-            mackClick(e){
-                this.markCurrent = e.target.dataset.mack
+            // 改变类型
+            changType(e){
+                let type = ''
+                if(e=='发布赞助需求'){
+                    type = '赞助'
+                }else if(e=='发布业务需求'){
+                    type = '拉新'
+                }else if(e=='发布活动需求'){
+                    type = '活动'
+                }
+                return type
+            },
+            // 获取设备信息
+            getSystem(){
+                wx.getSystemInfo({
+                    success:res=>{
+                        this.winHeight = res.windowHeight
+                        this.relHeight = this.winHeight-129
+                        console.log(res)
+                        console.log(this.relHeight)
+                        console.log(this.winHeight)
+                    }
+                })
             }
-        }
+            // mackClick(e){
+            //     this.markCurrent = e.target.dataset.mack
+            // }
+        },
+        onLoad (e) {
+            this.getSystem()
+            this.clearImg()
+            this.clearCode()
+            this.clearId()
+            this.list = e
+            if(e.text=='发布赞助需求'){
+                this.typeCase='bgex'
+            }else if(e.text=='发布业务需求'){
+                this.typeCase='bgex1'
+            }else if(e.text=='发布活动需求'){
+                this.typeCase='bgex2'
+            }else{
+                this.typeCase='bgex3'
+            }
+            
+            console.log(66666666666666666666666,e)
+            this.imageUrl = e.userIco
+            // 获取标签数据
+            this.fetchLabel(this.changType(this.list.text))
+            // console.log(this.changType(this.list.text))
+            // this.updateLabelArr(this.list.text)
+        },
+        onShow(){     
+        },
+
   })
 </script>
 <style lang="less" scoped>
+    .bgex{
+        background-image: url("../images/001.png");
+        background-size: 100% 100%;
+    }
+    .bgex1{
+        background-image: url("../images/002.png");
+        background-size: 100% 100%;
+    }
+    .bgex2{
+        background-image: url("../images/003.jpg");
+        background-size: 100% 100%;
+    }
+    .bgex3{
+        background-image: url("../images/ex.jpg");
+        background-size: 100% 100%;
+    }
+    // 出现弹出框时禁止下面主题内容滑动
+    .indexFixed{
+        position: fixed;
+        top:0;//top:0可不写,否则显示弹窗的同时会使底层滚动到顶部.
+        left:0;
+        bottom:50rpx;
+        right:0;
+    }
+  #desc-area,#desc-sup{
+    position: relative;
+    .inputAll{
+      height: 200rpx;
+    }
+    textarea{
+      height: 200rpx;
+      position: absolute;
+      top: 0;
+      padding: 30rpx;
+    }
+  }
     .inputTitle{
         font-size: 30rpx;
         color:#031316;
@@ -157,12 +494,12 @@
         }
         .inputText{
             .biaoti{
-            height: 90rpx;
-            padding:32rpx 0;
+            height: 76rpx;
+            padding:12rpx 0;
             box-sizing: border-box;
             border-bottom:1rpx solid #F0F0F0;
-        }  
-        }  
+        }
+        }
         .address{
             display: flex;
             justify-content: space-between;
@@ -209,7 +546,6 @@
                 width: 204rpx;
                 height: 204rpx;
                 box-sizing: border-box;
-                padding:75rpx;
                 background: #F0F3F3;
                 image{
                     width: 54rpx;
@@ -222,8 +558,7 @@
                 display: flex;
                 flex-wrap: wrap;
                 view{
-                    width: 177rpx;
-                    height: 42rpx;
+                    padding:4rpx 10rpx;                            
                     line-height: 42rpx;
                     text-align: center;
                     background: #F0F3F3;
@@ -242,24 +577,53 @@
             z-index: 999;
             width: 719rpx;
             height: 1270rpx;
-            padding:42rpx;
+            // padding:42rpx;
             position: absolute;
             top:407rpx;
             left: 16rpx;
-            background: white;
-            .pullCon{
-                height: 454rpx;
-                checkbox-group{
-                    display: flex;
-                    flex-direction: column;
-                    .checkbox{
-                        margin-bottom: 60rpx;
-                        font-size: 26rpx;
-                        color:#031316;
+            background: rgba(155, 155, 155, 0.3);
+            .showTop{
+                background: white;
+                .pullCon{
+                    width: 670rpx;
+                    margin:0 auto;
+                    padding-top: 20rpx;
+                    checkbox-group{
+                        display: flex;
+                        flex-direction: column;
+                        .checkbox{
+                            margin-bottom: 40rpx;
+                            font-size: 26rpx;
+                            color:#031316;
+                        }
+                        .checkbox .wx-checkbox-input{
+                            height: 26rpx;
+                            width: 26rpx;
+                            color:#48CFE7;
+                        }
                     }
-                    .checkbox .wx-checkbox-input{
-                        height: 26rpx;
-                        width: 26rpx;
+                }
+                .btns{
+                    margin-top: 22rpx;
+                    height: 120rpx;
+                    display: flex;
+                    align-items: center;
+                    view{
+                        width: 150rpx;
+                        height: 50rpx;
+                        line-height: 50rpx;
+                        text-align: center;
+                        font-size: 28rpx;
+                    }
+                    .redirt{
+                        background: #F0F3F3;
+                        color:#94A7AA;
+                        margin-right: 114rpx;
+                        margin-left: 110rpx;
+                    }
+                    .conf{
+                        background: #48CFE7;
+                        color:white;
                     }
                 }
             }
@@ -279,6 +643,35 @@
         background: #48CFE7;
         margin: 30rpx auto 30rpx;
     }
+    .showImg{
+            width: 718rpx;
+            position: absolute;
+            top:0;
+            left:0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.2);
+            z-index: 999;
+            .photoBtn{
+                height: 130rpx;
+                width: 718rpx;
+                display: flex;
+                // flex-direction: column;
+                align-items: center;
+                border-radius: 20rpx;
+                background: white;
+                color:#48CFE7;
+                font-size: 30rpx;
+                text-align:center;
+                margin: 0rpx auto 20rpx;
+                padding-top: 15rpx;
+                view{
+                    flex:1;
+                }
+            }
+      }
+      .hideImg{
+          display: none;
+      }
   }
 </style>
 

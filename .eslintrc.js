@@ -6,7 +6,7 @@ module.exports = {
   },
   extends: 'standard',
   settings: {
-    "html/html-extensions": [".html", ".mpx"],  // consider .html and .mpx files as HTML
+    'html/html-extensions': ['.html', '.mpx']  // consider .html and .mpx files as HTML
   },
   plugins: [
     'html'
@@ -15,5 +15,8 @@ module.exports = {
     'wx': true,
     'getApp': true,
     'App': true
+  },
+  rules: {
+    'space-before-function-paren': [0]
   }
 }

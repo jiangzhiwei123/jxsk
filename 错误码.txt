@@ -1,0 +1,72 @@
+/**
+	 * 用户未登录
+	 */
+	public static final int NOT_AUTHENTICATION = 10001;
+	/**
+	 * 用户未注册
+	 */
+	public static final int NOT_REGISTER = 10006;
+	/**
+	 * 未认证(权限不足)
+	 */
+	public static final int NOT_AUTH = 10008;
+
+	/**
+	 * 未获取微信绑定手机号
+	 */
+	public static final int NOT_REAL_PHONE = 10007;
+
+	/**
+	 * 微信小程序code错误
+	 */
+	public static final int ERRPE_WECHAT_APP_CODE = 10002;
+
+	/**
+	 * 用户已经注册
+	 */
+	public static final int USER_ALREAD_EXISTS = 10003;
+
+	/**
+	 * session不能为空
+	 */
+	public static final int SESSIONKEY_NOT_EMPTY = 10004;
+
+	/**
+	 * token不能为空
+	 */
+	public static final int TOKEN_NOT_EMPTY = 10005;
+
+	/**
+	 * 服务器内部错误
+	 */
+	public static final int SERVER_INNER_ERROR = 1005;
+
+	/**
+	 * 请求方法不支持
+	 */
+	public static final int REQUEST_METHOD_NOT_SUPPORTED = 1005;
+
+	/**
+	 * token无效()
+	 */
+	public static final int TOKEN_INVALID = 1006;
+
+	/**
+	 * 二维码失效, 请刷新后重新登录
+	 */
+	public static final int QRCODE_INVALID = 1007;
+
+	/**
+	 * 参数传入不合法
+	 */
+	public static final int PARAMETER_ERROR = 1008;
+
+	/**
+	 * JSON 数据格式错误
+	 */
+	public static final int JSON_FORMAT_ERROR = 1009;
+
+	/**
+	 * 上传文件大小不正确
+	 */
+	public static final int UPLOAD_FILE_SIZE_ERROR = 1009;

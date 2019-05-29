@@ -1,39 +1,79 @@
 <template>
   <view class="province">
     <view class="pro_contnet">
-      <view class="title">全部省份</view>
+      <view class="title" bindtap="aa">全部省份</view>
       <view class="cityBox">
-       <view class="{{index==current?'blue':''}}" wx:for="{{23}}" wx:key='{{index}}' bindtap='tabClick' data-current = '{{index}}'>
-        湖北省
-      </view>
+        <view class="grey {{ item.selected ?'blue':''}}" wx:for="{{provinces}}" wx:key='{{index}}' bindtap='selectItem(item.code)' data-current = '{{index}}' data-choose="false">
+          <view>{{item.name}}</view>
+          <view class="del" wx:if="{{ item.selected }}">x</view>
+        </view>
       </view>
     </view>
+    <view style="font-size:26rpx;color:rgba(167, 186, 189, 1);text-align:center;margin-top:20rpx;">最多只可以选择6个地区哟</view>
+    <button class="save" bindtap="saveJump">保存</button>
   </view>
 </template>
 
 <script>
   import { createComponent } from '@mpxjs/core'
-
+  import store from '../store/general'
+  import mpx, {watch} from '@mpxjs/core'
   createComponent({
-     data: {
-      current: 0
+      data: {
+      current: 0,
+      choose:false,
+      noticeList:[]
+      },
+      onload(){
+        this.clearCode()
+      },
+      // 检测地区个数变化
+      watch:{
+
       },
       methods: {
-         tabClick(e) {
-          this.current= e.currentTarget.dataset.current
-        }
+        aa(){
+          console.log(this.codeArr)
+        },
+        // 提交并返回
+        saveJump(){
+          wx.navigateBack({
+            delta: 1
+          });
+        },
+        ...store.mapActions(['fetchProvince']),
+        ...store.mapMutations(['selectItem','clearCode']),
+      },
+      computed:{
+         ...store.mapState(['provinces','codeArr']),
+      },
+      created(){
+        this.getList()
+      },
+      getList(){
+        this.fetchProvince()
       }
-     
   })
 </script>
 <style lang="less" scoped>
+  .save{
+      width: 700rpx;
+      height: 90rpx;
+      line-height: 90rpx;
+      text-align: center;
+      color: white;
+      font-size: 34rpx;
+      border-radius: 44rpx;
+      background: #48CFE7;
+      margin: 30rpx auto 30rpx;
+  }
   .province{
     width: 750rpx;
-    height: 1400rpx;
+    // height: 1400rpx;
+    padding-top: 20rpx;
     .pro_contnet{
       background: white;
       width: 719rpx;
-      height: 453rpx;
       margin:0 auto;
       padding: 25rpx;
       .title{
@@ -44,24 +84,36 @@
       .cityBox{
         display: flex;
         flex-wrap: wrap;
-        view{
-          width: 123rpx;
-          height: 42rpx;
-          line-height: 42rpx;
+        .grey{
           text-align: center;
+          line-height: 42rpx;
+          padding:10rpx 25rpx;
           font-size: 26rpx;
           color:#6D8B91;
           background:rgba(167,186,189,0.3);
+          position: relative;
+          overflow: hidden;
           border-radius: 5rpx;
           margin-top: 20rpx;
-          margin-right: 53rpx;
-          &:nth-child(4n){
-            margin-right: 0;
-          }
+          margin-right: 40rpx;
+          position: relative;
           &.blue{
-            background: #48CFE7;
-            color:white;
+            background: rgba(72, 207, 231, 0.2);
+            color:#48CFE7;
           }
+        }
+        .del{
+          position: absolute;
+          right:-20rpx;
+          top:-20rpx;
+          width: 40rpx;
+          height: 40rpx;
+          border-radius: 50%;
+          background-color: #48CFE7;
+          color:white;
+          padding-right: 15rpx;
+          padding-top: 7rpx;
+          font-size: 21rpx;
         }
       }
     }
@@ -71,5 +123,5 @@
 <script type="application/json">
   {
     "usingComponents": { }
-  } 
+  }
 </script>

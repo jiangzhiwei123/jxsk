@@ -3699,7 +3699,7 @@ scroll-view.cu-steps .cu-item {
 }
 
 .text-blue, .line-blue, .lines-blue {
-  color: var(--blue);
+  color:#48CFE7;
 }
 
 .text-purple, .line-purple, .lines-purple {

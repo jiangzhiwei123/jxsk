@@ -2,14 +2,15 @@
 	"miniprogramRoot": "dist/",
 	"compileType": "miniprogram",
 	"setting": {
-		"newFeature": true,
-		"urlCheck": true,
+		"urlCheck": false,
 		"es6": false,
 		"postcss": true,
 		"minified": false,
-		"autoAudits": false
+		"newFeature": true,
+		"autoAudits": false,
+		"checkInvalidKey": true
 	},
-	"appid": "wxe1ba157318c5ca8d",
+	"appid": "wx264af11a213167a3",
 	"projectname": "%E8%81%9A%E4%BA%AB%E6%97%B6%E7%A9%BA",
 	"description": "A mpx project",
 	"simulatorType": "wechat",
@@ -31,7 +32,7 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 4,
+			"current": 16,
 			"list": [
 				{
 					"id": -1,
@@ -63,6 +64,90 @@
 					"id": -1,
 					"name": "地区选择",
 					"pathName": "pages/chooseProvince",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "个人中心",
+					"pathName": "pages/home",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "详细个人资料",
+					"pathName": "pages/imformation",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "我的收藏",
+					"pathName": "pages/collect",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "我的发布",
+					"pathName": "pages/add",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "task部分",
+					"pathName": "pages/task",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": 11,
+					"name": "合作页面",
+					"pathName": "pages/task",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "裁剪测试",
+					"pathName": "pages/cropper",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "登录页面",
+					"pathName": "pages/login",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "认证页面",
+					"pathName": "pages/identify",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "用户类型",
+					"pathName": "pages/userType",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "获取手机号",
+					"pathName": "pages/getPhone",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "注册页面",
+					"pathName": "pages/regist",
 					"scene": null
 				}
 			]

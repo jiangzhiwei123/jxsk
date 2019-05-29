@@ -1,23 +1,695 @@
 <template>
-  <list></list>
+   <view class="page">
+    <!-- 文件头部 -->
+    <view class="headerBox">
+      <view class="title">活动与赞助平台</view>
+      <view class="titleBtn">关注平台</view>
+    </view>
+    <!-- nav部分 -->
+    <view class="navBox">
+      <!-- 导航栏上面部分 -->
+      <view class="navTop">
+        <view class="nav-item">
+          <view class="navImg"></view>
+          <view class="text">校园资源</view>
+        </view>
+        <view class="nav-item">
+          <view class="navImg"></view>
+          <view class="text">企业入驻</view>
+        </view>
+        <view class="nav-item">
+          <view class="navImg"></view>
+          <view class="text">资质认证</view>
+        </view>
+        <view class="nav-item">
+          <view class="navImg"></view>
+          <view class="text">攻略</view>
+        </view>
+      </view>
+      <!-- 导航栏下面部分 -->
+      <view class="navBot">
+        <view class="newLeft">最新消息</view>
+        <swiper class="newCon" style="width:527rpx;overflow:auto;height:36px;"
+        autoplay="{{autoplay}}" interval="{{interval}}" duration="{{duration}}" vertical>
+          <block wx:for="{{noticeList}}" wx:key="{{index}}" class="box" bindtap="showModal">
+           <swiper-item  bindtap="showNotice" data-target="Modal" data-id="{{index}}">
+              <view style="font-size: 28rpx;color:#46595c;font-weight: bold;">{{item.title}}</view>
+              <view style="overflow: hidden;text-overflow:ellipsis;white-space: nowrap;font-size: 24rpx;color:#A7BABD;font-weight: medium;">{{item.content}}</view>
+           </swiper-item>
+          </block>
+        </swiper>
+        <view class="newRig"></view>
+      </view>
+      <!-- 点击的时候弹出放大的信息-->
+      <view class="cu-modal {{modalName=='Modal'?'show':''}}">
+        <view class="cu-dialog">
+          <view class="cu-bar bg-white justify-end">
+            <view class="content" style="font-weight:bold;">{{modalList[modalId].title}}</view>
+            <view class="action" bindtap="hideModal">
+              <text class="icon-close text-red"></text>
+            </view>
+          </view>
+          <view class="padding-xl">
+            {{modalList[modalId].content}}
+          </view>
+        </view>
+      </view>
+    </view>
+    <!-- tabs部分 -->
+    <view class="tabs stickyClass" id="affix">
+      <view class="tabLeft">
+        <view class="tabTop">
+            <view wx:class="{{ {on:currentTab==0} }}" data-current='0' bindtap="navClick">全部</view>
+            <view wx:class="{{ {on:currentTab==1} }}" data-current='1' bindtap="navClick">企业资源</view>
+            <view wx:class="{{ {on:currentTab==2} }}" data-current='2' bindtap="navClick">校园资源</view>
+        </view>
+        <view bindtap="dqClick" class="diqu">
+          <view bindtap="changeclick" class="{{isClick?'on':''}}">{{address}}</view>
+          <view bindtap="changeclick" class="pic {{isClick?'active':''}}"></view>
+        </view>
+      </view>
+      <!-- 省份部分 -->
+      <view class="provinces {{isClick?'show':'hide'}}" >
+        <view class="pro_contnet">
+          <view style="display:flex;">
+            <view class="title" bindtap="aa" style="flex:1;">全部省份</view>
+            <view class="provinceBtn" bindtap="clearPro">不限地区</view>
+          </view>
+          <view class="cityBox">
+            <view class="{{ index==currentProvince?'blue':''}}" wx:for="{{provinces}}" wx:key='{{index}}' bindtap='checkProvince' data-current = '{{index}}' data-choose="false">
+              {{item.name}}
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+    <!-- 列表部分 -->
+    <view class="listBox">
+      <view class="list" wx:for="{{simpleList}}" wx:key="{{index}}"  data-num="{{index}}" bindtap="jupmDetail(index)">
+        <!-- 头像 -->
+        <image src="{{item.userIcon}}" class="userImg" style="width:74rpx;height:74rpx;border-radius:50%;"></image>
+        <view class="text">
+          <view class="title">【{{item.activityType}}】{{item.activityTitle}}</view>
+          <view class="information">
+            <!-- 认证图片 -->
+            <view style="width:92rpx;height:28rpx;" class="{{item.userStatus==='已认证'?'had':'noHad'}}"></view>
+            <!-- 姓名 省份 日期 -->
+            <view class="person">
+              <view class="name">{{item.userName}}</view>
+              <view class="province" wx:for="{{item.astrictAdds}}" wx:key="{{item.astrictAdds}}">{{item}}</view>
+              <view class="time" style="margin-top:4rpx;">{{item.beginTime}}</view>
+            </view>
+          </view>
+          <!-- 地址部分 -->
+          <view class="address">
+          <view wx:for="{{item.labels}}">{{item.labelName}}</view>
+          </view>
+          <!-- 评论收藏部分 -->
+          <view class="collect">
+            <image style="width:37rpx;height:28rpx;" src="../images/浏览1(1).png" mode="widthFix"></image>
+            <view>{{item.browseQty}}</view>
+            <view style="display:flex;" catchtap="clickCollect(index)" data-index="{{index}}">
+              <image style="width:28rpx;height:28rpx;" class="{{item.favorites?'imgClick':'notClick'}}" mode="widthFix"></image>
+              <view style="margin-top:3rpx;">收藏</view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
 </template>
 
 <script>
   import { createPage } from '@mpxjs/core'
-
+  import store from '../store/general.js'
+  import loadUserInfo from '../api/loadUser.js'
+  import newNotice from '../api/newNotice.js'
+  import simpleActive from '../api/loadSimple.js'
+  import Http from '../api/http.js'
+  var app = getApp()
   createPage({
-    onLoad () {
+    data: {
+      currentProvince:Number,
+      isClick:false,
+      modalName:'',
+      modalId:Number,
+      modalList:[],
+      currentTab:0,
+      menuFixed:false,
+      menuTop:Number,
+      // noticeList:[],
+      autoplay:true,
+      interval:5000,
+      // 合作略图数组
+      // simpleList:[],
+      // // 企业资源
+      // companyList:[],
+      // // 校园资源
+      // studentList:[],
+      // 点击传过去的值
+      simpleId:'',
+      listId:'',
+      isCollect:false,
+      save:Number,
+      // 是否刷新列表
+      // clickType:''
+    },
+    computed:{
+      ...store.mapState(['provinces','token','userMold','address','addressCode','userMold','activeType','clickType','noticeList','simpleList','userMold']),
+    },
+    methods: {
+      // 清除筛选状态
+      clearPro(){
+        this.isClick = false
+        // 更新选中的类型
+        this.updateclickType('')
+        // 更新字
+        this.fetchSimple('')
+        this.updateAddress('地区')
+        this.updateAddressCode('')
+      },
+      // 核对请求
+      checkRequest(){
+        // 核对loadUserInfo
+        this.requestImfor()
+        // loadUserInfo.getAll()
+        // loadUserInfo.getAll()
+        
+        // 核对公告栏接口
+        // newNotice.getAll()
+      },
+      // 点击改变选中的省份
+      checkProvince(e){
+        // 打印
+        wx.showLoading({ title: '加载中...' })
+        this.currentProvince = e.currentTarget.dataset.current
+        this.isClick=false
+        // 将选中的相应下标的name显示出来
+        this.updateAddress(this.provinces[this.currentProvince].name)
+        this.updateAddressCode(this.provinces[this.currentProvince].code)
+        this.activePro({name:this.clickType,id:this.addressCode})
+        // 然后对simpleList进行过滤
+        // this.fetchSimpType(this.clickType,this.addressCode)
+        // wx.request({
+        //   url: `${app.globalData.realm}/activity/loadSimpleActivityInfo`,
+        //   data:{
+        //     proviceId:this.addressCode,
+        //     plateName:this.clickType
+        //   },
+        //   header:{
+        //     'Authorization' :this.token
+        //   },
+        //   // data:{
+        //   //   proviceId:this.addressCode
+        //   // },
+        //   success: res => {
+        //     console.log(res.data.data)
+        //       let dataList =  res.data.data;
+        //       this.simpleList = dataList;
+        //   }
+        //  })
+        wx.hideLoading()
+        // console.log(e)
+      },
+      // 返回与传入的名字相同的
+      // 点击显示弹窗
+      showNotice(e) {
+          this.modalList = this.noticeList
+          this.modalName=e.currentTarget.dataset.target
+          this.modalId=e.currentTarget.dataset.id
+          // console.log(this.modalId)
+          // console.log(this.modalList)
+      },
+      ...store.mapActions(['fetchProvince','fetchNotice','fetchSimple','fetchSimpType','activePro','changeCollect','requestImfor']),
+      ...store.mapMutations(['getToken','updateAddress','updateAddressCode','updateclickType']),
+      dqClick(){
+        this.getList()
+      },
+      navClick(e){
+          this.currentTab=e.target.dataset.current
+          if(this.currentTab==0){
+            this.updateclickType('')
+          }else if(this.currentTab==1){
+            this.updateclickType('企业')
+          }else{
+            this.updateclickType('校园')
+          }
+          this.activePro({name:this.clickType,id:this.addressCode})
+          // wx.request({
+          //     url: `${app.globalData.realm}/activity/loadSimpleActivityInfo`,
+          //     data:{
+          //       proviceId:this.addressCode,
+          //       plateName:this.clickType
+          //     },
+          //     header:{
+          //       'Authorization' :this.token
+          //     },
+          //     success: res => {
+          //         let dataList =  res.data.data;
+          //         this.simpleList = dataList;
+          //     }
+          // })
+      },
+      changeclick(e){
+        this.isClick = !this.isClick
+      },
+      jupmDetail(index){
+        this.checkRequest()
+        const id =  this.simpleList[index].id
+        wx.navigateTo({
+          url: `../pages/task?id=${id}`
+        })
+      },
+      showModal(){
+          wx.showModal({
+          title: "啦啦啦",
+          content:"啊哈哈哈"
+        })
+      },
+      hideModal(e) {
+          this.modalName=null
+      },
+      // 收藏的接口
+      async clickCollect(index){
+        await this.simpleList[index].favorites?this.save=0:this.save=1
+        // wx.showLoading({ title: '加载中...' })
+        await this.changeCollect({ activeId:this.simpleList[index].id, isSave:this.save })
+        // wx.hideLoading()
+        this.activePro({name:this.clickType,id:this.addressCode})
+        // 刷新数据
+        // this.fetchSimple(this.clickType)
+        console.log(1234567889)
+          //   wx.request({
+          //   url: `${app.globalData.realm}/favorites/saveOrDelFavoritesHistory`,
+          //   method: "POST",
+          //   header: {
+          //     'content-type': 'application/x-www-form-urlencoded',
+          //     'Authorization' :this.token
+          //   },
+          //   data:{
+          //     activityId:this.simpleList[index].id,
+          //     isSave:this.save
+          //   },
+          //   success: res => {
+          //   }
+          // })
+      }
+    },
+    onLoad(options){       // 合作缩略请求
+        wx.showLoading({ title: '加载中...' })
+        // this.requestImfor()
+        wx.hideLoading()
+        console.log(this.userMold)
+        // 加载的时候刷新收藏接口
+    },
+    async onShow(){
+        wx.showLoading({ title: '加载中...' })
+        await this.fetchSimple("")
+        // 公告数据请求
+        await this.fetchNotice()
+        // 地区数据请求
+        await this.fetchProvince()
+        wx.hideLoading()
+      // this.fetchSimple("")
+      // this.fetchUser()
+      // console.log(1234567,this.noticeList)
+    },
+    getList(){
+      // 获取公告部分数据
+      // wx.request({
+      //   url: `${app.globalData.realm}/notice/loadNewNotice`,
+      //   header:{
+      //        'Authorization' :this.token
+      //   },
+      //   success: res => {
+      //     this.noticeList = res.data.data
+      //     console.log("公告接口")
+      //     console.log(this.noticeList)
+      //   }
+      // })
+      // 获取合作部分数据略图
+      // wx.request({
+      //   url: `${app.globalData.realm}/activity/loadSimpleActivityInfo`,
+      //   header:{
+      //     'Authorization' :this.token
+      //   },
+      //   // data:{
+      //   //   proviceId:this.addressCode
+      //   // },
+      //   success: res => {
+      //       let dataList =  res.data.data;
+      //       if(this.clickType==''){
+      //         this.simpleList = dataList
+      //       }else if(this.clickType=='企业'){
+      //         this.simpleList = dataList.filter(item => item.plateName=='企业')
+      //         // console.log(this.simpleList)
+      //       }else if(this.clickType=='校园'){
+      //         this.simpleList = dataList.filter(item => item.plateName=='校园')
+      //       }
+      //       console.log(this.simpleList)
+      //   }
+      // })
+      // 获取用户身份
+      // console.log('store',noticeList)
+      // wx.request({
+      //   url: `${app.globalData.realm}/user/loadUserInfo`,
+      //   header: {
+      //     'Authorization': this.token
+      //   },
+      //   success: res => {
+      //     console.log('loadUserInfo')
+      //     console.log(res)
+      //   }
+      // })
+    },
+    // 去重函数
+    uniqArray(array){
+      var data = []
+      for(let i in array){
+        if(data.indexOf(array[i])==-1){
+          data.push(array[i])
+        }
+      }
+      return data
     }
+
+
   })
 </script>
 <style lang="less" scoped>
-  
+  // 地区样式
+  .provinces{
+    width: 750rpx;
+    // height: 1400rpx;
+    padding-top: 20rpx;
+    .pro_contnet{
+      background: white;
+      width: 719rpx;
+      margin:0 auto;
+      padding: 25rpx 25rpx 25rpx 0;
+      .title{
+        font-size: 30rpx;
+        font-weight: bold;
+        color:#46595C;
+      }
+      .provinceBtn{
+        text-align: center;
+          line-height: 42rpx;
+          padding:10rpx 25rpx;
+          font-size: 30rpx;
+          font-weight: bold;
+          color:#46595C;
+          border-radius: 5rpx;
+          margin-right: 40rpx;
+      }
+      .cityBox{
+        display: flex;
+        flex-wrap: wrap;
+          view{
+          text-align: center;
+          line-height: 42rpx;
+          padding:10rpx 25rpx;
+          font-size: 26rpx;
+          color:#6D8B91;
+          background:rgba(167,186,189,0.3);
+          border-radius: 5rpx;
+          margin-top: 20rpx;
+          margin-right: 40rpx;
+          &.blue{
+            background: #48CFE7;
+            color:white;
+          }
+        }
+      }
+    }
+  }
+  // 是否收藏
+  .notClick{
+    background-image: url("../images/收 藏 (1).png");
+    background-size: 100% 100%;
+  }
+  .imgClick{
+    background-image: url("../images/已收藏.png");
+    background-size: 100% 100%;
+  }
+  .stickyClass{
+      position: sticky;
+      top: 0; //当menu元素距离可视窗口顶部<0时，menu由static定位切换为fixed定位
+      z-index: 999;
+  }
+  .page{
+    background: #F2F5F5;
+    .hide{
+      display: none;
+    }
+    .headerBox{
+      background: #48CFE7;
+      width: 100%;
+      height: 259rpx;
+      text-align: center;
+      padding-top: 47rpx;
+      .title{
+        font-size: 55rpx;
+        color: white;
+      }
+      .titleBtn{
+        height: 60rpx;
+        font-size: 34rpx;
+        width: 273rpx;
+        margin:0 auto;
+        line-height: 60rpx;
+        color:#48CFE7;
+        background: white;
+        border-radius: 30rpx;
+        margin-top: 25rpx;
+      }
+    }
+    .navBox{
+      width: 718rpx;
+      height: 282rpx;
+      background: white;
+      margin:0 auto;
+      padding-top: 20rpx;
+      border-radius: 10rpx;
+      box-sizing: border-box;
+      position: relative;
+      top:-20rpx;
+      .navTop{
+        display: flex;
+        text-align: center;
+        height: 157rpx;
+        border-bottom:1rpx solid rgb(240, 240, 240);
+        .nav-item{
+          flex:1;
+          width: 120rpx;
+          height: 120rpx;
+          text-align: center;
+          .navImg{
+            width: 74rpx;
+            height: 71rpx;
+            background: url("../images/校园资源icon.png") 0 0 no-repeat;
+            background-size: 100% 100%;
+            margin: 0 auto;
+          }
+          .text{
+            font-size: 28rpx;
+            margin-top: 20rpx;
+          }
+          &:nth-child(2){
+            .navImg{
+              width: 57rpx;
+              background-image: url("../images/企业入驻icon.png");
+            }
+          }
+          &:nth-child(3){
+            .navImg{
+              width: 71rpx;
+              background-image: url("../images/资质认证.png");
+            }
+          }
+          &:nth-child(4){
+            .navImg{
+              width: 59rpx;
+              height: 71rpx;
+              background-image: url("../images/攻略.png");
+            }
+          }
+        }
+      }
+      .navBot{
+        padding:20rpx 24rpx;
+        display: flex;
+        align-items: center;
+        .newLeft{
+          font-size: 32rpx;
+          margin-top: -24rpx;
+          width: 80rpx;
+          height: 65rpx;
+          color: #48CFE7;
+        }
+        .newCon{
+          margin-left: 10rpx;
+          flex:1;
+          .box{
+             view:nth-child(1){
+              font-size: 28rpx;
+              color:#46595c;
+              font-weight: bold;
+            }
+            view:nth-child(2){
+              font-size: 24rpx;
+              color:#A7BABD;
+              font-weight: medium;
+            }
+          }
+        }
+        .newRig{
+          background-image: url("../images/下拉按钮(公告）.png");
+          width: 12rpx;
+          height: 23rpx;
+          background-size: 100% 100%;
+        }
+      }
+    }
+    .fixed{position: fixed; top: 0;left:16rpx;z-index: 999; }
+    .tabs{
+      background: white;
+      // display: flex;
+      // width: 720rpx;
+      // height: 98rpx;
+      margin: 10rpx auto;
+      font-size: 28rpx;
+      padding:30rpx;
+      box-sizing: border-box;
+      border-radius: 10rpx;
+      .tabLeft{
+        display: flex;
+        // margin-right: 130rpx;
+        position: relative;
+        .tabTop{
+          display: flex;
+          view{
+            margin-right: 52rpx;
+            padding-bottom: 15rpx;
+          }
+        }
+        .diqu{
+          display: flex;
+          align-items: center;
+          position: absolute;
+          right:0;
+          flex:1;
+          // margin-left: 120rpx;
+          text-align: right;
+          .pic{
+              width: 12rpx;
+              height: 23rpx;
+              background-image: url("../images/下拉按钮(公告）.png");
+              background-size: 100% 100%;
+              margin-left: 15rpx;
+              margin-top: 6rpx;
+              &.active{
+                width: 23rpx;
+                height: 12rpx;
+                background-image: url("../images/下拉按钮 拷贝 3.png");
+                background-size: 100% 100%;
+                margin-top: -6rpx;
+              }
+          }
+        }
+      }
+
+    }
+    .listBox{
+      .list{
+        margin: 0 auto;
+        width: 718rpx;
+        background: white;
+        margin-top: 14rpx;
+        margin-bottom: 10rpx;
+        padding: 30rpx 27rpx 20rpx;
+        box-sizing: border-box;
+        display: flex;
+        .userImg{
+          // background-image: url("../images/头像.jpg");
+          width: 37rpx;
+          height: 37rpx;
+          background-size: 100% 100%;
+          margin-right: 21rpx;
+        }
+        .text{
+          flex:1;
+          .title{
+            font-size: 28rpx;
+            color:#031316;
+            margin-bottom: 14rpx;
+          }
+          .information{
+            font-size: 20rpx;
+            color:#A7BABD;
+            display: flex;
+            margin-bottom: 20rpx;
+            .had{
+              background-image: url("../images/认证(1).png");
+              background-size: 100% 100%;
+              margin-right: 14rpx;
+            }
+            .noHad{
+              background-image: url("../images/未认证.png");
+              background-size: 100% 100%;
+              margin-right: 14rpx;
+            }
+            .person{
+              flex:1;
+              display: flex;
+              flex-wrap: wrap;
+              .name{
+                margin-right: 17rpx;
+              }
+              .province{
+                margin-right: 20rpx;
+              }
+            }
+
+          }
+          .address{
+            display: flex;
+            flex-wrap: wrap;
+            view{
+              padding: 9rpx 16rpx 10rpx 19rpx;
+              box-sizing: border-box;
+              background:#F0F3F3;
+              color:#A7BABD;
+              font-size: 24rpx;
+              margin-right: 13rpx;
+              margin-bottom: 20rpx;
+            }
+          }
+          .collect{
+            display: flex;
+            align-items: center;
+            image{
+              margin-right: 16rpx;
+            }
+            view{
+              font-size: 20rpx;
+              margin-right: 32rpx;
+            }
+          }
+        }
+      }
+    }
+  }
+  .on{
+    color:#48CFE7;
+    border-bottom: 3rpx solid #48CFE7;
+    padding-bottom: 15rpx;
+  }
 </style>
 
 <script type="application/json">
   {
     "usingComponents": {
-      "list": "../components/list"
     }
   }
 </script>

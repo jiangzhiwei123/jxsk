@@ -1,18 +1,40 @@
 <template>
-  <province></province>
+  <view>
+    <!-- 合作的区域 -->
+    <province></province>
+  </view>
 </template>
 
 <script>
 import { createPage } from "@mpxjs/core";
-
+import store from '../store/general.js'
 
 createPage({
   data: {
-    check: true
+    
+  },
+  onLoad(){
+
+  },
+  methods: {
+    submit(){
+    }
   }
 });
 </script>
 <style lang="less" scoped>
+.btn{
+    width: 700rpx;
+    height: 90rpx;
+    line-height: 90rpx;
+    text-align: center;
+    color: white;
+    font-size: 34rpx;
+    border-radius: 44rpx;
+    background: #48CFE7;
+    margin: 30rpx auto 30rpx;
+}
+ 
 </style>
 
 <script type="application/json">

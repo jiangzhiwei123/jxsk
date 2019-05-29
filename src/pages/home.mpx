@@ -1,27 +1,206 @@
 <template>
-  <view>
-    <view>我是个人中心部分</view>
+  <view class="home">
+    <view class="banner"></view>
+    <!-- 个人信息 -->
+    <view class="imformation">
+      <navigator url="../pages/imformation?" hover-class="none">
+        <view class="content">
+          <image class="userImg" src="{{infoList.userIcon}}"></image>
+            <view class="userinfo">
+              <view>{{infoList.userName}}</view>
+              <view>{{infoList.position}}</view>
+            </view>
+          <view class="point"></view>
+        </view>
+      </navigator>
+        <view class="infoList">
+          <!-- <navigator url="../pages/add" hover-class="none" > -->
+              <view class="myPub"  bindtap="jumpDetial">
+                <image src="../images/发布 .png"></image>
+                <view>我的发布</view>
+                <view></view>
+              </view>
+          <!-- </navigator> -->
+          <!-- <navigator url="../pages/collect" hover-class="none"> -->
+             <view class="myPub" bindtap="jumpCollect">
+                <image src="../images/收藏.png"></image>
+                <view>我的收藏</view>
+                <view></view>
+             </view>
+          <!-- </navigator> -->
+          <view class="myPub" bindtap="jumpIdentify">
+            <image src="../images/资质认证 - 副本.png"></image>
+            <view>企业身份认证</view>
+            <view></view>
+          </view>
+          <view class="myPub" style="padding:10rpx 0 10rpx 0;">
+            <image src="../images/客服.png"></image>
+            <button open-type='contact' style="flex:1;text-align:left;border:none;font-size:28rpx;color:#46595C;margin-left:-15px;margin-right:10rpx;" plain>专属客服</button>
+            <image src="../images/下拉按钮(公告）.png" style="background-size: 100% 100%;width: 13rpx;height: 26rpx;"></image>
+          </view>
+          <view class="myPub">
+            <image src="../images/合作握手.png"></image>
+            <view>商务合作</view>
+            <view></view>
+          </view>
+          <view class="myPub" style="padding:10rpx 0 10rpx 0;">
+            <image src="../images/意见反馈 (1).png"></image>
+            <button open-type='feedback' style="flex:1;text-align:left;border:none;font-size:28rpx;color:#46595C;margin-left:-15px;margin-right:10rpx;" plain>意见反馈</button>
+            <image src="../images/下拉按钮(公告）.png" style="background-size: 100% 100%;width: 13rpx;height: 26rpx;"></image>
+          </view>
+        </view>
+    </view>
+    
   </view>
 </template>
 
 <script>
   import { createPage } from '@mpxjs/core'
-
+  import store from '../store/general.js'
+  import loadUserInfo from '../api/loadUser.js'
+  var app = getApp();
+  
   createPage({
     data:{
-      check:true
+    },
+    onShow(){
+      wx.showLoading({ title: '加载中...' })
+      this.checkRequest()
+      this.requestImfor()
+      wx.hideLoading();
+    },
+    computed: {
+      ...store.mapState(['token','infoList'])
+    },
+    methods: {
+      ...store.mapActions(['requestImfor']),
+      checkRequest(){
+        loadUserInfo.getAll()
+      },
+      // 跳转到企业认证页面
+      jumpIdentify(){
+        wx.navigateTo({
+          url:'../pages/identify'
+        })
+      },
+      // 跳转到我的发布
+      jumpDetial(){
+        // const id = this.infoList.id
+        wx.navigateTo({
+          url: `../pages/add`
+        })
+        // console.log(id)
+      },
+      // 跳转到我的收藏
+      jumpCollect(){
+          // const userId = this.infoList.id
+          wx.navigateTo({
+            url: `../pages/collect`
+          })
+          // console.log(userId)
+      }
+      // 跳转到我的收藏
     }
   })
 </script>
 <style lang="less" scoped>
-  
+  .home{
+    .banner{
+      width: 750rpx;
+      height: 109rpx;
+      background: #48CFE7;
+    }
+    .imformation{
+      margin: -109rpx auto;
+      z-index: 999;
+      width: 717rpx;
+      .content{
+        display: flex;
+        align-items: center;
+        height: 170rpx;
+        padding: 30rpx 22rpx;
+        background: white;
+        border-radius: 10rpx;
+        .userImg{
+          // background-image: url("../images/头像.jpg");
+          background-size: 100% 100%;
+          width: 110rpx;
+          height: 110rpx;
+          border-radius: 50%;
+        }
+        .userinfo{
+          flex:1;
+          display: flex;
+          flex-direction: column;
+          margin-left: 20rpx;
+          view{
+            &:nth-of-type(1){
+              font-size: 34rpx;
+              color:#46595C;
+              font-weight: bold;
+              margin-bottom: 20rpx;
+            }
+            &:nth-of-type(2){
+              font-size: 28rpx;
+              color:#A7BABD;
+            }
+          }
+        }
+        .point{
+          background-image: url("../images/下拉按钮(公告）.png");
+          width: 17rpx;
+          height: 32rpx;
+          background-size: 100% 100%;
+        }
+      }   
+      .infoList{
+        // height: 440rpx;
+        width: 717rpx;
+        margin-top: 10rpx;
+        background: white;
+        padding:0rpx 22rpx;
+        .myPub{
+          display: flex;
+          align-items: center;
+          padding: 25rpx 0;
+          border-bottom:1rpx solid #F0F0F0;
+          image{
+              width: 30rpx;
+              height: 30rpx;
+              margin-right: 15rpx;
+            }
+          view{
+            &:nth-of-type(1){
+              flex:1;
+              font-size: 28rpx;
+              color:#46595C;
+            }
+            &:nth-of-type(2){
+              background-image: url("../images/下拉按钮(公告）.png");
+              background-size: 100% 100%;
+              width: 13rpx;
+              height: 26rpx;
+              margin-right: 14rpx;
+            }
+          }
+          // &:nth-of-type(5){
+          //   border-bottom:none;
+          // }
+        }
+      }
+    }
+    
+  }
 </style>
 
 <script type="application/json">
   {
     "usingComponents": {
       
-    }
+    },
+    "navigationBarTitleText": "个人中心",
+    "navigationBarBackgroundColor":"#48CFE7",
+    "navigationBarTextStyle":"white"
   }
   
 </script>

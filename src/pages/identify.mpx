@@ -1,0 +1,300 @@
+<template>
+    <view>
+      <view style="background:white;height:{{setHeight}}px;" id="myView" wx:if="{{userMold=='企业'}}">
+        <!-- 审核主体 -->
+        <view class="identify {{isShowPhoto?'indexFixed':''}}" wx:if="{{text!='已认证'}}">
+        <!-- 标题 -->
+        <view class="title">认证企业身份</view>
+        <view class="head">加v表示,提升公信力,信息审核更易过</view>
+        <!-- 上传文件部分 -->
+        <view class="bgColor" bindtap="upImg">
+          <image src="{{identify}}" wx:if="{{identify!=''}}" style="height:285rpx;width:430rpx;background-size:100% 100%;"></image>
+          <!-- 上传图片按钮 -->
+          <view class="content" wx:if="{{identify==''}}">
+            <view class="picture"></view>
+          </view>
+          <!-- 问题提醒 -->
+          <view style="font-size:26rpx;color:rgba(107, 214, 234, 1);position:absolute;top:185rpx;left:112rpx;text-align:center;" wx:if="{{identify==''}}">请上传名片或工牌</view>
+        </view>
+        <!-- upPhoto部分   -->
+        <view class="{{isShowPhoto?'showImg':'hideImg'}}" style="height:840px;">
+            <view class="photoBtn">
+                <!-- <view class="take" bindtap="pic">拍摄照片</view> -->
+                <view class="select" bindtap="pic">选择照片</view>
+            </view>
+            <button style="background:white;color:#48CFE7;height:88rpx;width:718rpx;margin:0 auto;" bindtap="cancle">取消</button>
+        </view>
+        <!-- 认证点击按钮 -->
+        <button class="btn" bindtap="match" wx:if="{{text=='点击认证'}}">{{text}}</button>
+        <button class="grey" wx:if="{{text=='待审核' ||  text=='已驳回'}}">{{text}}</button>
+        <!-- 拍摄要求 -->
+        <view class="attention" wx:if="{{rejectReason==''}}">拍摄要求:1文字清晰可见 2企业名称与资料中所填保持一致</view>
+        <view class="attention" style="" wx:if="{{text=='已驳回'}}">很抱歉,您的审核被驳回!<view style="color:#E35850;">驳回原因:{{rejectReason}} 请重新认证</view></view>
+        </view>
+        <!-- 审核成功后 -->
+        <view class="success" wx:if="{{text=='已认证'}}" style="width:{{IDwidth}}px;height:{{IDheight}}px;background:white;">
+          <view class="pic"></view>
+          <view class="text">企业身份认证成功</view>
+          <view class="warn">加V标识,提升公信力,信息审核更易通过</view>
+        </view>
+      </view>
+      <view class="flex align-center justify-center" style="background:white;padding-top:400rpx;color:#48CFE7;" wx:if="{{userMold=='学生'}}">
+        <view style="font-size:40rpx;font-weight:bold;">学生身份不需要认证</view>
+      </view>
+    </view>
+</template>
+
+<script>
+  import { createPage } from '@mpxjs/core'
+  import store from '../store/general'
+  import Http from '../api/http.js'
+  var app = getApp();
+  createPage({
+    data:{
+      isShowPhoto:false,
+      text:'点击认证',
+      // textStatus:'',
+      // 驳回原因
+      rejectReason:'',
+      setHeight:Number,
+      // // 屏幕宽度
+      // IDwidth:Number,
+      // // 获取屏幕高度
+      // IDheight:Number
+    },
+    computed: {
+      ...store.mapState(['identify','token','userMold','phoneHeight','phoneWidth']),
+    },
+    onLoad(){
+      this.clearIdentify()
+      this.getData()
+    },
+    methods: {
+      ...store.mapMutations(['clearIdentify','updateHeight','updateWidth']),
+      // 提交认证
+      match(){
+        var _this = this
+           wx.showModal({
+              title: '提示',
+              content: '是否提交认证',
+              success(res) {
+                  //  var _this=this
+                  if (res.confirm) {
+                      _this.text="待审核"
+                      _this.matchData()
+                      _this.clearIdentify()
+                      } else if (res.cancel) {
+                      console.log('用户点击取消')
+                  }
+              }
+          })   
+      },
+      // 上传认证
+      matchData(){
+        Http.post({
+          url:`${app.globalData.realm}/auth/saveAuth`,
+          header:{
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          data:{
+            certificateIcon:this.identify
+          },
+          success:res =>{
+            console.log(44444444444444444,res)
+          }
+        })
+      },
+      // 获取认证返回的数据
+      async getData(){
+        const res = await Http.get({url:'/auth/myAuth'})
+        this.rejectReason = res.data.rejectReason
+        this.text = res.data.status
+      },
+      // 上传图片
+      upImg(){
+          this.text= '点击认证'
+          var _this = this
+          // 获取系统信息
+          wx.getSystemInfo({
+            success(res) {
+                _this.setHeight = res.screenHeight
+            }
+          }),
+          this.isShowPhoto=true
+      },
+      cancle(){
+          this.isShowPhoto=false
+      },
+      pic: function (options) {
+          this.isShowPhoto=false
+          this.clearIdentify()
+          // console.log(this.codeArr)
+          wx.chooseImage({
+              count: 1, // 默认9
+              sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+              sourceType: ['album'], // 可以指定来源是相册还是相机，默认二者都有
+              success: function (res) {
+                  // 返回选定照片的本地文件路径列表，tempFilePath可以作为img标签的src属性显示图片
+                  const src = res.tempFilePaths[0]
+                  wx.navigateTo({
+                  url: `../pages/cropper?src=${src}&imageType=auth&page=identify`
+                  })
+              }
+          })
+      }
+    }
+  })
+</script>
+<style lang="less" scoped>
+  page{
+    background:white;
+    height: 100%;
+  }
+  .success{
+    padding-top:175rpx;
+    background-color: white;
+    .pic{
+      background-image: url("../images/认证成功.png");
+      background-size: 100% 100%;
+      width: 136rpx;
+      height: 136rpx;
+      margin-bottom: 40rpx;
+      margin-left: 307rpx;
+    }
+    .text{
+      font-size: 36rpx;
+      color:rgba(3, 19, 22, 1);
+      margin-bottom: 183rpx;
+      text-align: center;
+    }
+    .warn{
+      color:rgba(167, 186, 189, 1);
+      font-size: 30rpx;
+      text-align: center;
+    }
+  }
+    // 出现弹出框时禁止下面主题内容滑动
+  .indexFixed{
+        position: fixed;
+        top:0;//top:0可不写,否则显示弹窗的同时会使底层滚动到顶部.
+        left:0;
+        bottom:50rpx;
+        right:0;
+    }
+  .identify{
+    background: white;
+    padding:100rpx 110rpx 386rpx;
+    text-align: center;
+    .title{
+      font-size: 48rpx;
+      color:#48CFE7;
+      font-weight: bold;
+      margin-bottom: 29rpx;
+    }
+    .head{
+      color:#A7BABD;
+      font-size: 30rpx;
+      margin-bottom: 77rpx;
+    }
+    .bgColor{
+      background-image: url("../images/矢量智能对象.png");
+      background-size: 100% 100%;
+      position: relative;
+      width: 430px;
+      height: 285px;
+      margin-left: 37px;
+      margin-bottom: 108px;
+      .content{
+        width: 90px;
+        height: 90px;
+        border-radius: 50%;
+        background-image: url("../images/椭圆 3.png");
+        background-size: 100% 100%;
+        position: absolute;
+        left:170rpx;
+        top:74rpx;
+        padding:24rpx 21rpx;
+        text-align: center;
+        .picture{
+          width: 51px;
+          height: 43px;
+          background-image: url("../images/照相.png");
+          background-size: 100% 100%;
+          margin-bottom: 8rpx;
+        }
+        .text{
+          color:white;
+          font-size: 24rpx;
+          margin-left: -2rpx;
+        }
+      }
+    }
+    .btn{
+      width: 546px;
+      height: 68px;
+      line-height: 68px;
+      text-align: center;
+      background: #48CFE7;
+      color:white;
+      font-size: 32rpx;
+      border-radius: 34rpx;
+      margin-bottom: 18rpx;
+    }
+    .grey{
+      width: 546px;
+      height: 68px;
+      line-height: 68px;
+      text-align: center;
+      background: #A0AFB2;
+      color:white;
+      font-size: 32rpx;
+      border-radius: 34rpx;
+      margin-bottom: 18rpx;
+    }
+    .attention{
+      color:#A7BABD;
+      font-size: 24rpx;
+      margin: 0 50rpx;
+    }
+  }
+  .showImg{
+      width: 718rpx;
+      position: absolute;
+      top:0;
+      left:0;
+      width: 100%;
+      background: rgba(0, 0, 0, 0.2);
+      z-index: 999;
+      .photoBtn{
+          height: 130rpx;
+          width: 718rpx;
+          display: flex;
+          // flex-direction: column;
+          align-items: center;
+          border-radius: 20rpx;
+          background: white;
+          color:#48CFE7;
+          font-size: 30rpx;
+          text-align:center;
+          margin: 1000rpx auto 20rpx;
+          padding-top: 15rpx;
+          view{
+              flex:1;
+          }
+        }
+      }
+      .hideImg{
+          display: none;
+      }
+</style>
+
+<script type="application/json">
+  {
+    "usingComponents": {
+       
+    },
+    "navigationBarTitleText": "企业身份认证",
+    "navigationBarBackgroundColor":"#48CFE7",
+    "navigationBarTextStyle":"white"
+  }
+</script>

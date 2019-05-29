@@ -1,0 +1,268 @@
+<template>
+    <view class="myAddPage">
+      <!-- 如果数组中有东西 -->
+      <view class="myAdd" wx:if="{{myPublish.length>0}}">
+        <view class="addBox" wx:for="{{myPublish}}" wx:key="{{index}}" bindtap="jumpPublish(index)">
+            <view class="donate">
+                <view></view>
+                <view>赞助活动</view>
+                <view>{{item.status}}</view>
+            </view>
+            <view class="content">
+                <view class="title">{{item.activityTitle}}</view>
+                <view class="pic">
+                    <view class="ear"></view>
+                    <view>{{item.browseQty}}</view>
+                    <view class="share"></view>
+                    <view>{{item.forwardQty}}</view>
+                </view>
+            </view>
+            <view class="btns">
+                <button size="mini" class="del" catchtap="delContent(index)">删除</button>
+                <button size="mini" class="down {{item.status=='用户下架'?'greyBtn':'blueBtn'}}" catchtap="changeStatus(index)" disabled="{{item.status=='用户下架'}}">下架</button>
+            </view>
+        </view>
+      </view>
+      <!-- 如果数组中无东西 -->
+      <view wx:if="{{myPublish.length==0}}" class="flex align-center justify-center noThing" style="padding-top:400rpx;color:#48CFE7;">你还没有发布任何东西</view>
+    </view>
+</template>
+<script>
+  import { createPage } from '@mpxjs/core'
+  import store from '../store/general.js'
+  import Http from '../api/http.js'
+  var app =getApp();
+  
+  createPage({
+    data:{
+      myPublish:[],
+      status:"",
+      isClick:false,
+      canClcik:false,
+      inId:''
+    },
+    computed: {
+       ...store.mapState(['token','phoneHeight','phoneWidth'])
+    },
+    onShow(p){
+      wx.showLoading({ title: '加载中...' })
+      this.getList(p)
+      wx.hideLoading()
+      console.log(app.globalData.tokenKey)
+    },
+    onLoad(p){
+      wx.showLoading({ title: '加载中...' })
+      this.getList(p)
+      wx.hideLoading()
+    },
+    // 请求发布接口
+    async getList(p){
+      const res = await Http.get({url:'/activity/myPublish'})
+      this.myPublish = res.data
+    },
+    methods: {
+      ...store.mapActions(['downActive','delActive']),
+      // 跳转到详情页面
+      jumpPublish(index){
+        const id = this.myPublish[index].id
+        wx.navigateTo({
+          url:`../pages/task?id=${id}`
+        })
+      },
+      // 点击删除,删除当前发布内容
+      delContent(index){
+        var _this = this
+        // 弹出提示框
+        wx.showModal({
+          title: '提示',
+          content: '是否删除该发布',
+          success(res) {
+            //  var _this=this
+            if (res.confirm) {
+              _this.delPost(index)
+            } else if (res.cancel) {
+              console.log('用户点击取消')
+            }
+          }
+        })
+      
+      },
+      // 提交删除请求
+      delPost(index){
+          this.delActive(this.myPublish[index].id),
+          // 删除接口
+          // wx.request({`
+          //   url: `${app.globalData.realm}/activity/deleteActivity`,
+          //   method: "POST",
+          //   header: {
+          //   'content-type': 'application/x-www-form-urlencoded',
+          //   'Authorization' :this.token
+          //   },
+          //   data: {
+          //     id:this.myPublish[index].id
+          //   },
+          //   success: res => {
+          //     console.log(res.data)
+          //   }
+          // })
+          this.myPublish.splice(index,1)
+        },
+      // 用户呢下架发布
+      changeStatus(index){
+        var _this = this
+        // 显示提示窗口
+        wx.showModal({
+          title: '提示',
+          content: '您确定要下架吗',
+          success(res) {
+            if (res.confirm) {
+              _this.isClick=true
+              _this.canClcik=true
+              _this.aa(index)
+              _this.onShow()
+            } else if (res.cancel) {
+              _this.isClick=false
+              _this.canClcik=false
+            }
+          }
+        })
+      },
+      async aa(index){
+        // this.downActive(this.myPublish[index].id) 
+        // var _this =this
+        const res = await Http.post({
+          url:'/activity/remove',
+          header:{
+            'content-type': 'application/x-www-form-urlencoded'
+          },
+          data:{
+            id:this.myPublish[index].id
+          }
+        })
+        this.getList()
+        //  wx.request({
+        //   url: `${app.globalData.realm}/activity/remove`,
+        //   method: "POST",
+        //   header: {
+        //     'content-type': 'application/x-www-form-urlencoded',
+        //     'Authorization' :this.token
+        //   },
+        //   data:{
+        //     id:this.myPublish[index].id
+        //   },
+        //   success: res => {
+        //     console.log(res) 
+        //     this.getList()
+        //   }
+        // })
+      }
+    }
+
+  })
+</script>
+<style lang="less" scoped>
+page{
+  height: 100%;
+  // background: white;
+}
+  .myAddPage{
+    // background: white;
+    .noThing{
+      color:#48CFE7;
+      font-size: 36rpx;
+      text-align: center;
+    }
+    .myAdd{
+        padding-top: 20rpx;
+        .addBox{
+          width: 717rpx;
+          margin: 0 auto;
+          border-radius: 10rpx;
+          padding: 30rpx 25rpx;
+          background: white;
+          margin-bottom: 30rpx;
+          .donate{
+            display: flex;
+            align-items: center;
+            padding-bottom: 33rpx;
+            border-bottom:1rpx solid #F0F0F0;
+            view{
+              &:nth-of-type(1){
+                background-image: url("../images/发布赞助icon.png");
+                background-size: 100% 100%;
+                width: 68rpx;
+                height: 68rpx;
+                margin-right: 20rpx;
+              }
+              &:nth-of-type(2){
+                flex:1;
+                font-size: 32rpx;
+                color:#031316;
+              }
+            }
+          }
+          .content{
+            height: 186rpx;
+            padding-top: 30rpx;
+              .title{
+                font-size: 28rpx;
+                color:#46595C;
+                margin-bottom: 26rpx;
+              }
+            .pic{
+                display: flex;
+                color:#46595C;
+                font-size: 20rpx;
+                align-items: center;
+                .ear{
+                  background-image: url("../images/浏览1(1).png");
+                  background-size: 100% 100%;
+                  width: 37rpx;
+                  height: 28rpx;
+                  margin-right: 16rpx;
+                  margin-left: 480rpx;
+                }
+                .share{
+                  background-image: url("../images/分享.png");
+                  background-size: 100% 100%;
+                  width: 26rpx;
+                  height: 26rpx;
+                  margin-right: 16rpx;
+                  margin-left: 16rpx;
+                }
+              }
+            }
+          }
+          .btns{
+            display: flex;
+            .del{
+              color:#FA736E;
+              margin-right:390rpx;
+              border-color:#FA736E;
+            }
+            .del::after{
+              margin-right: 40rpx;
+              border-color:#FA736E;
+            }
+            .greyBtn{
+              color:#A7BABD;
+            }
+            .blueBtn{
+              color:white;
+              background: #48CFE7;
+            }
+          }
+    }
+  }
+  
+</style>
+
+<script type="application/json">
+  {
+    "usingComponents": {
+    },
+    "navigationBarTitleText": "我的发布",
+    "navigationBarBackgroundColor":"#48CFE7",
+    "navigationBarTextStyle":"white"
+  }
+</script>

@@ -1,0 +1,32 @@
+<template>
+    <view>哈哈哈哈哈</view>
+</template>
+
+<script>
+  import { createPage } from '@mpxjs/core'
+  import store from '../store/general.js'
+  createPage({
+    onLoad () {
+    }
+  })
+  
+</script>
+<style lang="less" scoped>
+  button{
+    width: 80%;
+    margin: 40rpx auto;
+    color:white;
+    background: #48CFE7;
+  }
+</style>
+
+<script type="application/json">
+  {
+    "usingComponents": {
+      "list": "../components/list"
+    },
+    "navigationBarTitleText": "专属客服",
+    "navigationBarBackgroundColor":"#48CFE7",
+    "navigationBarTextStyle":"white"
+  }
+</script>

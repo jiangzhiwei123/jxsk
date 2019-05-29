@@ -1,0 +1,38 @@
+<template>
+  <view>
+    <image src="https://image.weilanwl.com/gif/loading-white.gif" mode="aspectFit" class="gif-white response"
+         style="height:440rpx"></image>
+  <view class="flex flex-direction justify-center">
+    <view class="text-center padding-lg text-xl text-green">
+      <view>您的登录状态已失效</view>
+      <view>正在自动刷新</view>
+      <view>请稍等</view>
+    </view>
+  </view>
+  </view>
+</template>
+<script type="application/json">
+  {
+    "usingComponents": {
+    }
+  }
+</script>
+
+<script>
+  import { createPage } from '@mpxjs/core'
+  import store from '../store'
+  createPage({
+    data: {},
+    computed: {},
+    async onLoad () {
+
+    },
+
+    methods: {}
+  })
+</script>
+<style>
+  page {
+    background: #fff;
+  }
+</style>

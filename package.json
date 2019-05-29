@@ -15,6 +15,8 @@
   "license": "ISC",
   "dependencies": {
     "@mpxjs/core": "^1.1.0",
+    "@mpxjs/fetch": "^1.1.5",
+    "@mpxjs/promisify": "^1.1.7",
     "less": "^3.9.0",
     "less-loader": "^4.1.0"
   },

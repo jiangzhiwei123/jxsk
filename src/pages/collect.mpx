@@ -1,0 +1,228 @@
+<template>
+    <view class="listBox">
+        <!-- 有收藏的时候 -->
+        <view class="list" wx:for="{{collectList}}" bindtap="listClick(index)" wx:key="{{index}}" wx:if="{{collectList.length>0}}">
+          <!-- 头像 -->
+          <image class="userImg" src="{{item.userIcon}}"></image>
+          <view class="text">
+            <view class="title">{{item.activityTitle}}</view>
+            <view class="information">
+              <!-- 认证图片 -->
+              <image class="{{item.userStatus==='已认证'?'had':'noHad'}}" style="width:92rpx;height:28rpx;"></image>
+              <!-- 姓名 省份 日期 -->
+              <view class="person" style="flex-wrap:wrap;">
+                <view class="name">{{item.userName}}</view>
+                <view wx:for="{{item.astrictAdds}}">
+                  <view class="province">{{item}}</view>
+                </view>
+                <view class="time" style="margin-top:4rpx;">{{item.beginTime}}</view>
+              </view>
+            </view>
+            <!-- 地址部分 -->
+            <view class="address">
+              <view wx:for="{{item.labels}}">{{item.labelName}}</view>
+            </view>
+            <!-- 评论收藏部分 -->
+            <view class="collect">
+              <image style="width:37rpx;height:28rpx;" src="../images/浏览1(1).png" mode="widthFix"></image>
+              <view>{{item.browseQty}}</view>
+              <view style="display:flex;" catchtap="clickCollect(index)" data-index="{{index}}">
+                <view style="width:28rpx;height:28rpx;" class="{{item.favorites?'imgClick':'notClick'}}" mode="widthFix"></view>
+                <view style="margin-top:3rpx;">收藏</view>
+              </view>
+            </view>
+          </view>
+        </view>
+        <!-- 没有收藏的时候 -->
+        <view class="flex align-center justify-center" style="padding-top:400rpx;color:#48CFE7;font-size:36rpx;" wx:if="{{collectList.length==0}}">你暂时没有收藏</view>
+    </view>
+</template>
+
+<script>
+  import { createPage } from '@mpxjs/core'
+  import store from '../store/general.js'
+  var app = getApp();
+  
+  createPage({
+    data:{
+      // collectList:[],
+      save:Number,
+      activityId:""
+    },
+    computed: {
+      ...store.mapState(['token','collectList'])
+    },
+    methods: {
+      ...store.mapActions(['changeCollect','lookCollect']),
+      listClick(index){
+        const id = this.collectList[index].id
+        wx.navigateTo({
+          url: `../pages/task?id=${id}`
+        })
+      },
+      // 收藏的接口
+      async clickCollect(index){
+        var _this=this
+        // 弹出提示框
+        wx.showModal({
+          title: '提示',
+          content: '是否取消',
+          success(res) {
+            if (res.confirm) {
+                  _this.collectList[index].favorites?_this.save=0:_this.save=1
+                  // wx.showLoading({ title: '加载中...' })
+                  _this.changeCollect({ activeId:_this.collectList[index].id, isSave:_this.save })
+                  // wx.hideLoading()
+                  _this.collectList.splice(index,1)
+                  // _this.lookCollect()
+            // this.simpleList[index].favorites=!this.simpleList[index].favorites
+              // wx.request({
+              //   url: `${app.globalData.realm}/favorites/saveOrDelFavoritesHistory`,
+              //   method: "POST",
+              //   header: {
+              //     'content-type': 'application/x-www-form-urlencoded',
+              //     'Authorization' :_this.token
+              //   },
+              //   data:{
+              //     activityId:_this.collectList[index].id,
+              //     isSave:_this.save
+              //   },
+              //   success: res => {
+              //     _this.onLoad()
+              //   }
+              // })
+            } else if (res.cancel) {
+              console.log('用户点击取消')
+            }
+          }
+        })
+        
+      }
+    },
+    onLoad(){
+      wx.showLoading({ title: '加载中...' })
+      this.lookCollect()
+      wx.hideLoading()
+    },
+    // 查看用户收藏
+      // this.lookCollect()
+      // wx.request({
+      //   url:`${app.globalData.realm}/activity/myFavoritesHistory`,
+      //   header:{
+      //     'Authorization' :this.token
+      //   },
+      //   success:res=>{
+      //     this.collectList=res.data.data 
+      //     console.log(this.collectList)
+      //   }
+      // })
+    
+
+  })
+</script>
+<style lang="less" scoped>
+page{
+  height: 100%;
+  padding-top: 20rpx;
+  // background: white;
+}
+ // 是否收藏
+  .notClick{
+    background-image: url("../images/收 藏 (1).png");
+    background-size: 100% 100%;
+  }
+  .imgClick{
+    background-image: url("../images/已收藏.png");
+    background-size: 100% 100%;
+  }
+  .listBox{
+      .list{
+        margin: 0 auto;
+        width: 718rpx;
+        background: white;
+        margin-top: 14rpx;
+        padding: 30rpx 27rpx 20rpx;
+        box-sizing: border-box;
+        display: flex;
+        border-radius: 20rpx;
+        .userImg{
+          // background-image: url("../images/头像.jpg");
+          background-size: 100% 100%;
+          width: 74rpx;
+          height:74rpx;
+          margin-right: 21rpx;
+          border-radius:50%
+        }
+        .text{
+          flex:1;
+          .title{
+            font-size: 28rpx;
+            color:#031316;
+            margin-bottom: 14rpx;
+          }
+          .information{
+            font-size: 20rpx;
+            color:#A7BABD;
+            display: flex;
+            margin-bottom: 20rpx;
+            .had{
+              background-image: url("../images/认证(1).png");
+              background-size: 100% 100%;
+              margin-right: 14rpx;
+            }
+            .noHad{
+              background-image: url("../images/未认证.png");
+              background-size: 100% 100%;
+              margin-right: 14rpx;
+            }
+            .person{
+              flex:1;
+              display: flex;
+              .name{
+                margin-right: 17rpx;
+              }
+              .province{
+                margin-right: 20rpx;
+              }
+            }
+            
+          }
+          .address{
+            display: flex;
+            flex-wrap: wrap;
+            view{
+              padding: 9rpx 16rpx 10rpx 19rpx;
+              box-sizing: border-box;
+              background:#F0F3F3;
+              color:#A7BABD;
+              font-size: 24rpx;
+              margin-right: 13rpx;
+              margin-bottom: 20rpx;
+            }
+          }
+          .collect{
+            display: flex;
+            align-items: center;
+            image{
+              margin-right: 16rpx;
+            }
+            view{
+              font-size: 20rpx;
+              margin-right: 32rpx;
+            }
+          }
+        }
+      }
+    }
+</style>
+
+<script type="application/json">
+  {
+    "usingComponents": {
+       
+    },
+    "navigationBarTitleText": "我的收藏",
+    "navigationBarBackgroundColor":"#48CFE7",
+    "navigationBarTextStyle":"white"
+  }
+</script>
