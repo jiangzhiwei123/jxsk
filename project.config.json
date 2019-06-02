@@ -11,7 +11,7 @@
 		"checkInvalidKey": true
 	},
 	"appid": "wx264af11a213167a3",
-	"projectname": "%E8%81%9A%E4%BA%AB%E6%97%B6%E7%A9%BA",
+	"projectname": "%E8%81%9A%E4%BA%AB%E6%97%B6%E7%A9%BA2222",
 	"description": "A mpx project",
 	"simulatorType": "wechat",
 	"simulatorPluginLibVersion": {},
@@ -32,7 +32,7 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 16,
+			"current": 17,
 			"list": [
 				{
 					"id": -1,
@@ -148,6 +148,14 @@
 					"id": -1,
 					"name": "注册页面",
 					"pathName": "pages/regist",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": 17,
+					"name": "分享",
+					"pathName": "pages/index",
+					"query": "id=201905291928152889904450fca5d2ef&type=active",
 					"scene": null
 				}
 			]

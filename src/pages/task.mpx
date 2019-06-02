@@ -16,10 +16,10 @@
             <view class="conHead">{{dataList.activityTitle}}</view>
             <view class="conAddress">
                 <view></view>
-                <view wx:for="{{dataList.astrictAdds}}">{{item}}</view>
+                <view wx:for="{{dataList.astrictAdds}}" wx:key="{{index}}">{{item}}</view>
             </view>
             <view class="conText">
-                <view wx:for="{{dataList.labels}}">{{item.labelName}}</view>
+                <view wx:for="{{dataList.labels}}" wx:key="{{index}}">{{item.labelName}}</view>
             </view>
             <view class="conThrough">
                 <view></view>
@@ -84,17 +84,29 @@
     },
     // 转发功能
     onShareAppMessage(res) {
+
         if (res.from === 'button') {
         // 来自页面内转发按钮
-        console.log(res)
-        }
+        console.log(3434343434,res)
         return {
             title: '聚校推:聚拢优质企业资源,助力高校精彩活动',
-            path: '/page/user?id=123'
+            path: `/pages/index?id=${this.dataList.id}&type=active`
         }
+        }else  if (res.from === 'menu'){
+            console.log(55555555555555,res)
+            return {
+                title: '聚校推:聚拢优质企业资源,助力高校精彩活动',
+                path: '/pages/index'
+            }
+        }
+       
+        
     },
-    onLoad (p) {
+    onLoad (p) { 
         this.getList(p)
+        // if(p.){
+
+        // }
         // if(this.imgArray.length==1){
         //     console.log(343434343443)
         //     this.imgNumber=true

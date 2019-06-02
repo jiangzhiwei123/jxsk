@@ -102,7 +102,7 @@
           </view>
           <!-- 地址部分 -->
           <view class="address">
-          <view wx:for="{{item.labels}}">{{item.labelName}}</view>
+          <view wx:for="{{item.labels}}" wx:key="{{index}}">{{item.labelName}}</view>
           </view>
           <!-- 评论收藏部分 -->
           <view class="collect">
@@ -295,7 +295,23 @@
           // })
       }
     },
-    onLoad(options){       // 合作缩略请求
+    onLoad(options){    
+        if(options.type=='active'){
+              wx.showModal({
+              title: '提示',
+              content: '是否跳转到分享页面',
+              success: (result) => {
+                if(result.confirm){
+                  wx.navigateTo({
+                    url: `../pages/task?id=${options.id}`,
+                  })
+                }
+              }
+            })
+        }
+        console.log(333333333333,options.id,options.type)
+        wx.showShareMenu()   
+        // 合作缩略请求
         wx.showLoading({ title: '加载中...' })
         // this.requestImfor()
         wx.hideLoading()

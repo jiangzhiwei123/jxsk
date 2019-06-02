@@ -12,7 +12,7 @@
       wxLength: false,
       tokenKey: '',
       // 域名
-      realm: 'https://jxsk.juhi8.com'
+      realm: 'https://jxsk.juhi8.com/api/jxt'
       // realm: 'http://47.101.56.46:8080'
       // realm:'http://192.168.1.40:8080'
     },

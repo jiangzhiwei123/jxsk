@@ -13,15 +13,15 @@
             </view>
             <!-- 案例部分 -->
             <!-- modal框架部分 -->
-            <view class="cu-modal {{modalName=='Image'?'show':''}}" style="width:750rpx;position:absolute;left:0;top:0;height:1533rpx;">
+            <view class="cu-modal {{modalName=='Image'?'show':''}}" style="width:750rpx;position:absolute;left:0;top:0;height:800px;">
             <view class="cu-dialog" style="height:650px;">
-                <view class="bg-img {{typeCase}}" style="height:600px;">
-                <view class="cu-bar justify-end text-white">
-                    <view class="action" bindtap="hideModal">
-                    <text class="icon-close "></text>
+                <image class="bg-img" style="height:600px;" src="{{typeCase}}">
+                    <view class="cu-bar justify-end text-white">
+                        <view class="action" bindtap="hideModal">
+                        <text class="icon-close "></text>
+                        </view>
                     </view>
-                </view>
-                </view>
+                </image>
                 <view class="cu-bar bg-white">
                 <view class="action margin-0 flex-sub  solid-left" bindtap="hideModal">我知道了</view>
                 </view>
@@ -29,13 +29,15 @@
             </view>
             <!-- 标题表单 -->
             <view class="inputText">
-                 <input class="biaoti" type="text" placeholder="请输入合作标题" placeholder-style="font-size:28rpx;color:#A7BABD;" bindblur="submitTitle"/>
+                 <input class="biaoti" type="text" placeholder="请输入合作标题" placeholder-style="font-size:28rpx;color:#A7BABD;" bindblur="submitTitle" value="{{supTitle}}"/>
             </view>
             <!-- 合作区域 -->
             <navigator url="../pages/chooseProvince" hover-class="none">
                 <view class="address">
                     <view>合作区域</view>
-                    <view></view>
+                    <view style="display:flex;flex-direction:row;text-align:right;">
+                        <view wx:for="{{nameArray}}" style="font-size:20rpx;color:#A7BABD;margin-right:10px;" wx:key="{{index}}">{{item}}</view>
+                    </view>
                     <image class="icon" src="../images/下拉按钮(公告）.png"></image>
                 </view>
             </navigator>
@@ -66,17 +68,17 @@
             </view> -->
             <!-- 企业需求资源说明 -->
             <view class="explain"  wx:if="{{userMold=='企业'}}">
-                <view class="inputTitle">需求资源说明</view>
+                <view class="inputTitle" bindtap="bbbbbbbbbbb">需求资源说明</view>
                 <view id="desc-area">
                   <view class="inputAll">
-                    <view wx:if="{{ descArea.length === 0}}">
+                    <view wx:if="{{ supNeed==''}}">
                       <view>1.需求资源描述</view>
                       <view>2.时间限制</view>
                       <view>3.学校限制</view>
                       <view>4.其他限制</view>
                     </view>
                   </view>
-                  <textarea name=""  wx:model="{{descArea}}" id="" maxlength="-1" cols="30" rows="10" bindblur="subText" value="hahah"  style="color:black;"></textarea>
+                  <textarea name=""  id="" maxlength="-1" cols="30" rows="10" bindblur="subText" value="{{supNeed}}" bindinput="an" style="color:black;"></textarea>
                 </view>
             </view>
             <!-- 学校需求资源说明 -->
@@ -84,14 +86,14 @@
                 <view class="inputTitle">需求资源说明</view>
                 <view id="desc-area">
                   <view class="inputAll">
-                    <view wx:if="{{ descArea.length === 0}}">
+                    <view wx:if="{{ supNeed==''}}">
                       <view>1.需求资源描述</view>
                       <view>2.时间期限</view>
                       <view>3.学校限制</view>
                       <view>4.其他描述</view>
                     </view>
                   </view>
-                  <textarea name=""  wx:model="{{descArea}}" id="" maxlength="-1" cols="30" rows="10" bindblur="subText" value="hahah"  style="color:black;"></textarea>
+                  <textarea name=""  id="" maxlength="-1" cols="30" rows="10" bindblur="subText" value="{{supNeed}}" style="color:black;" bindinput="an"></textarea>
                 </view>
             </view>
             <!-- 资源图片选填 -->
@@ -100,7 +102,7 @@
                 <!-- 图片展示部分 -->
                 <view style="display:flex;" bindtap="upImg">
                     <image  wx:for="{{imgUrl}}" src="{{item}}" style="width:204rpx;
-                height:204rpx;background-size:100% 100%;"></image>
+                height:204rpx;background-size:100% 100%;" wx:key="{{index}}"></image>
                     <view class="imageBtn" style="position:relative;">
                         <image src="../images/选择图片.png" style="position:absolute;left:0;right:0;top:0;bottom:0;margin:auto;"></image>
                     </view>
@@ -115,29 +117,29 @@
                 <button style="background:white;color:#48CFE7;height:88rpx;width:718rpx;margin:0 auto;" bindtap="cancle">取消</button>
             </view>
             <!-- 学生提供资源说明 -->
-             <view class="explain" wx:if="{{userMold=='学生'}}">
+            <view class="explain" wx:if="{{userMold=='学生'}}">
                 <view class="inputTitle">提供资源说明</view>
                 <view id="desc-sup">
                   <view class="inputAll">
-                    <view wx:if="{{ descSup.length === 0}}">
+                    <view wx:if="{{ supreSource==''}}">
                       <view>1.活动内容</view>
                       <view>2.其他补充</view>
                     </view>
                   </view>
-                  <textarea name="" wx:model="{{descSup}}" maxlength="-1" id="" cols="30" rows="10" style="color:black;" bindblur="subSup"></textarea>
+                  <textarea name="" value="{{supreSource}}" maxlength="-1" id="" cols="30" rows="10" style="color:black;" bindblur="subSup" bindinput="bn"></textarea>
                 </view>
             </view>
             <!-- 企业提供资源说明 -->
-             <view class="explain" wx:if="{{userMold=='企业'}}">
+            <view class="explain" wx:if="{{userMold=='企业'}}">
                 <view class="inputTitle">提供资源说明</view>
                 <view id="desc-sup">
                   <view class="inputAll">
-                    <view wx:if="{{ descSup.length === 0}}">
+                    <view wx:if="{{ supreSource==''}}">
                       <view>1.提供资源类型（资金或其他）</view>
                       <view>2.其他补充</view>
                     </view>
                   </view>
-                  <textarea name="" wx:model="{{descSup}}" maxlength="-1" id="" cols="30" rows="10" style="color:black;" bindblur="subSup"></textarea>
+                  <textarea name="" value="{{supreSource}}" maxlength="-1" id="" cols="30" rows="10" style="color:black;" bindblur="subSup" bindinput="bn"></textarea>
                 </view>
             </view>
             <!-- 选择标签 -->
@@ -178,10 +180,6 @@
             // 活动标题
             activity_title:'',
             // 需求描述
-            req_description:'',
-            // 提供资源说明
-            provide_description:'',
-            // 合作区域的id集合
             codes:[],
             // 活动选择的id标签集合
             labelIds:[],
@@ -194,26 +192,43 @@
             // 设备windows宽度
             relHeight:'',
             // 设备windows高度
-            winHeight:''
+            winHeight:'',
+            nameArray:[]
 
         },
         computed:{
-            ...store.mapState(['imgUrl','codeArr','label','idArr','token','codeArr','userMold','LabelArr']),
+            ...store.mapState(['imgUrl','codeArr','label','idArr','token','codeArr','userMold','LabelArr','provinceName','supTitle','supNeed','supreSource']),
+        },
+        onShareAppMessage(res){
+            if (res.from === 'menu') {
+                // 来自页面内转发按钮
+                console.log(res.target)
+            }
+            return {
+                title: '聚校推:聚拢优质企业资源,助力高校精彩活动',
+                path: '/pages/index'
+            }
         },
         methods: {
-            ...store.mapMutations(['updateLabelArr']),
+            // 键盘按下去的时候
+            an(e){
+                // 将需求存入store
+                this.req_description = e.detail.value
+                this.updateNeed(e.detail.value)
+            },
+            bn(e){
+                // 将需求存入store
+                this.provide_description = e.detail.value
+                this.updateSource(e.detail.value)
+            },
             showModal(e){
                 this.modalName = e.currentTarget.dataset.target
-                console.log( this.modalName)
             },
             hideModal(){
                 this.modalName=''
             },
-            aa(){
-                console.log(this.idArr)
-            },
             // 提交以后清空状态值里面的图片
-            ...store.mapMutations(['clearImg','clearCode','selectLabel','clearId']),
+            ...store.mapMutations(['clearImg','clearCode','selectLabel','clearId','updateLabelArr','updateSupTitle','updateSource','updateNeed','clearThree','clearProvinceName']),
             ...store.mapActions(['fetchLabel']),
             // 照片
             pic: function (options) {
@@ -279,20 +294,22 @@
                     })
                 }else{
                     this.activity_title=e.detail.value
+                    // 将标题存入store
+                    this.updateSupTitle(e.detail.value)
                 }
-                console.log(this.activity_title)
             },
-            subText(e){
-                console.log(e.detail)
-                this.req_description = e.detail.value
-            },
+            // 需求的资源
+            // subText(e){
+            //     this.req_description = e.detail.value
+            // },
             formSubmit(e){
                 console.log(e.detail)
             },
-            subSup(e){
-                this.provide_description = e.detail.value
-                console.log(e.detail)
-            },
+            // 提供资源
+            // subSup(e){
+            //     this.provide_description = e.detail.value
+            //     console.log(e.detail)
+            // },
             // 点击提交按钮
             submitData(){
                 // 提醒用户是否发布
@@ -306,9 +323,14 @@
                         //  var _this=this
                         if (res.confirm) {
                             _this.submit()
+                            // 清空图片
                             _this.clearImg()
+                            // 清空地区
                             _this.clearCode()
+                            // 清空标签
                             _this.clearId()
+                            // 清空标题和内容
+                            _this.clearThree()
                             wx.showToast({
                             title: '成功',
                             icon: 'success'
@@ -332,9 +354,9 @@
                         // 'Authorization' :this.token
                     },
                     data: {
-                        activityTitle:this.activity_title,
-                        reqDescription:this.req_description,
-                        provideDescription:this.provide_description,
+                        activityTitle:this.supTitle,
+                        reqDescription:this.supNeed,
+                        provideDescription:this.supreSource,
                         codes  :this.codeArr,
                         labelIds:this.idArr,
                         imageUrl:this.imgUrl,
@@ -342,10 +364,7 @@
                         // labeltype:this.list.text
                     },
                     success: res => {
-                        this.clearImg()
-                        this.clearCode()
-                        this.clearId()
-                        console.log(res.data)
+                        console.log(56789,res.data)
                         // wx.navigateBack({
                         //     delta: 1
                         // })
@@ -378,56 +397,97 @@
                         console.log(this.winHeight)
                     }
                 })
+            },
+            // 提示用户是否采用草稿
+            ifShow(){
+                var _this = this
+                wx.showModal({
+                title: '提示',
+                content: '是否保留上次编辑内容',
+                success (res) {
+                    if (res.confirm) {
+                    console.log('用户点击确定')
+                    } else if (res.cancel) {
+                        _this.clearThree()
+                        _this.clearImg()
+                    console.log('用户点击取消')
+                    }
+                }
+            })
             }
+            
             // mackClick(e){
             //     this.markCurrent = e.target.dataset.mack
             // }
         },
+        // 从子页面2返回到子页面1，会触发子页面2的onUnload()
         onLoad (e) {
             this.getSystem()
-            this.clearImg()
+            // this.clearImg()
             this.clearCode()
             this.clearId()
             this.list = e
-            if(e.text=='发布赞助需求'){
-                this.typeCase='bgex'
-            }else if(e.text=='发布业务需求'){
-                this.typeCase='bgex1'
-            }else if(e.text=='发布活动需求'){
-                this.typeCase='bgex2'
+            if(e.text=='发布赞助需求'&&this.userMold=='企业'){
+                this.typeCase='https://jxt-1255675207.cos.ap-chengdu.myqcloud.com/example/case1.jpg'
+            }else if(e.text=='发布业务需求'&&this.userMold=='企业'){
+                this.typeCase='https://jxt-1255675207.cos.ap-chengdu.myqcloud.com/example/case3.jpg'
+            }else if(e.text=='发布活动需求'&&this.userMold=='企业'){
+                this.typeCase='https://jxt-1255675207.cos.ap-chengdu.myqcloud.com/example/case2.jpg'
+            }else if(e.text=='发布活动需求'&&this.userMold=='学生'){
+                this.typeCase='https://jxt-1255675207.cos.ap-chengdu.myqcloud.com/example/case6.jpg'
+            }else if(e.text=='发布业务需求'&&this.userMold=='学生'){
+                this.typeCase='https://jxt-1255675207.cos.ap-chengdu.myqcloud.com/example/case5.jpg'
+            }else if('发布活动需求'&&this.userMold=='学生'){
+                this.typeCase='https://jxt-1255675207.cos.ap-chengdu.myqcloud.com/example/case4.jpg'
             }else{
-                this.typeCase='bgex3'
+                this.typeCase='https://jxt-1255675207.cos.ap-chengdu.myqcloud.com/example/case1.jpg'
             }
             
             console.log(66666666666666666666666,e)
             this.imageUrl = e.userIco
             // 获取标签数据
             this.fetchLabel(this.changType(this.list.text))
+            // 弹窗显示
+            if(this.supTitle!=''){
+                console.log(777777777777777)
+                this.ifShow()
+            }
+            
             // console.log(this.changType(this.list.text))
-            // this.updateLabelArr(this.list.text)
+            // this .updateLabelArr(this.list.text)
         },
-        onShow(){     
+        onShow(){   
+            // 数据刷新加载
+            this.nameArray = this.provinceName  
         },
 
   })
 </script>
 <style lang="less" scoped>
-    .bgex{
-        background-image: url("../images/001.png");
-        background-size: 100% 100%;
-    }
-    .bgex1{
-        background-image: url("../images/002.png");
-        background-size: 100% 100%;
-    }
-    .bgex2{
-        background-image: url("../images/003.jpg");
-        background-size: 100% 100%;
-    }
-    .bgex3{
-        background-image: url("../images/ex.jpg");
-        background-size: 100% 100%;
-    }
+    // .bgex{
+    //     background-image: url("../images/case1.jpg");
+    //     background-size: 100% 100%;
+    // }
+    // .bgex1{
+    //     background-image: url("../images/case3.jpg");
+    //     background-size: 100% 100%;
+    // }
+    // .bgex2{
+    //     background-image: url("../images/case2.jpg");
+    //     background-size: 100% 100%;
+    // }
+    // .bgex3{
+    //     background-image: url("../images/case6.jpg");
+    //     background-size: 100% 100%;
+    // }
+    // .bgex4{
+    //     background-image: url("../images/case4.jpg");
+    //     background-size: 100% 100%;
+    // }
+    // .bgex5{
+    //     background-image: url("../images/case5.jpg");
+    //     background-size: 100% 100%;
+    // }
     // 出现弹出框时禁止下面主题内容滑动
     .indexFixed{
         position: fixed;

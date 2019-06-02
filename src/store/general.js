@@ -43,7 +43,9 @@ const store = createStore({
     // 设备高度
     phoneHeight: '',
     // 设备宽度
-    phoneWidth: ''
+    phoneWidth: '',
+    // 显示选择地区的名字
+    provinceName: []
     // 改善
     // login变形
     // 学生企业 发布页面不同
@@ -84,8 +86,10 @@ const store = createStore({
         state.provinces[index].selected = !state.provinces[index].selected
         if (state.provinces[index].selected) {
           state.codeArr.push(code)
+          state.provinceName.push(state.provinces[index].name)
         } else {
           state.codeArr = state.codeArr.filter(item => item !== code)
+          state.provinceName = state.provinceName.filter(item => item !== code)
         }
       } else {
         wx.showModal({
@@ -153,6 +157,10 @@ const store = createStore({
           }
         })
       }
+    },
+    //  清空用户选择的地区
+    clearProvinceName(state, p) {
+      state.provinceName = []
     },
     // 清除地区code集合
     clearCode(state) {

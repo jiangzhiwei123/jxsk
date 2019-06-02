@@ -12,7 +12,7 @@
               <!-- 姓名 省份 日期 -->
               <view class="person" style="flex-wrap:wrap;">
                 <view class="name">{{item.userName}}</view>
-                <view wx:for="{{item.astrictAdds}}">
+                <view wx:for="{{item.astrictAdds}}" wx:key="{{index}}">
                   <view class="province">{{item}}</view>
                 </view>
                 <view class="time" style="margin-top:4rpx;">{{item.beginTime}}</view>
@@ -20,7 +20,7 @@
             </view>
             <!-- 地址部分 -->
             <view class="address">
-              <view wx:for="{{item.labels}}">{{item.labelName}}</view>
+              <view wx:for="{{item.labels}}" wx:key="{{index}}">{{item.labelName}}</view>
             </view>
             <!-- 评论收藏部分 -->
             <view class="collect">
@@ -104,6 +104,16 @@
       this.lookCollect()
       wx.hideLoading()
     },
+    onShareAppMessage(res){
+      if (res.from === 'menu') {
+        // 来自页面内转发按钮
+        console.log(res.target)
+      }
+      return {
+        title: '聚校推:聚拢优质企业资源,助力高校精彩活动',
+        path: '/pages/index'
+      }
+    }
     // 查看用户收藏
       // this.lookCollect()
       // wx.request({

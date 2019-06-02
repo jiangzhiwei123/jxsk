@@ -170,6 +170,16 @@
     computed: {
         ...store.mapState(['token','infoList','userMold']),
     },
+    onShareAppMessage(res){
+      if (res.from === 'menu') {
+        // 来自页面内转发按钮
+        console.log(res.target)
+      }
+      return {
+        title: '聚校推:聚拢优质企业资源,助力高校精彩活动',
+        path: '/pages/index'
+      }
+    },
     // 根据id查看用户信息
     async getImformation(options){
         // this.requestImfor()
@@ -429,7 +439,7 @@
                     // 返回选定照片的本地文件路径列表，tempFilePath可以作为img标签的src属性显示图片
                     const src = res.tempFilePaths[0]
                     wx.redirectTo({
-                    url: `../pages/cropper?src=${src}&imageType=log&page=add`
+                        url: `../pages/cropper?src=${src}&imageType=log&page=add`
                     })
                 }
             })

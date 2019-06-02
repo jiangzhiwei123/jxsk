@@ -27,6 +27,16 @@
     computed: {
       ...store.mapState(['token'])
     },
+    onShareAppMessage(res){
+      if (res.from === 'menu') {
+        // 来自页面内转发按钮
+        console.log(res.target)
+      }
+      return {
+        title: '聚校推:聚拢优质企业资源,助力高校精彩活动',
+        path: '/pages/index'
+      }
+    },
     onLoad(options) {
       // 获取到image-cropper对象
       this.cropper = this.selectComponent('#image-cropper')
@@ -82,6 +92,7 @@
                   url: `../pages/imformation?id=2019042010390054605046bac8638du1&userIcon=${_this.userIcon}`
                 })
               }else if(_this.page=="support"){
+                // 发布需求的时候
                 _this.addImg(_this.userIcon)
                 wx.navigateBack({
                    delta: 1

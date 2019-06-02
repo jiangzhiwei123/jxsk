@@ -31,6 +31,7 @@
   import { createPage } from '@mpxjs/core'
   import store from '../store/general.js'
   import Http from '../api/http.js'
+  import mpx from '@mpxjs/core'
   var app =getApp();
   
   createPage({
@@ -54,6 +55,16 @@
       wx.showLoading({ title: '加载中...' })
       this.getList(p)
       wx.hideLoading()
+    },
+    onShareAppMessage(res){
+      if (res.from === 'menu') {
+        // 来自页面内转发按钮
+        console.log(res.target)
+      }
+      return {
+        title: '聚校推:聚拢优质企业资源,助力高校精彩活动',
+        path: '/pages/index'
+      }
     },
     // 请求发布接口
     async getList(p){
@@ -237,7 +248,7 @@ page{
             display: flex;
             .del{
               color:#FA736E;
-              margin-right:390rpx;
+              margin-right:380rpx;
               border-color:#FA736E;
             }
             .del::after{

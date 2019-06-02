@@ -15,12 +15,36 @@ const state = {
   taskId: '',
   // 合作伙头像
   imgArray: [],
-  widthImg: ''
+  widthImg: '',
+  // 发布需求时的title
+  supTitle: '',
+  // 发布需求时需求的资源
+  supNeed: '',
+  // 发布需求时提供的资源
+  supreSource: ''
 }
 const mutations = {
   // 更新task页面的数据
   updateDatalist(state, t) {
     state.dataList = t
+  },
+  // 更新发布需求时的title
+  updateSupTitle(state, t) {
+    state.supTitle = t
+  },
+  // 更新发布需求的资源
+  updateNeed(state, t) {
+    state.supNeed = t
+  },
+  // 更新发布提供的资源
+  updateSource(state, t) {
+    state.supreSource = t
+  },
+  // 清空title 需求 提供的资源
+  clearThree(state) {
+    state.supTitle = ''
+    state.supNeed = ''
+    state.supreSource = ''
   },
   // 更新活动id
   updateActiveId(state, t) {

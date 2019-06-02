@@ -22,9 +22,11 @@
       data: {
       current: 0,
       choose:false,
-      noticeList:[]
+      noticeList:[],
+      // 接收省份集合
+      arrayaa:[]
       },
-      onload(){
+      async onload(){
         this.clearCode()
       },
       // 检测地区个数变化
@@ -95,7 +97,7 @@
           overflow: hidden;
           border-radius: 5rpx;
           margin-top: 20rpx;
-          margin-right: 40rpx;
+          margin-right: 35rpx;
           position: relative;
           &.blue{
             background: rgba(72, 207, 231, 0.2);

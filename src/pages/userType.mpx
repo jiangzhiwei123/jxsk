@@ -58,6 +58,16 @@
     onShow(){
       // this.fetchUser()
     },
+    onShareAppMessage(res){
+      if (res.from === 'menu') {
+        // 来自页面内转发按钮
+        console.log(res.target)
+      }
+      return {
+        title: '聚校推:聚拢优质企业资源,助力高校精彩活动',
+        path: '/pages/index'
+      }
+    },
     methods: {
     },
     data:{
