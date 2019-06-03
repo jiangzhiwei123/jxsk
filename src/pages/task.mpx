@@ -313,7 +313,7 @@
                 flex-wrap: wrap;
                 view{
                     // width: 183rpx;
-                    padding:0 10px;
+                    padding:2rpx 10px;
                     color:white;
                     background:#48CFE7;
                     font-size: 24rpx;

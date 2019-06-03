@@ -97,7 +97,7 @@
             <view class="person">
               <view class="name">{{item.userName}}</view>
               <view class="province" wx:for="{{item.astrictAdds}}" wx:key="{{item.astrictAdds}}">{{item}}</view>
-              <view class="time" style="margin-top:4rpx;">{{item.beginTime}}</view>
+              <view class="time" style="margin-top:2px;">{{item.beginTime}}</view>
             </view>
           </view>
           <!-- 地址部分 -->
@@ -150,12 +150,27 @@
       simpleId:'',
       listId:'',
       isCollect:false,
-      save:Number,
-      // 是否刷新列表
+      save:Number
       // clickType:''
     },
     computed:{
-      ...store.mapState(['provinces','token','userMold','address','addressCode','userMold','activeType','clickType','noticeList','simpleList','userMold']),
+      ...store.mapState(['provinces','token','userMold','address','addressCode','userMold','activeType','clickType','noticeList','simpleList','userMold','pageCount']),
+    },
+    /**
+     * 页面上拉触底事件的处理函数
+     */
+    onReachBottom: function () {
+      var _this = this;
+      // 显示加载图标
+      wx.showLoading({
+        title: '玩命加载中',
+      })
+      // 页数增加
+      this.updatePage(1)
+      console.log(555555555555555,this.pageCount)
+      // 调用请求函数
+      _this.activePro({name:this.clickType, id:this.addressCode,rows:10,page:_this.pageCount})
+      wx.hideLoading()
     },
     methods: {
       // 清除筛选状态
@@ -164,7 +179,7 @@
         // 更新选中的类型
         this.updateclickType('')
         // 更新字
-        this.fetchSimple('')
+        this.fetchSimple({type:"",rows:10,page:this.pageCount})
         this.updateAddress('地区')
         this.updateAddressCode('')
       },
@@ -187,7 +202,7 @@
         // 将选中的相应下标的name显示出来
         this.updateAddress(this.provinces[this.currentProvince].name)
         this.updateAddressCode(this.provinces[this.currentProvince].code)
-        this.activePro({name:this.clickType,id:this.addressCode})
+        this.activePro({name:this.clickType,id:this.addressCode,rows:10,page:this.pageCount})
         // 然后对simpleList进行过滤
         // this.fetchSimpType(this.clickType,this.addressCode)
         // wx.request({
@@ -221,7 +236,7 @@
           // console.log(this.modalList)
       },
       ...store.mapActions(['fetchProvince','fetchNotice','fetchSimple','fetchSimpType','activePro','changeCollect','requestImfor']),
-      ...store.mapMutations(['getToken','updateAddress','updateAddressCode','updateclickType']),
+      ...store.mapMutations(['getToken','updateAddress','updateAddressCode','updateclickType','updatePage']),
       dqClick(){
         this.getList()
       },
@@ -234,7 +249,9 @@
           }else{
             this.updateclickType('校园')
           }
-          this.activePro({name:this.clickType,id:this.addressCode})
+          this.activePro({name:this.clickType,id:this.addressCode,rows:10,page:this.pageCount})
+          // this.activePro({name:this.clickType,id:this.addressCode})
+          // this.activePro({name:this.clickType,id:this.addressCode,rows:5,page:this.pageNum})
           // wx.request({
           //     url: `${app.globalData.realm}/activity/loadSimpleActivityInfo`,
           //     data:{
@@ -275,7 +292,7 @@
         // wx.showLoading({ title: '加载中...' })
         await this.changeCollect({ activeId:this.simpleList[index].id, isSave:this.save })
         // wx.hideLoading()
-        this.activePro({name:this.clickType,id:this.addressCode})
+        this.activePro({name:this.clickType,id:this.addressCode,rows:'',page:''})
         // 刷新数据
         // this.fetchSimple(this.clickType)
         console.log(1234567889)
@@ -296,31 +313,31 @@
       }
     },
     onLoad(options){    
-        if(options.type=='active'){
-              wx.showModal({
-              title: '提示',
-              content: '是否跳转到分享页面',
-              success: (result) => {
-                if(result.confirm){
-                  wx.navigateTo({
-                    url: `../pages/task?id=${options.id}`,
-                  })
-                }
+      if(options.type=='active'){
+            wx.showModal({
+            title: '提示',
+            content: '是否跳转到分享页面',
+            success: (result) => {
+              if(result.confirm){
+                wx.navigateTo({
+                  url: `../pages/task?id=${options.id}`,
+                })
               }
-            })
-        }
-        console.log(333333333333,options.id,options.type)
-        wx.showShareMenu()   
-        // 合作缩略请求
-        wx.showLoading({ title: '加载中...' })
-        // this.requestImfor()
-        wx.hideLoading()
-        console.log(this.userMold)
+            }
+          })
+      }
+      console.log(333333333333,options.id,options.type)
+      wx.showShareMenu()   
+      // 合作缩略请求
+      wx.showLoading({ title: '加载中...' })
+      // this.requestImfor()
+      wx.hideLoading()
+      console.log(this.userMold)
         // 加载的时候刷新收藏接口
     },
     async onShow(){
         wx.showLoading({ title: '加载中...' })
-        await this.fetchSimple("")
+        await this.fetchSimple({type:"",rows:5,page:1})
         // 公告数据请求
         await this.fetchNotice()
         // 地区数据请求
@@ -639,6 +656,7 @@
             font-size: 28rpx;
             color:#031316;
             margin-bottom: 14rpx;
+            margin-left: -10rpx;
           }
           .information{
             font-size: 20rpx;

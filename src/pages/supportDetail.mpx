@@ -158,7 +158,7 @@
   import { createPage } from '@mpxjs/core'
   import store from '../store/general.js'
   import mpx, {watch} from '@mpxjs/core'
-  import Http from '../api/http.js'
+  import Http from '../api/http.js' 
   var app =  getApp();
   createPage({
         data:{
@@ -306,10 +306,10 @@
                 console.log(e.detail)
             },
             // 提供资源
-            // subSup(e){
-            //     this.provide_description = e.detail.value
-            //     console.log(e.detail)
-            // },
+            subSup(e){
+                this.provide_description = e.detail.value
+                console.log(e.detail)
+            },
             // 点击提交按钮
             submitData(){
                 // 提醒用户是否发布
@@ -427,6 +427,7 @@
             this.clearCode()
             this.clearId()
             this.list = e
+            // 案例显示图片
             if(e.text=='发布赞助需求'&&this.userMold=='企业'){
                 this.typeCase='https://jxt-1255675207.cos.ap-chengdu.myqcloud.com/example/case1.jpg'
             }else if(e.text=='发布业务需求'&&this.userMold=='企业'){
@@ -442,7 +443,7 @@
             }else{
                 this.typeCase='https://jxt-1255675207.cos.ap-chengdu.myqcloud.com/example/case1.jpg'
             }
-            
+            this.clearProvinceName()
             console.log(66666666666666666666666,e)
             this.imageUrl = e.userIco
             // 获取标签数据
