@@ -102,6 +102,7 @@
        
         
     },
+    // 页面隐藏的时候
     onLoad (p) { 
         this.getList(p)
         // if(p.){

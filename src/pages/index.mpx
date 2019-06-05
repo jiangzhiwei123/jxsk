@@ -116,6 +116,7 @@
         </view>
       </view>
     </view>
+    <view class="cu-load bg-grey {{!isMore?'loading':'over'}}" wx:if="{{isLoading}}"></view>
   </view>
 </template>
 
@@ -140,46 +141,57 @@
       // noticeList:[],
       autoplay:true,
       interval:5000,
-      // 合作略图数组
-      // simpleList:[],
-      // // 企业资源
-      // companyList:[],
-      // // 校园资源
-      // studentList:[],
       // 点击传过去的值
       simpleId:'',
       listId:'',
       isCollect:false,
-      save:Number
+      save:Number,
+      moveList:[],
+      // 是否还有
+      isMore:false
+      // 判断累加还是赋值
+      // isConcat:false
       // clickType:''
     },
     computed:{
-      ...store.mapState(['provinces','token','userMold','address','addressCode','userMold','activeType','clickType','noticeList','simpleList','userMold','pageCount']),
+      ...store.mapState(['provinces','token','userMold','address','addressCode','userMold','activeType','clickType','noticeList','simpleList','userMold','pageCount','totalPage','isLoading']),
     },
     /**
      * 页面上拉触底事件的处理函数
      */
     onReachBottom: function () {
-      var _this = this;
       // 显示加载图标
       wx.showLoading({
         title: '玩命加载中',
       })
-      // 页数增加
-      this.updatePage(1)
       console.log(555555555555555,this.pageCount)
-      // 调用请求函数
-      _this.activePro({name:this.clickType, id:this.addressCode,rows:10,page:_this.pageCount})
+      // 调用请求函数 如果当前页数小于总页数
+      if(this.pageCount<this.totalPage){
+        // this.isConcat=true
+        this.updateLoading(true)
+        // 页数增加
+        this.updatePage(1)
+        this.activePro({name:this.clickType, id:this.addressCode,rows:10,page:this.pageCount})
+        // this.moveList = this.moveList.concat(this.simpleList)
+        this.isMore = true
+      }else{
+        // 是加载
+        this.updateLoading(true)
+        // this.isMore =true
+      }
       wx.hideLoading()
     },
     methods: {
       // 清除筛选状态
       clearPro(){
+        this.isMore = false
+        this.updateSimple([])
+        this.clearPage()
         this.isClick = false
         // 更新选中的类型
         this.updateclickType('')
         // 更新字
-        this.fetchSimple({type:"",rows:10,page:this.pageCount})
+        this.activePro({name:'',id:'',rows:10,page:this.pageCount} )
         this.updateAddress('地区')
         this.updateAddressCode('')
       },
@@ -195,6 +207,10 @@
       },
       // 点击改变选中的省份
       checkProvince(e){
+        // 先把数据清0
+        this.updateSimple([])
+        // 初始化页码
+        this.clearPage()
         // 打印
         wx.showLoading({ title: '加载中...' })
         this.currentProvince = e.currentTarget.dataset.current
@@ -204,25 +220,6 @@
         this.updateAddressCode(this.provinces[this.currentProvince].code)
         this.activePro({name:this.clickType,id:this.addressCode,rows:10,page:this.pageCount})
         // 然后对simpleList进行过滤
-        // this.fetchSimpType(this.clickType,this.addressCode)
-        // wx.request({
-        //   url: `${app.globalData.realm}/activity/loadSimpleActivityInfo`,
-        //   data:{
-        //     proviceId:this.addressCode,
-        //     plateName:this.clickType
-        //   },
-        //   header:{
-        //     'Authorization' :this.token
-        //   },
-        //   // data:{
-        //   //   proviceId:this.addressCode
-        //   // },
-        //   success: res => {
-        //     console.log(res.data.data)
-        //       let dataList =  res.data.data;
-        //       this.simpleList = dataList;
-        //   }
-        //  })
         wx.hideLoading()
         // console.log(e)
       },
@@ -236,7 +233,7 @@
           // console.log(this.modalList)
       },
       ...store.mapActions(['fetchProvince','fetchNotice','fetchSimple','fetchSimpType','activePro','changeCollect','requestImfor']),
-      ...store.mapMutations(['getToken','updateAddress','updateAddressCode','updateclickType','updatePage']),
+      ...store.mapMutations(['getToken','updateAddress','updateAddressCode','updateclickType','updatePage','updateLoading','updateSimple','clearPage']),
       dqClick(){
         this.getList()
       },
@@ -249,6 +246,10 @@
           }else{
             this.updateclickType('校园')
           }
+          // 先把数据清0
+          this.updateSimple([])
+          // 初始化页码
+          this.clearPage()
           this.activePro({name:this.clickType,id:this.addressCode,rows:10,page:this.pageCount})
           // this.activePro({name:this.clickType,id:this.addressCode})
           // this.activePro({name:this.clickType,id:this.addressCode,rows:5,page:this.pageNum})
@@ -291,25 +292,19 @@
         await this.simpleList[index].favorites?this.save=0:this.save=1
         // wx.showLoading({ title: '加载中...' })
         await this.changeCollect({ activeId:this.simpleList[index].id, isSave:this.save })
+        this.updateSimple([])
+        // 初始化页码
+        this.clearPage()
+        this.activePro({name:this.clickType,id:this.addressCode,rows:10,page:this.pageCount})
         // wx.hideLoading()
-        this.activePro({name:this.clickType,id:this.addressCode,rows:'',page:''})
+        // 初始化页码
+        // this.clearPage()
+        // 初始化列表
+        // this.updateSimple([])
+        // this.activePro({name:this.clickType,id:this.addressCode,rows:10,page:this.pageCount})
         // 刷新数据
         // this.fetchSimple(this.clickType)
         console.log(1234567889)
-          //   wx.request({
-          //   url: `${app.globalData.realm}/favorites/saveOrDelFavoritesHistory`,
-          //   method: "POST",
-          //   header: {
-          //     'content-type': 'application/x-www-form-urlencoded',
-          //     'Authorization' :this.token
-          //   },
-          //   data:{
-          //     activityId:this.simpleList[index].id,
-          //     isSave:this.save
-          //   },
-          //   success: res => {
-          //   }
-          // })
       }
     },
     onLoad(options){    
@@ -329,20 +324,22 @@
       console.log(333333333333,options.id,options.type)
       wx.showShareMenu()   
       // 合作缩略请求
-      wx.showLoading({ title: '加载中...' })
+      // this.activePro({name:"",id:this.addressCode,rows:10,page:1})
+      // wx.showLoading({ title: '加载中...' })
       // this.requestImfor()
-      wx.hideLoading()
+      // wx.hideLoading()
       console.log(this.userMold)
         // 加载的时候刷新收藏接口
     },
     async onShow(){
-        wx.showLoading({ title: '加载中...' })
-        await this.fetchSimple({type:"",rows:5,page:1})
+        // wx.showLoading({ title: '加载中...' })
+        await this.activePro({name:"",id:this.addressCode,rows:10,page:1})
+        // await this.fetchSimple('')
         // 公告数据请求
         await this.fetchNotice()
         // 地区数据请求
         await this.fetchProvince()
-        wx.hideLoading()
+        // wx.hideLoading()
       // this.fetchSimple("")
       // this.fetchUser()
       // console.log(1234567,this.noticeList)
@@ -394,16 +391,6 @@
       //     console.log(res)
       //   }
       // })
-    },
-    // 去重函数
-    uniqArray(array){
-      var data = []
-      for(let i in array){
-        if(data.indexOf(array[i])==-1){
-          data.push(array[i])
-        }
-      }
-      return data
     }
 
 
