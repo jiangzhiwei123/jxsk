@@ -10,11 +10,24 @@ import Http from '../api/http'
  */
 const state = {
   // 我的收藏里查看收藏的列表
-  collectList: []
+  collectList: [],
+  // 给一个状态改变收藏的状态
+  collectStatus:'',
+  // 更新活动id
+  colectId:''
 }
 const mutations = {
   updateCollect(state, c) {
     state.collectList = c
+  },
+  // 更新收藏状态
+  updateStatus(state,p) {
+    state.collectStatus = p
+    console.log(5555566666)
+  },
+  // 更新活动id
+  updateId(state,p) {
+    state.colectId=p
   }
 }
 const actions = {
@@ -28,6 +41,9 @@ const actions = {
       data: {
         activityId: activeId,
         isSave: isSave
+      },
+      success:res=>{
+        console.log(5678,res)
       }
     })
     console.log(2222222222222222)

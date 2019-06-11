@@ -140,6 +140,7 @@
             //     }
             // })
         },
+        ...store.mapMutations(['updateStatus','updateId']),
         ...store.mapActions(['StoreTeamWork','taskData','changeCollect','ShareActive']),
         // 点击图片预览放大
         biggerImg(index){
@@ -207,10 +208,15 @@
         },
         async collectTask(){
             // 点击收藏的时候
-            console.log(this.dataList)
-            await this.dataList.favorites?this.save=0:this.save=1
+            // console.log(this.dataList)
+            this.dataList.favorites = !this.dataList.favorites
+            await this.dataList.favorites?this.save=1:this.save=0
             await this.changeCollect({ activeId:this.dataList.id, isSave:this.save })
-            this.getList(this.dataList)
+            // 改变收藏的状态方便加载首页传值
+            this.updateStatus(!this.dataList.favorites)
+            // 更新活动id
+            this.updateId(this.dataList.id)
+            // this.getList(this.dataList)
             // wx.request({
             //     url: `${app.globalData.realm}/favorites/saveOrDelFavoritesHistory`,
             //     method: "POST",

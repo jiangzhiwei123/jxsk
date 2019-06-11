@@ -69,36 +69,25 @@
             <!-- 企业需求资源说明 -->
             <view class="explain"  wx:if="{{userMold=='企业'}}">
                 <view class="inputTitle" bindtap="bbbbbbbbbbb">需求资源说明</view>
-                <view id="desc-area">
-                  <view class="inputAll">
-                    <view wx:if="{{ supNeed==''}}">
-                      <view>1.需求资源描述</view>
-                      <view>2.时间限制</view>
-                      <view>3.学校限制</view>
-                      <view>4.其他限制</view>
-                    </view>
-                  </view>
-                  <textarea name=""  id="" maxlength="-1" cols="30" rows="10" bindblur="subText" value="{{supNeed}}" bindinput="an" style="color:black;"></textarea>
+                <view id="desc-area" style="display:flex;width:668rpx;">
+                  <text class="inputAll" style="width:153px;">1.需求资源描述:\n2.时间限制:\n3.学校限制:\n 4.其他限制:</text>
+                  <textarea name=""  id="" maxlength="-1" cols="30" rows="10"  value="{{supNeed}}" bindinput="an" style="background:#F0F3F3;"></textarea>
                 </view>
             </view>
             <!-- 学校需求资源说明 -->
             <view class="explain"  wx:if="{{userMold=='学生'}}">
-                <view class="inputTitle">需求资源说明</view>
-                <view id="desc-area">
-                  <view class="inputAll">
-                    <view wx:if="{{ supNeed==''}}">
-                      <view>1.需求资源描述</view>
-                      <view>2.时间期限</view>
-                      <view>3.学校限制</view>
-                      <view>4.其他描述</view>
-                    </view>
-                  </view>
-                  <textarea name=""  id="" maxlength="-1" cols="30" rows="10" bindblur="subText" value="{{supNeed}}" style="color:black;" bindinput="an"></textarea>
+                <view class="inputTitle" bindtap="bbbbbbbbbbb">需求资源说明</view>
+                <view id="desc-area" style="display:flex;width:668rpx;">
+                  <text class="inputAll" style="width:153px;">1.需求资源描述:\n2.时间限制:\n3.学校限制:\n 4.其他限制:</text>
+                  <textarea name=""  id="" maxlength="-1" cols="30" rows="10" value="{{supNeed}}" bindinput="an" style="background:#F0F3F3;"></textarea>
                 </view>
             </view>
             <!-- 资源图片选填 -->
-            <view class="imgUp" >
-                <view class="inputTitle">资源图片(选填)</view>
+            <view class="imgUp">
+                <view class="inputTitle" style="display:flex;justify-content:space-between;">
+                    <view>资源图片(选填)</view>
+                    <view bindtap="clearTwo">清空图片</view>
+                </view>
                 <!-- 图片展示部分 -->
                 <view style="display:flex;" bindtap="upImg">
                     <image  wx:for="{{imgUrl}}" src="{{item}}" style="width:204rpx;
@@ -119,27 +108,17 @@
             <!-- 学生提供资源说明 -->
             <view class="explain" wx:if="{{userMold=='学生'}}">
                 <view class="inputTitle">提供资源说明</view>
-                <view id="desc-sup">
-                  <view class="inputAll">
-                    <view wx:if="{{ supreSource==''}}">
-                      <view>1.活动内容</view>
-                      <view>2.其他补充</view>
-                    </view>
-                  </view>
-                  <textarea name="" value="{{supreSource}}" maxlength="-1" id="" cols="30" rows="10" style="color:black;" bindblur="subSup" bindinput="bn"></textarea>
+                <view id="desc-sup" style="display:flex;width:668rpx;">
+                  <text class="inputAll" style="width:153px;"> 1.活动内容\n2.其他补充</text>
+                  <textarea name="" value="{{supreSource}}" maxlength="-1" id="" cols="30" rows="10" bindblur="subSup" bindinput="bn" style="background:#F0F3F3;"></textarea>
                 </view>
             </view>
             <!-- 企业提供资源说明 -->
             <view class="explain" wx:if="{{userMold=='企业'}}">
                 <view class="inputTitle">提供资源说明</view>
-                <view id="desc-sup">
-                  <view class="inputAll">
-                    <view wx:if="{{ supreSource==''}}">
-                      <view>1.提供资源类型（资金或其他）</view>
-                      <view>2.其他补充</view>
-                    </view>
-                  </view>
-                  <textarea name="" value="{{supreSource}}" maxlength="-1" id="" cols="30" rows="10" style="color:black;" bindblur="subSup" bindinput="bn"></textarea>
+                <view id="desc-sup" style="display:flex;width:668rpx;">
+                  <text class="inputAll" style="width:153px;"> 1.提供资源类型（资金或其他）\n2.其他补充</text>
+                  <textarea name="" value="{{supreSource}}" maxlength="-1" id="" cols="30" rows="10" bindblur="subSup" bindinput="bn" style="background:#F0F3F3;"></textarea>
                 </view>
             </view>
             <!-- 选择标签 -->
@@ -193,7 +172,9 @@
             relHeight:'',
             // 设备windows高度
             winHeight:'',
-            nameArray:[]
+            nameArray:[],
+            // 活动类型
+            activeType:''
 
         },
         computed:{
@@ -210,6 +191,10 @@
             }
         },
         methods: {
+            // 点击清空图片，清空上传的图片
+            clearTwo(){
+                this.clearImg()
+            },
             // 键盘按下去的时候
             an(e){
                 // 将需求存入store
@@ -228,7 +213,7 @@
                 this.modalName=''
             },
             // 提交以后清空状态值里面的图片
-            ...store.mapMutations(['clearImg','clearCode','selectLabel','clearId','updateLabelArr','updateSupTitle','updateSource','updateNeed','clearThree','clearProvinceName']),
+            ...store.mapMutations(['clearImg','clearCode','selectLabel','clearId','updateLabelArr','updateSupTitle','updateSource','updateNeed','clearThree','clearProvinceName','clearImg']),
             ...store.mapActions(['fetchLabel']),
             // 照片
             pic: function (options) {
@@ -360,7 +345,7 @@
                         codes  :this.codeArr,
                         labelIds:this.idArr,
                         imageUrl:this.imgUrl,
-                        activityType:this.list.text
+                        activityType:this.activeType
                         // labeltype:this.list.text
                     },
                     success: res => {
@@ -426,21 +411,32 @@
             // this.clearImg()
             this.clearCode()
             this.clearId()
+            // if(e.text=="发布赞助需求" && ){
+
+            // }
             this.list = e
+            console.log(777777,e)
             // 案例显示图片
             if(e.text=='发布赞助需求'&&this.userMold=='企业'){
+                this.activeType = "提供赞助"
                 this.typeCase='https://jxt-1255675207.cos.ap-chengdu.myqcloud.com/example/case1.jpg'
             }else if(e.text=='发布业务需求'&&this.userMold=='企业'){
+                this.activeType = "提供单子"
                 this.typeCase='https://jxt-1255675207.cos.ap-chengdu.myqcloud.com/example/case3.jpg'
             }else if(e.text=='发布活动需求'&&this.userMold=='企业'){
+                this.activeType = "找承办方"
                 this.typeCase='https://jxt-1255675207.cos.ap-chengdu.myqcloud.com/example/case2.jpg'
-            }else if(e.text=='发布活动需求'&&this.userMold=='学生'){
+            }else if(e.text=='发布赞助需求'&&this.userMold=='学生'){
+                this.activeType = "需要赞助"
                 this.typeCase='https://jxt-1255675207.cos.ap-chengdu.myqcloud.com/example/case6.jpg'
             }else if(e.text=='发布业务需求'&&this.userMold=='学生'){
+                this.activeType = "能做单子"
                 this.typeCase='https://jxt-1255675207.cos.ap-chengdu.myqcloud.com/example/case5.jpg'
             }else if('发布活动需求'&&this.userMold=='学生'){
+                this.activeType = "承办活动"
                 this.typeCase='https://jxt-1255675207.cos.ap-chengdu.myqcloud.com/example/case4.jpg'
             }else{
+                this.activeType = "其他"
                 this.typeCase='https://jxt-1255675207.cos.ap-chengdu.myqcloud.com/example/case1.jpg'
             }
             this.clearProvinceName()
@@ -449,7 +445,7 @@
             // 获取标签数据
             this.fetchLabel(this.changType(this.list.text))
             // 弹窗显示
-            if(this.supTitle!=''){
+            if(this.supTitle!=''||this.supreSource!=''||this.supNeed!=''){
                 console.log(777777777777777)
                 this.ifShow()
             }
@@ -500,13 +496,14 @@
   #desc-area,#desc-sup{
     position: relative;
     .inputAll{
-      height: 200rpx;
+      height: 250rpx;
+      line-height: 56rpx;
     }
     textarea{
-      height: 200rpx;
-      position: absolute;
-      top: 0;
-      padding: 30rpx;
+      height: 250rpx;
+    //   position: absolute;
+    //   top: 0;
+      padding: 30rpx 30rpx 30rpx 0;
     }
   }
     .inputTitle{
@@ -592,7 +589,7 @@
         .explain{
             padding-top: 30rpx;
            .inputAll{
-               padding:20rpx 30rpx;
+               padding:20rpx 0 20rpx 30rpx;
                background: #F0F3F3;
                border-radius: 10rpx;
                width: 670rpx;

@@ -59,7 +59,7 @@
     "window": {
       "backgroundTextStyle": "light",
       "navigationBarBackgroundColor": "#fff",
-      "navigationBarTitleText": "聚享时空",
+      "navigationBarTitleText": "聚校推",
       "navigationBarTextStyle": "black"
     },
     "tabBar": {

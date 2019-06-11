@@ -82,7 +82,7 @@ const actions = {
     console.log(88888888888,state.simpleList.concat(res.data))
     // 更新活动列表
     await commit('updateSimple', state.simpleList.concat(res.data))
-    await commit('uniqArray ', state.simpleList)
+    // await commit('uniqArray ', state.simpleList)
     // await commit('updateSimple', res.data.concat(state.simpleList))
     // 更新总的页数
     await commit('updateTotal', Math.ceil(res.total/10))

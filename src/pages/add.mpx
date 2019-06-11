@@ -51,9 +51,10 @@
       wx.hideLoading()
       console.log(app.globalData.tokenKey)
     },
-    onLoad(p){
+    async onLoad(p){
       wx.showLoading({ title: '加载中...' })
-      this.getList(p)
+      await this.getList(p)
+      console.log(44444445646546465456465)
       wx.hideLoading()
     },
     onShareAppMessage(res){
