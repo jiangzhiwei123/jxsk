@@ -24,7 +24,7 @@
         </view>
       </view>
       <!-- 如果数组中无东西 -->
-      <view wx:if="{{myPublish.length==0}}" class="flex align-center justify-center noThing" style="padding-top:400rpx;color:#48CFE7;">你还没有发布任何东西</view>
+      <view wx:else class="flex align-center justify-center noThing" style="padding-top:400rpx;color:#48CFE7;">你还没有发布任何东西</view>
     </view>
 </template>
 <script>
@@ -46,10 +46,10 @@
        ...store.mapState(['token','phoneHeight','phoneWidth'])
     },
     onShow(p){
-      wx.showLoading({ title: '加载中...' })
-      this.getList(p)
-      wx.hideLoading()
-      console.log(app.globalData.tokenKey)
+      // wx.showLoading({ title: '加载中...' })
+      // this.getList(p)
+      // wx.hideLoading()
+      // console.log(app.globalData.tokenKey)
     },
     async onLoad(p){
       wx.showLoading({ title: '加载中...' })

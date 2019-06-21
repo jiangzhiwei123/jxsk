@@ -6,7 +6,7 @@
             <view class="means">
                 <view class="top">
                     <view class="name">{{dataList.userName}}</view>
-                    <view class="pic"></view>
+                    <view class="pic" wx:if="{{dataList.status=='已认证'}}"></view>
                 </view>
                 <view class="bot">{{dataList.position}}</view>
             </view>
@@ -84,7 +84,6 @@
     },
     // 转发功能
     onShareAppMessage(res) {
-
         if (res.from === 'button') {
         // 来自页面内转发按钮
         console.log(3434343434,res)
@@ -98,9 +97,7 @@
                 title: '聚校推:聚拢优质企业资源,助力高校精彩活动',
                 path: '/pages/index'
             }
-        }
-       
-        
+        }    
     },
     // 页面隐藏的时候
     onLoad (p) { 

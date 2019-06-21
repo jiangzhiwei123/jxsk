@@ -313,6 +313,7 @@
       }
     },
     onLoad(options){    
+      console.log(11223344556677,options)
       if(options.type=='active'){
             wx.showModal({
             title: '提示',
@@ -334,18 +335,19 @@
       // this.activePro({name:"",id:this.addressCode,rows:10,page:1})
       // wx.showLoading({ title: '加载中...' })
       // this.requestImfor()
-      // wx.hideLoading()
+      // wx.hideLoading() 
       console.log(this.userMold)
-
+      this.activePro({name:"",id:this.addressCode,rows:10,page:1})
     },
     async onShow(){
         // wx.showLoading({ title: '加载中...' })
         // await this.fetchSimple('')
+        console.log(1231132132132132123)
         // 公告数据请求
         await this.fetchNotice()
         // 地区数据请求
         await this.fetchProvince()
-        await this.activePro({name:"",id:this.addressCode,rows:10,page:1})
+        // await this.updateSimple([])
         const coIndex =  this.simpleList.findIndex(item =>{
         return item.id == this.colectId
       })
@@ -670,9 +672,10 @@
               margin-right: 14rpx;
             }
             .noHad{
-              background-image: url("../images/未认证.png");
-              background-size: 100% 100%;
-              margin-right: 14rpx;
+              display:none;
+              // background-image: url("../images/未认证.png");
+              // background-size: 100% 100%;
+              // margin-right: 14rpx;
             }
             .person{
               flex:1;
