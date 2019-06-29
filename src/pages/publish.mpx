@@ -1,5 +1,5 @@
 <template>
-  <view class="publishPage" style="padding-top:20rpx;">
+  <view class="publishPage" style="padding-top:20rpx;background:white;">
     <!-- 游客身份 -->
     <view class="identity" wx:if="{{userMold == '游客' ||  userMold == ''}}">
       <view class="title">请选择用户身份</view>

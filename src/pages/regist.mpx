@@ -24,8 +24,9 @@
       this.fetchRegist()   
       console.log(11111111111111111111)
     },
-    onLoad(){
+    onLoad(options){
       this.getSys()
+      // console.log(454545,options)
     },
     getSys(){
       wx.getSystemInfo({

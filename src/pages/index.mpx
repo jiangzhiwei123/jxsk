@@ -148,13 +148,15 @@
       save:Number,
       moveList:[],
       // 是否还有
-      isMore:false
+      isMore:false,
+      // 邀请码
+      inviteIndex:''
       // 判断累加还是赋值
       // isConcat:false
       // clickType:''
     },
     computed:{
-      ...store.mapState(['provinces','token','userMold','address','addressCode','userMold','activeType','clickType','noticeList','simpleList','userMold','pageCount','totalPage','isLoading','collectStatus','colectId']),
+      ...store.mapState(['provinces','token','userMold','address','addressCode','userMold','activeType','clickType','noticeList','simpleList','userMold','pageCount','totalPage','isLoading','collectStatus','colectId','invite']),
     },
     /**
      * 页面上拉触底事件的处理函数
@@ -232,7 +234,7 @@
           // console.log(this.modalId)
           // console.log(this.modalList)
       },
-      ...store.mapActions(['fetchProvince','fetchNotice','fetchSimple','fetchSimpType','activePro','changeCollect','requestImfor']),
+      ...store.mapActions(['fetchProvince','fetchNotice','fetchSimple','fetchSimpType','activePro','changeCollect','requestImfor','userType']),
       ...store.mapMutations(['getToken','updateAddress','updateAddressCode','updateclickType','updatePage','updateLoading','updateSimple','clearPage']),
       dqClick(){
         this.getList()
@@ -312,7 +314,7 @@
         console.log(1234567889)
       }
     },
-    onLoad(options){    
+    async onLoad(options){    
       console.log(11223344556677,options)
       if(options.type=='active'){
             wx.showModal({
@@ -338,6 +340,20 @@
       // wx.hideLoading() 
       console.log(this.userMold)
       this.activePro({name:"",id:this.addressCode,rows:10,page:1})
+      await this.userType(options.scene)
+      this.inviteIndex = this.invite
+      // console.log(898989,this.inviteIndex)
+      console.log(898989,this.invite)
+      // 现在用不到
+      // if(this.invite==1){
+      //   // console.log(898989,this.invite)
+      //   wx.reLaunch({
+      //     url: `./login?type=${this.invite}`
+      //   }),
+      //   console.log('成功了呀')
+      // }else{
+      //   console.log('我爱你')
+      // }
     },
     async onShow(){
         // wx.showLoading({ title: '加载中...' })

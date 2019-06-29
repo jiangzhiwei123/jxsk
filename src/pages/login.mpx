@@ -104,14 +104,15 @@
       }
     },
     computed: {
-      ...store.mapState(['token'])
+      ...store.mapState(['token','codeNum'])
     },
     onGotUserInfo() {
       // 登录
       this.loginRegister()   
     },
-    onLoad(){
+    onLoad(options){
       this.getSys()
+      console.log(4555555,options)
     },
     getSys(){
       wx.getSystemInfo({

@@ -76,7 +76,8 @@
             name: 'file',
             header: {
               'content-type': 'multipart/form-data;charset=UTF-8',
-              'Authorization' :this.token
+              'Authorization' :this.token,
+              'traceId':generalStore.state.traceId
             },
             data:{
 

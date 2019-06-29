@@ -45,7 +45,8 @@ const store = createStore({
     // 设备宽度
     phoneWidth: '',
     // 显示选择地区的名字
-    provinceName: []
+    provinceName: [],
+    traceId:wx.getStorageSync('traceId')
     // 改善
     // login变形
     // 学生企业 发布页面不同
@@ -186,25 +187,40 @@ const store = createStore({
     // 清除图片
     clearImg(state) {
       state.imgUrl = []
+    },
+    // 更新traceId
+    updateTraceId(state, t) {
+      state.traceId = t
+      wx.setStorageSync('traceId', t)
     }
   },
   getters: {},
   actions: {
     // 用户注册 以后再登录就能拿到token
-    async loginRegister({ commit }) {
+    async loginRegister({ state,commit }) {
       const code = (await mpx.login()).code
       const userInfo = (await mpx.getUserInfo({ lang: 'zh_CN' }))
       const iv = userInfo.iv
       const encryptedData = userInfo.encryptedData
+      const codeNum = state.codeNum
+      console.log(1111,code)
+      console.log(1111,iv)
+      console.log(1111,encryptedData)
+      console.log(1111,codeNum)
+      // return
       const res = await Http.post({
         url: '/login/register',
         data: {
           code,
           iv,
-          encryptedData
+          encryptedData,
+          codeNum
         }
       })
-      commit('updateToken', res.data)
+      commit('updateToken', res.data.token)
+      commit('updateTraceId', res.data.traceId)
+      console.log('我传过去的是什么'+res.data.token)
+      console.log('我传过去的是什么'+res.data.traceId)
       wx.redirectTo({
         url: '../pages/getPhone'
       })
@@ -219,7 +235,8 @@ const store = createStore({
         }
       })
       console.log(44444444444, res)
-      commit('updateToken', res.data)
+      commit('updateToken', res.data.token)
+      commit('updateTraceId', res.data.traceId)
     // wx.redirectTo({
     //   url: '../pages/login'
     // })

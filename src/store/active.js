@@ -21,7 +21,11 @@ const state = {
   // 发布需求时需求的资源
   supNeed: '',
   // 发布需求时提供的资源
-  supreSource: ''
+  supreSource: '',
+  // 邀请码
+  invite:Number,
+  // 邀请码
+  codeNum:''
 }
 const mutations = {
   // 更新task页面的数据
@@ -53,6 +57,18 @@ const mutations = {
   // 更新合作伙伴头像
   updateImg(state, t) {
     state.imgArray = t
+  },
+  // 更新邀请码
+  updateInvite(state, t){
+    state.invite = t
+  },
+  // 更新codeNum
+  updateCodeNum(state, t){
+    state.codeNum = t
+  },
+  // 清除邀请码
+  clearInvite(state){
+    state.invite = ''
   }
 }
 const actions = {
@@ -114,6 +130,16 @@ const actions = {
         id: dowmId
       }
     })
+  },
+  // 邀请
+  async userType(context, codeNum) {
+    const res = await Http.get({
+      url: `/minicode/${codeNum}`,
+    })
+    context.commit('updateInvite',res.data.codeType)
+    context.commit('updateCodeNum',res.data.codeNum)
+    console.log(555555555566666,state.invite)
+    console.log(555555555566666,res.data.codeType)
   }
 
 }
