@@ -13,8 +13,8 @@ const safeRedirect = (url = '/pages/login') => {
 // const baseUrl  发起请求
 mpx.xfetch.interceptors.request.use(function (config) {
   // 如果传入的请求是不带域名的话则加上域名以防万一
-  // let base = 'https://jxsk.juhi8.com/api/jxt'
-  let base = 'http://47.101.56.46:8080/jxtapi'
+  let base = 'https://jxsk.juhi8.com/api/jxt'
+  // let base = 'http://47.101.56.46:8080/jxtapi'
   if (config.url[0] === '/') {
     config.url = base + config.url
   }

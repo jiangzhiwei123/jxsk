@@ -340,8 +340,10 @@
       // wx.hideLoading() 
       console.log(this.userMold)
       this.activePro({name:"",id:this.addressCode,rows:10,page:1})
-      await this.userType(options.scene)
-      this.inviteIndex = this.invite
+      if(options.scene){
+        await this.userType(options.scene)
+        this.inviteIndex = this.invite
+      } 
       // console.log(898989,this.inviteIndex)
       console.log(898989,this.invite)
       // 现在用不到
