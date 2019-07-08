@@ -69,17 +69,43 @@
             <!-- 企业需求资源说明 -->
             <view class="explain"  wx:if="{{userMold=='企业'}}">
                 <view class="inputTitle" bindtap="bbbbbbbbbbb">需求资源说明</view>
-                <view id="desc-area" style="display:flex;width:668rpx;">
-                  <text class="inputAll" style="width:153px;">1.需求资源描述:\n2.时间限制:\n3.学校限制:\n 4.其他限制:</text>
-                  <textarea name=""  id="" maxlength="-1" cols="30" rows="10"  value="{{supNeed}}" bindinput="an" style="background:#F0F3F3;"></textarea>
+                <!-- 1.需求资源描述 -->
+                <view style="width:628rpx;margin:0 auto 10rpx;min-height:50rpx;">
+                    <textarea name="" id=""  value="{{firstNr}}" maxlength="-1" style="width:628rpx;margin:0 auto;min-height:50rpx;height:auto;line-height:auto;"  auto-height="true" bindblur="loseTextFirst" bindinput="keydownFirst"></textarea>
                 </view>
+                <!-- 时间限制描述 -->
+                <view style="width:628rpx;margin:0 auto 10rpx;min-height:50rpx;">
+                    <textarea name="" id=""  value="{{secondNr}}"  maxlength="-1" style="width:628rpx;margin:0 auto;min-height:50rpx;height:auto;"  auto-height="true" bindblur="loseTextSecond" bindinput="keydownSecond"></textarea>
+                </view>
+                <!-- 学校限制描述 -->
+                <view style="width:628rpx;margin:0 auto 10rpx;min-height:50rpx;">
+                    <textarea name="" id=""  value="{{thirdNr}}" maxlength="-1" style="width:628rpx;margin:0 auto;min-height:50rpx;height:auto;"  auto-height="true" bindblur="loseTextThird" bindinput="keydownThird"></textarea>
+                </view>
+                <!-- 点击以后显示的学校限制描述 -->
+                <!-- 其他限制-->
+                <view style="width:628rpx;margin:0 auto 10rpx;min-height:50rpx;">
+                    <textarea name="" id=""  value="{{fourthNr}}"  maxlength="-1" style="width:628rpx;margin:0 auto;min-height:50rpx;height:auto;"  auto-height="true" bindblur="loseTextFourth" bindinput="keydownFourth"></textarea>
+                </view>
+                <!-- 点击以后显示的其他限制-->
             </view>
             <!-- 学校需求资源说明 -->
             <view class="explain"  wx:if="{{userMold=='学生'}}">
                 <view class="inputTitle" bindtap="bbbbbbbbbbb">需求资源说明</view>
-                <view id="desc-area" style="display:flex;width:668rpx;">
-                  <text class="inputAll" style="width:153px;">1.需求资源描述:\n2.时间限制:\n3.学校限制:\n 4.其他限制:</text>
-                  <textarea name=""  id="" maxlength="-1" cols="30" rows="10" value="{{supNeed}}" bindinput="an" style="background:#F0F3F3;"></textarea>
+                <view style="width:628rpx;margin:0 auto 10rpx;min-height:50rpx;">
+                    <textarea name="" id=""  value="{{firstNr}}" maxlength="-1" style="width:628rpx;margin:0 auto;min-height:50rpx;height:auto;line-height:auto;"  auto-height="true" bindblur="loseTextFirst" bindinput="keydownFirst"></textarea>
+                </view>
+                <!-- 时间限制描述 -->
+                <view style="width:628rpx;margin:0 auto 10rpx;min-height:50rpx;">
+                    <textarea name="" id=""  value="{{secondNr}}"  maxlength="-1" style="width:628rpx;margin:0 auto;min-height:50rpx;height:auto;"  auto-height="true" bindblur="loseTextSecond" bindinput="keydownSecond"></textarea>
+                </view>
+                <!-- 学校限制描述 -->
+                <view style="width:628rpx;margin:0 auto 10rpx;min-height:50rpx;">
+                    <textarea name="" id=""  value="{{thirdNr}}" maxlength="-1" style="width:628rpx;margin:0 auto;min-height:50rpx;height:auto;"  auto-height="true" bindblur="loseTextThird" bindinput="keydownThird"></textarea>
+                </view>
+                <!-- 点击以后显示的学校限制描述 -->
+                <!-- 其他限制-->
+                <view style="width:628rpx;margin:0 auto 10rpx;min-height:50rpx;">
+                    <textarea name="" id=""  value="{{fourthNr}}"  maxlength="-1" style="width:628rpx;margin:0 auto;min-height:50rpx;height:auto;"  auto-height="true" bindblur="loseTextFourth" bindinput="keydownFourth"></textarea>
                 </view>
             </view>
             <!-- 资源图片选填 -->
@@ -108,17 +134,25 @@
             <!-- 学生提供资源说明 -->
             <view class="explain" wx:if="{{userMold=='学生'}}">
                 <view class="inputTitle">提供资源说明</view>
-                <view id="desc-sup" style="display:flex;width:668rpx;">
+                <!-- <view id="desc-sup" style="display:flex;width:668rpx;">
                   <text class="inputAll" style="width:153px;"> 1.活动内容\n2.其他补充</text>
                   <textarea name="" value="{{supreSource}}" maxlength="-1" id="" cols="30" rows="10" bindblur="subSup" bindinput="bn" style="background:#F0F3F3;"></textarea>
+                </view> -->
+                <view style="width:628rpx;margin:0 auto 10rpx;min-height:50rpx;">
+                    <textarea name="" id=""  value="{{sevenNr}}" maxlength="-1" style="width:628rpx;margin:0 auto;min-height:50rpx;height:auto;line-height:auto;"  auto-height="true" bindblur="loseTextSeven" bindinput="keydownSeven"></textarea>
+                </view>
+                <view style="width:628rpx;margin:0 auto 10rpx;min-height:50rpx;">
+                    <textarea name="" id=""  value="{{sixNr}}" maxlength="-1" style="width:628rpx;margin:0 auto;min-height:50rpx;height:auto;line-height:auto;"  auto-height="true" bindblur="loseTextSix" bindinput="keydownSix"></textarea>
                 </view>
             </view>
             <!-- 企业提供资源说明 -->
             <view class="explain" wx:if="{{userMold=='企业'}}">
                 <view class="inputTitle">提供资源说明</view>
-                <view id="desc-sup" style="display:flex;width:668rpx;">
-                  <text class="inputAll" style="width:153px;"> 1.提供资源类型（资金或其他）\n2.其他补充</text>
-                  <textarea name="" value="{{supreSource}}" maxlength="-1" id="" cols="30" rows="10" bindblur="subSup" bindinput="bn" style="background:#F0F3F3;"></textarea>
+                <view style="width:628rpx;margin:0 auto 10rpx;min-height:50rpx;">
+                    <textarea name="" id=""  value="{{fifthNr}}" maxlength="-1" style="width:628rpx;margin:0 auto;min-height:50rpx;height:auto;line-height:auto;"  auto-height="true" bindblur="loseTextFifth" bindinput="keydownFifth"></textarea>
+                </view>
+                <view style="width:628rpx;margin:0 auto 10rpx;min-height:50rpx;">
+                    <textarea name="" id=""  value="{{sixNr}}" maxlength="-1" style="width:628rpx;margin:0 auto;min-height:50rpx;height:auto;line-height:auto;"  auto-height="true" bindblur="loseTextSix" bindinput="keydownSix"></textarea>
                 </view>
             </view>
             <!-- 选择标签 -->
@@ -141,6 +175,8 @@
   var app =  getApp();
   createPage({
         data:{
+            // 输入框view是否显示
+            isConText:true,
             // 案例类型
             typeCase:'',
             screenHeight:Number,
@@ -178,7 +214,7 @@
 
         },
         computed:{
-            ...store.mapState(['imgUrl','codeArr','label','idArr','token','codeArr','userMold','LabelArr','provinceName','supTitle','supNeed','supreSource']),
+            ...store.mapState(['imgUrl','codeArr','label','idArr','token','codeArr','userMold','LabelArr','provinceName','supTitle','supNeed','supreSource','firstNr','secondNr','thirdNr','fourthNr','fifthNr','sixNr','sevenNr']),
         },
         onShareAppMessage(res){
             if (res.from === 'menu') {
@@ -191,6 +227,91 @@
             }
         },
         methods: {
+            // 键盘按下的时候
+            // 'updateFirst','updateSecond','updateThird','updateFourth','updateFifth','updateSix'
+            keydownFirst(e){
+                this.updateFirst(e.detail.value)
+                // 需求的内容
+                this.updateNeed(this.firstNr+this.secondNr+this.thirdNr+this.fourthNr)
+            },
+            // 失去焦点的时候还原
+            loseTextFirst(e){
+               if(this.firstNr.length<11){
+                   this.updateFirst('1.需求资源描述 : ')
+               }
+            },
+            // 键盘按下的时候
+            keydownSecond(e){
+                this.updateSecond(e.detail.value)
+                this.updateNeed(this.firstNr+this.secondNr+this.thirdNr+this.fourthNr)
+            },
+            // 失去焦点的时候还原
+            loseTextSecond(e){
+               if(this.secondNr.length<9){
+                   this.updateSecond('2.时间限制 : ')
+               }
+            },
+            // 键盘按下的时候
+            keydownThird(e){
+                this.updateThird(e.detail.value)
+                this.updateNeed(this.firstNr+this.secondNr+this.thirdNr+this.fourthNr)
+            },
+            // 失去焦点的时候还原
+            loseTextThird(e){
+               if(this.thirdNr.length<9){
+                   this.updateThird('3.学校限制 : ')
+               }
+            },
+            // 键盘按下的时候
+            keydownFourth(e){
+                this.updateFourth(e.detail.value)
+                this.updateNeed(this.firstNr+this.secondNr+this.thirdNr+this.fourthNr)
+            },
+            // 失去焦点的时候还原
+            loseTextFourth(e){
+               if(this.fourthNr.length<9){
+                   this.updateFourth('4.其他限制 : ')
+               }
+            },
+            // 键盘按下的时候
+            keydownFifth(e){
+                this.updateFifth(e.detail.value)
+                this.updateSource(this.fifthNr+this.sixNr)
+            },
+            // 失去焦点的时候还原
+            loseTextFifth(e){
+                console.log(this.fifthNr.length)
+               if(this.fifthNr.length<18){
+                   this.updateFifth('1.提供资源类型(资金或其他) : ')
+               }
+            },
+            // 键盘按下的时候
+            keydownSix(e){
+                this.updateSix(e.detail.value)
+                if(this.userMold=='企业'){
+                    this.updateSource(this.fifthNr+this.sixNr)
+                }else if(this.userMold=='学生'){
+                    this.updateSource(this.sevenNr+this.sixNr)
+                }
+                
+            },
+            // 失去焦点的时候还原
+            loseTextSix(e){
+               if(this.sixNr.length<9){
+                   this.updateSix('2.其他补充 : ')
+               }
+            },
+            // 键盘按下的时候
+            keydownSeven(e){
+                this.updateSeven(e.detail.value)
+                this.updateSource(this.sevenNr+this.sixNr)
+            },
+            // 失去焦点的时候还原
+            loseTextSeven(e){
+               if(this.sixNr.length<9){
+                   this.updateSeven('1.活动内容 : ')
+               }
+            },
             // 点击清空图片，清空上传的图片
             clearTwo(){
                 this.clearImg()
@@ -198,12 +319,12 @@
             // 键盘按下去的时候
             an(e){
                 // 将需求存入store
-                this.req_description = e.detail.value
+                // this.req_description = e.detail.value
                 this.updateNeed(e.detail.value)
             },
             bn(e){
                 // 将需求存入store
-                this.provide_description = e.detail.value
+                // this.provide_description = e.detail.value
                 this.updateSource(e.detail.value)
             },
             // 标题存入store
@@ -219,7 +340,7 @@
                 this.modalName=''
             },
             // 提交以后清空状态值里面的图片
-            ...store.mapMutations(['clearImg','clearCode','selectLabel','clearId','updateLabelArr','updateSupTitle','updateSource','updateNeed','clearThree','clearProvinceName','clearImg']),
+            ...store.mapMutations(['clearImg','clearCode','selectLabel','clearId','updateLabelArr','updateSupTitle','updateSource','updateNeed','clearThree','clearProvinceName','clearImg','updateFirst','updateSecond','updateThird','updateFourth','updateFifth','updateSix','updateSeven']),
             ...store.mapActions(['fetchLabel']),
             // 照片
             pic: function (options) {
@@ -273,10 +394,6 @@
             submitTitle(e){
                 console.log(e)
             },
-            // 需求的资源
-            // subText(e){
-            //     this.req_description = e.detail.value
-            // },
             formSubmit(e){
                 console.log(e.detail)
             },
@@ -397,6 +514,7 @@
                 content: '是否保留上次编辑内容',
                 success (res) {
                     if (res.confirm) {
+                        // this.
                     console.log('用户点击确定')
                     } else if (res.cancel) {
                         _this.clearThree()
@@ -451,7 +569,14 @@
             // 获取标签数据
             this.fetchLabel(this.changType(this.list.text))
             // 弹窗显示
-            if(this.supTitle!=''||this.supreSource!=''||this.supNeed!=''){
+    //          state.firstNr = '1.需求资源描述 : '
+    // state.secondNr = '2.时间限制 : '
+    // state.thirdNr = '3.学校限制 : '
+    // state.fourthNr = '4.其他限制 : '
+    // state.fifthNr = '5.提供资源类型(资金或其他) : '
+    // state.sixNr = '6.其他补充 : '
+            // 'firstNr','secondNr','thirdNr','fourthNr','fifthNr','sixNr',
+            if(this.supTitle!=''||this.firstNr!='1.需求资源描述 : '||this.secondNr!='2.时间限制 : '||this.thirdNr!='3.学校限制 : '||this.fourthNr!='4.其他限制 : '||this.fifthNr!='1.提供资源类型(资金或其他) : '||this.sixNr!='2.其他补充 : '||this.sevenNr!='1.活动内容 : '){
                 console.log(777777777777777)
                 this.ifShow()
             }
@@ -467,30 +592,9 @@
   })
 </script>
 <style lang="less" scoped>
-    // .bgex{
-    //     background-image: url("../images/case1.jpg");
-    //     background-size: 100% 100%;
-    // }
-    // .bgex1{
-    //     background-image: url("../images/case3.jpg");
-    //     background-size: 100% 100%;
-    // }
-    // .bgex2{
-    //     background-image: url("../images/case2.jpg");
-    //     background-size: 100% 100%;
-    // }
-    // .bgex3{
-    //     background-image: url("../images/case6.jpg");
-    //     background-size: 100% 100%;
-    // }
-    // .bgex4{
-    //     background-image: url("../images/case4.jpg");
-    //     background-size: 100% 100%;
-    // }
-    // .bgex5{
-    //     background-image: url("../images/case5.jpg");
-    //     background-size: 100% 100%;
-    // }
+.firstTitle,.secondTitle,.thirdTitle{
+    margin-bottom: 20rpx;
+}
     // 出现弹出框时禁止下面主题内容滑动
     .indexFixed{
         position: fixed;
@@ -593,7 +697,10 @@
             }
         }
         .explain{
-            padding-top: 30rpx;
+            background:rgba(240,243,243,1);
+            padding: 30rpx 20rpx;
+            margin-bottom: 30rpx;
+            border-radius: 10rpx;
            .inputAll{
                padding:20rpx 0 20rpx 30rpx;
                background: #F0F3F3;

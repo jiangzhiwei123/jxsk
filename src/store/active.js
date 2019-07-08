@@ -10,6 +10,13 @@ import store from './general'
  * 怎么引入，看general.js
  */
 const state = {
+  firstNr:'1.需求资源描述 : ',
+  secondNr:'2.时间限制 : ',
+  thirdNr:'3.学校限制 : ',
+  fourthNr:'4.其他限制 : ',
+  fifthNr:'1.提供资源类型(资金或其他) : ',
+  sixNr:'2.其他补充 : ',
+  sevenNr:'1.活动内容 : ',
   dataList: [],
   // 单个活动id
   taskId: '',
@@ -28,6 +35,34 @@ const state = {
   codeNum:''
 }
 const mutations = {
+  // 更新需求文本框的内容
+  updateFirst(state,t){
+    state.firstNr=t
+  },
+  // 更新需求文本框的内容
+  updateSecond(state,t){
+    state.secondNr=t
+  },
+  // 更新需求文本框的内容
+  updateThird(state,t){
+    state.thirdNr=t
+  },
+  // 更新需求文本框的内容
+  updateFourth(state,t){
+    state.fourthNr=t
+  },
+  // 更新需求文本框的内容
+  updateFifth(state,t){
+    state.fifthNr=t
+  },
+  // 更新需求文本框的内容
+  updateSix(state,t){
+    state.sixNr=t
+  },
+  // 更新需求文本框的内容
+  updateSeven(state,t){
+    state.sevenNr=t
+  },
   // 更新task页面的数据
   updateDatalist(state, t) {
     state.dataList = t
@@ -49,6 +84,13 @@ const mutations = {
     state.supTitle = ''
     state.supNeed = ''
     state.supreSource = ''
+    state.firstNr = '1.需求资源描述 : '
+    state.secondNr = '2.时间限制 : '
+    state.thirdNr = '3.学校限制 : '
+    state.fourthNr = '4.其他限制 : '
+    state.fifthNr = '1.提供资源类型(资金或其他) : '
+    state.sixNr = '2.其他补充 : '
+    state.sevenNr = '1.活动内容 : '
   },
   // 更新活动id
   updateActiveId(state, t) {
