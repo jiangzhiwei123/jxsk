@@ -77,7 +77,7 @@
             header: {
               'content-type': 'multipart/form-data;charset=UTF-8',
               'Authorization' :this.token,
-              'traceId':generalStore.state.traceId
+              'traceId':store.state.traceId
             },
             data:{
 

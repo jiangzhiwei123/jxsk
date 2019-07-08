@@ -1,14 +1,24 @@
 <template>
    <view class="page">
     <!-- 文件头部 -->
-    <view class="headerBox">
+    <!-- <view class="headerBox">
       <view class="title">活动与赞助平台</view>
       <view class="titleBtn">关注平台</view>
+    </view> -->
+    <view class="headBanner" style="margin-bottom:24rpx;">
+      <swiper indicator-dots="{{!indicatorDots}}"
+      autoplay="{{!autoplay}}" interval="{{interval}}" duration="{{duration}}" style="height:375rpx;" indicator-color="#fff" indicator-active-color="#48CFE7">
+      <block wx:for="{{imgUrls}}" wx:key="{{index}}">
+        <swiper-item>
+          <image src="{{item}}" class="slide-image bannerImg"/>
+        </swiper-item>
+      </block>
+    </swiper>
     </view>
     <!-- nav部分 -->
     <view class="navBox">
       <!-- 导航栏上面部分 -->
-      <view class="navTop">
+      <!-- <view class="navTop">
         <view class="nav-item">
           <view class="navImg"></view>
           <view class="text">校园资源</view>
@@ -25,11 +35,13 @@
           <view class="navImg"></view>
           <view class="text">攻略</view>
         </view>
-      </view>
+      </view> -->
+      <!-- 上面banner大轮播图 -->
+
       <!-- 导航栏下面部分 -->
       <view class="navBot">
         <view class="newLeft">最新消息</view>
-        <swiper class="newCon" style="width:527rpx;overflow:auto;height:36px;"
+        <swiper class="newCon" style="width:527rpx;overflow:auto;height:100%;"
         autoplay="{{autoplay}}" interval="{{interval}}" duration="{{duration}}" vertical>
           <block wx:for="{{noticeList}}" wx:key="{{index}}" class="box" bindtap="showModal">
            <swiper-item  bindtap="showNotice" data-target="Modal" data-id="{{index}}">
@@ -150,7 +162,17 @@
       // 是否还有
       isMore:false,
       // 邀请码
-      inviteIndex:''
+      inviteIndex:'',
+      // 轮播图的参数
+      imgUrls: [
+      'https://images.unsplash.com/photo-1551334787-21e6bd3ab135?w=640',
+      'https://images.unsplash.com/photo-1551214012-84f95e060dee?w=640',
+      'https://images.unsplash.com/photo-1551446591-142875a901a1?w=640'
+      ],
+      indicatorDots: false,
+      autoplay: false,
+      interval: 5000,
+      duration: 1000
       // 判断累加还是赋值
       // isConcat:false
       // clickType:''
@@ -493,6 +515,13 @@
   }
   .page{
     background: #F2F5F5;
+    .headBanner{
+      .bannerImg{
+        width: 100vw;
+        height: 100%;
+        // background-size: 100% 100%;
+      }
+    }
     .hide{
       display: none;
     }
@@ -519,11 +548,13 @@
       }
     }
     .navBox{
-      width: 718rpx;
-      height: 282rpx;
+      // width: 718rpx;
+      // height: 282rpx;
+      height: 127rpx;
+      padding-right: 19rpx;
       background: white;
       margin:0 auto;
-      padding-top: 20rpx;
+      // padding-top: 20rpx;
       border-radius: 10rpx;
       box-sizing: border-box;
       position: relative;
@@ -574,6 +605,7 @@
         padding:20rpx 24rpx;
         display: flex;
         align-items: center;
+        height: 120rpx;
         .newLeft{
           font-size: 32rpx;
           margin-top: -24rpx;
@@ -584,6 +616,7 @@
         .newCon{
           margin-left: 10rpx;
           flex:1;
+          padding-top:7rpx;
           .box{
              view:nth-child(1){
               font-size: 28rpx;
@@ -609,7 +642,7 @@
     .tabs{
       background: white;
       // display: flex;
-      // width: 720rpx;
+      width: 720rpx;
       // height: 98rpx;
       margin: 10rpx auto;
       font-size: 28rpx;

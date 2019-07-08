@@ -1,4 +1,4 @@
-import general from './general'
+import general from '../store/general'
 
 export { general as generalStore }
 
