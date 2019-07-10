@@ -32,7 +32,7 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 17,
+			"current": 18,
 			"list": [
 				{
 					"id": -1,
@@ -156,6 +156,12 @@
 					"name": "分享",
 					"pathName": "pages/index",
 					"query": "id=201905291928152889904450fca5d2ef&type=active",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "案例展示",
+					"pathName": "pages/showCase",
 					"scene": null
 				}
 			]

@@ -13,7 +13,7 @@
             </view>
             <!-- 案例部分 -->
             <!-- modal框架部分 -->
-            <view class="cu-modal {{modalName=='Image'?'show':''}}" style="width:750rpx;position:absolute;left:0;top:0;height:800px;">
+            <!-- <view class="cu-modal {{modalName=='Image'?'show':''}}" style="width:750rpx;position:absolute;left:0;top:0;height:800px;">
             <view class="cu-dialog" style="height:650px;">
                 <image class="bg-img" style="height:600px;" src="{{typeCase}}">
                     <view class="cu-bar justify-end text-white">
@@ -26,7 +26,7 @@
                 <view class="action margin-0 flex-sub  solid-left" bindtap="hideModal">我知道了</view>
                 </view>
             </view>
-            </view>
+            </view> -->
             <!-- 标题表单 -->
             <view class="inputText">
                  <input class="biaoti" type="text" placeholder="请输入合作标题" placeholder-style="font-size:28rpx;color:#A7BABD;" bindblur="submitTitle" value="{{supTitle}}" bindinput="cn" />
@@ -71,20 +71,20 @@
                 <view class="inputTitle" bindtap="bbbbbbbbbbb">需求资源说明</view>
                 <!-- 1.需求资源描述 -->
                 <view style="width:628rpx;margin:0 auto 10rpx;min-height:50rpx;">
-                    <textarea name="" id=""  value="{{firstNr}}" maxlength="-1" style="width:628rpx;margin:0 auto;min-height:50rpx;height:auto;line-height:auto;"  auto-height="true" bindblur="loseTextFirst" bindinput="keydownFirst"></textarea>
+                    <textarea name=""   value="{{firstNr}}" maxlength="-1" style="width:628rpx;margin:0 auto;min-height:50rpx;height:auto;line-height:auto;"  auto-height="true" bindblur="loseTextFirst" bindinput="keydownFirst"></textarea>
                 </view>
                 <!-- 时间限制描述 -->
                 <view style="width:628rpx;margin:0 auto 10rpx;min-height:50rpx;">
-                    <textarea name="" id=""  value="{{secondNr}}"  maxlength="-1" style="width:628rpx;margin:0 auto;min-height:50rpx;height:auto;"  auto-height="true" bindblur="loseTextSecond" bindinput="keydownSecond"></textarea>
+                    <textarea name=""    value="{{secondNr}}"  maxlength="-1" style="width:628rpx;margin:0 auto;min-height:50rpx;height:auto;"  auto-height="true" bindblur="loseTextSecond" bindinput="keydownSecond"></textarea>
                 </view>
                 <!-- 学校限制描述 -->
                 <view style="width:628rpx;margin:0 auto 10rpx;min-height:50rpx;">
-                    <textarea name="" id=""  value="{{thirdNr}}" maxlength="-1" style="width:628rpx;margin:0 auto;min-height:50rpx;height:auto;"  auto-height="true" bindblur="loseTextThird" bindinput="keydownThird"></textarea>
+                    <textarea name=""    value="{{thirdNr}}" maxlength="-1" style="width:628rpx;margin:0 auto;min-height:50rpx;height:auto;"  auto-height="true" bindblur="loseTextThird" bindinput="keydownThird"></textarea>
                 </view>
                 <!-- 点击以后显示的学校限制描述 -->
                 <!-- 其他限制-->
                 <view style="width:628rpx;margin:0 auto 10rpx;min-height:50rpx;">
-                    <textarea name="" id=""  value="{{fourthNr}}"  maxlength="-1" style="width:628rpx;margin:0 auto;min-height:50rpx;height:auto;"  auto-height="true" bindblur="loseTextFourth" bindinput="keydownFourth"></textarea>
+                    <textarea name=""    value="{{fourthNr}}"  maxlength="-1" style="width:628rpx;margin:0 auto;min-height:50rpx;height:auto;"  auto-height="true" bindblur="loseTextFourth" bindinput="keydownFourth"></textarea>
                 </view>
                 <!-- 点击以后显示的其他限制-->
             </view>
@@ -92,20 +92,20 @@
             <view class="explain"  wx:if="{{userMold=='学生'}}">
                 <view class="inputTitle" bindtap="bbbbbbbbbbb">需求资源说明</view>
                 <view style="width:628rpx;margin:0 auto 10rpx;min-height:50rpx;">
-                    <textarea name="" id=""  value="{{firstNr}}" maxlength="-1" style="width:628rpx;margin:0 auto;min-height:50rpx;height:auto;line-height:auto;"  auto-height="true" bindblur="loseTextFirst" bindinput="keydownFirst"></textarea>
+                    <textarea name=""    value="{{firstNr}}" maxlength="-1" style="width:628rpx;margin:0 auto;min-height:50rpx;height:auto;line-height:auto;"  auto-height="true" bindblur="loseTextFirst" bindinput="keydownFirst"></textarea>
                 </view>
                 <!-- 时间限制描述 -->
                 <view style="width:628rpx;margin:0 auto 10rpx;min-height:50rpx;">
-                    <textarea name="" id=""  value="{{secondNr}}"  maxlength="-1" style="width:628rpx;margin:0 auto;min-height:50rpx;height:auto;"  auto-height="true" bindblur="loseTextSecond" bindinput="keydownSecond"></textarea>
+                    <textarea name=""    value="{{secondNr}}"  maxlength="-1" style="width:628rpx;margin:0 auto;min-height:50rpx;height:auto;"  auto-height="true" bindblur="loseTextSecond" bindinput="keydownSecond"></textarea>
                 </view>
                 <!-- 学校限制描述 -->
                 <view style="width:628rpx;margin:0 auto 10rpx;min-height:50rpx;">
-                    <textarea name="" id=""  value="{{thirdNr}}" maxlength="-1" style="width:628rpx;margin:0 auto;min-height:50rpx;height:auto;"  auto-height="true" bindblur="loseTextThird" bindinput="keydownThird"></textarea>
+                    <textarea name=""    value="{{thirdNr}}" maxlength="-1" style="width:628rpx;margin:0 auto;min-height:50rpx;height:auto;"  auto-height="true" bindblur="loseTextThird" bindinput="keydownThird"></textarea>
                 </view>
                 <!-- 点击以后显示的学校限制描述 -->
                 <!-- 其他限制-->
                 <view style="width:628rpx;margin:0 auto 10rpx;min-height:50rpx;">
-                    <textarea name="" id=""  value="{{fourthNr}}"  maxlength="-1" style="width:628rpx;margin:0 auto;min-height:50rpx;height:auto;"  auto-height="true" bindblur="loseTextFourth" bindinput="keydownFourth"></textarea>
+                    <textarea name=""    value="{{fourthNr}}"  maxlength="-1" style="width:628rpx;margin:0 auto;min-height:50rpx;height:auto;"  auto-height="true" bindblur="loseTextFourth" bindinput="keydownFourth"></textarea>
                 </view>
             </view>
             <!-- 资源图片选填 -->
@@ -136,23 +136,23 @@
                 <view class="inputTitle">提供资源说明</view>
                 <!-- <view id="desc-sup" style="display:flex;width:668rpx;">
                   <text class="inputAll" style="width:153px;"> 1.活动内容\n2.其他补充</text>
-                  <textarea name="" value="{{supreSource}}" maxlength="-1" id="" cols="30" rows="10" bindblur="subSup" bindinput="bn" style="background:#F0F3F3;"></textarea>
+                  <textarea name="" value="{{supreSource}}" maxlength="-1"   cols="30" rows="10" bindblur="subSup" bindinput="bn" style="background:#F0F3F3;"></textarea>
                 </view> -->
                 <view style="width:628rpx;margin:0 auto 10rpx;min-height:50rpx;">
-                    <textarea name="" id=""  value="{{sevenNr}}" maxlength="-1" style="width:628rpx;margin:0 auto;min-height:50rpx;height:auto;line-height:auto;"  auto-height="true" bindblur="loseTextSeven" bindinput="keydownSeven"></textarea>
+                    <textarea name=""    value="{{sevenNr}}" maxlength="-1" style="width:628rpx;margin:0 auto;min-height:50rpx;height:auto;line-height:auto;"  auto-height="true" bindblur="loseTextSeven" bindinput="keydownSeven"></textarea>
                 </view>
                 <view style="width:628rpx;margin:0 auto 10rpx;min-height:50rpx;">
-                    <textarea name="" id=""  value="{{sixNr}}" maxlength="-1" style="width:628rpx;margin:0 auto;min-height:50rpx;height:auto;line-height:auto;"  auto-height="true" bindblur="loseTextSix" bindinput="keydownSix"></textarea>
+                    <textarea name=""    value="{{sixNr}}" maxlength="-1" style="width:628rpx;margin:0 auto;min-height:50rpx;height:auto;line-height:auto;"  auto-height="true" bindblur="loseTextSix" bindinput="keydownSix"></textarea>
                 </view>
             </view>
             <!-- 企业提供资源说明 -->
             <view class="explain" wx:if="{{userMold=='企业'}}">
                 <view class="inputTitle">提供资源说明</view>
                 <view style="width:628rpx;margin:0 auto 10rpx;min-height:50rpx;">
-                    <textarea name="" id=""  value="{{fifthNr}}" maxlength="-1" style="width:628rpx;margin:0 auto;min-height:50rpx;height:auto;line-height:auto;"  auto-height="true" bindblur="loseTextFifth" bindinput="keydownFifth"></textarea>
+                    <textarea name=""    value="{{fifthNr}}" maxlength="-1" style="width:628rpx;margin:0 auto;min-height:50rpx;height:auto;line-height:auto;"  auto-height="true" bindblur="loseTextFifth" bindinput="keydownFifth"></textarea>
                 </view>
                 <view style="width:628rpx;margin:0 auto 10rpx;min-height:50rpx;">
-                    <textarea name="" id=""  value="{{sixNr}}" maxlength="-1" style="width:628rpx;margin:0 auto;min-height:50rpx;height:auto;line-height:auto;"  auto-height="true" bindblur="loseTextSix" bindinput="keydownSix"></textarea>
+                    <textarea name=""    value="{{sixNr}}" maxlength="-1" style="width:628rpx;margin:0 auto;min-height:50rpx;height:auto;line-height:auto;"  auto-height="true" bindblur="loseTextSix" bindinput="keydownSix"></textarea>
                 </view>
             </view>
             <!-- 选择标签 -->
@@ -175,7 +175,8 @@
   var app =  getApp();
   createPage({
         data:{
-            // 输入框view是否显示
+            // isHide:false,
+            // // 输入框view是否显示
             isConText:true,
             // 案例类型
             typeCase:'',
@@ -333,12 +334,19 @@
                 // 将标题存入store
                 this.updateSupTitle(e.detail.value)
             },
-            showModal(e){
-                this.modalName = e.currentTarget.dataset.target
+            showModal(){
+                wx.navigateTo({
+                    url: `./showCase?typeCase=${this.typeCase}`
+                })
             },
-            hideModal(){
-                this.modalName=''
-            },
+            // showModal(e){
+            //     this.modalName = e.currentTarget.dataset.target
+            //     this.isHide =true
+            // },
+            // hideModal(){
+            //     this.modalName=''
+            //     this.isHide =false
+            // },
             // 提交以后清空状态值里面的图片
             ...store.mapMutations(['clearImg','clearCode','selectLabel','clearId','updateLabelArr','updateSupTitle','updateSource','updateNeed','clearThree','clearProvinceName','clearImg','updateFirst','updateSecond','updateThird','updateFourth','updateFifth','updateSix','updateSeven']),
             ...store.mapActions(['fetchLabel']),
@@ -592,6 +600,9 @@
   })
 </script>
 <style lang="less" scoped>
+#off{
+    display: none;
+}
 .firstTitle,.secondTitle,.thirdTitle{
     margin-bottom: 20rpx;
 }

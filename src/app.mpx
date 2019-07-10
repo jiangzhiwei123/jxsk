@@ -54,6 +54,7 @@
       "./pages/identify",
       "./pages/getPhone",
       "./pages/task",
+      "./pages/showCase",
       "./pages/regist"
     ],
     "window": {
