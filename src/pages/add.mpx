@@ -1,7 +1,7 @@
 <template>
     <view class="myAddPage">
       <!-- 如果数组中有东西 -->
-      <view class="myAdd" wx:if="{{myPublish.length>0}}">
+      <view class="myAdd" wx:if="{{haveAdd==1}}">
         <view class="addBox" wx:for="{{myPublish}}" wx:key="{{index}}" bindtap="jumpPublish(index)">
             <view class="donate">
                 <view></view>
@@ -24,7 +24,7 @@
         </view>
       </view>
       <!-- 如果数组中无东西 -->
-      <view wx:else class="flex align-center justify-center noThing" style="padding-top:400rpx;color:#48CFE7;">你还没有发布任何东西</view>
+      <view wx:if="{{haveAdd==0}}" class="flex align-center justify-center noThing" style="padding-top:400rpx;color:#48CFE7;">你还没有发布任何东西</view>
     </view>
 </template>
 <script>
@@ -40,7 +40,8 @@
       status:"",
       isClick:false,
       canClcik:false,
-      inId:''
+      inId:'',
+      haveAdd:Number
     },
     computed: {
        ...store.mapState(['token','phoneHeight','phoneWidth'])
@@ -70,6 +71,11 @@
     // 请求发布接口
     async getList(p){
       const res = await Http.get({url:'/activity/myPublish'})
+      if(res.data.length==0){
+        this.haveAdd=0
+      }else{
+        this.haveAdd=1
+      }
       this.myPublish = res.data
     },
     methods: {

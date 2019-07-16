@@ -109,7 +109,7 @@ export default class Http {
     const loginRequired = [1006, 10004, 10005, 10001]
 
     if (loginRequired.indexOf(res.status) >= 0) {
-      console.log(789789789789)
+      // console.log(789789789789)
       /**
        * 如果在loginRequired找到res.status，说明需要登录
        * 那么就登录后再重新发出请求
@@ -120,7 +120,7 @@ export default class Http {
       delete options.header.Authorization
       res = await mpx.xfetch.fetch(options)
     }
-    console.log(978658970, res)
+    // console.log(978658970, res)
     return res
   }
 

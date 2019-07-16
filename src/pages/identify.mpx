@@ -3,33 +3,33 @@
       <view style="background:white;height:{{setHeight}}px;" id="myView" wx:if="{{userMold=='企业'}}">
         <!-- 审核主体 -->
         <view class="identify {{isShowPhoto?'indexFixed':''}}" wx:if="{{text!='已认证'}}">
-        <!-- 标题 -->
-        <view class="title">认证企业身份</view>
-        <view class="head">加v表示,提升公信力,信息审核更易过</view>
-        <!-- 上传文件部分 -->
-        <view class="bgColor" bindtap="upImg">
-          <image src="{{identify}}" wx:if="{{identify!=''}}" style="height:285rpx;width:430rpx;background-size:100% 100%;"></image>
-          <!-- 上传图片按钮 -->
-          <view class="content" wx:if="{{identify==''}}">
-            <view class="picture"></view>
-          </view>
-          <!-- 问题提醒 -->
-          <view style="font-size:26rpx;color:rgba(107, 214, 234, 1);position:absolute;top:185rpx;left:112rpx;text-align:center;" wx:if="{{identify==''}}">请上传名片或工牌</view>
-        </view>
-        <!-- upPhoto部分   -->
-        <view class="{{isShowPhoto?'showImg':'hideImg'}}" style="height:840px;">
-            <view class="photoBtn">
-                <!-- <view class="take" bindtap="pic">拍摄照片</view> -->
-                <view class="select" bindtap="pic">选择照片</view>
+          <!-- 标题 -->
+          <view class="title">认证企业身份</view>
+          <view class="head">加v表示,提升公信力,信息审核更易过</view>
+          <!-- 上传文件部分 -->
+          <view class="bgColor" bindtap="upImg">
+            <image src="{{identify}}" wx:if="{{identify!=''}}" style="height:285rpx;width:430rpx;background-size:100% 100%;"></image>
+            <!-- 上传图片按钮 -->
+            <view class="content" wx:if="{{identify==''}}">
+              <view class="picture"></view>
             </view>
-            <button style="background:white;color:#48CFE7;height:88rpx;width:718rpx;margin:0 auto;" bindtap="cancle">取消</button>
-        </view>
-        <!-- 认证点击按钮 -->
-        <button class="btn" bindtap="match" wx:if="{{text=='点击认证'}}">{{text}}</button>
-        <button class="grey" wx:if="{{text=='待审核' ||  text=='已驳回'}}">{{text}}</button>
-        <!-- 拍摄要求 -->
-        <view class="attention" wx:if="{{rejectReason==''}}">拍摄要求:1文字清晰可见 2企业名称与资料中所填保持一致</view>
-        <view class="attention" style="" wx:if="{{text=='已驳回'}}">很抱歉,您的审核被驳回!<view style="color:#E35850;">驳回原因:{{rejectReason}} 请重新认证</view></view>
+            <!-- 问题提醒 -->
+            <view style="font-size:26rpx;color:rgba(107, 214, 234, 1);position:absolute;top:185rpx;left:112rpx;text-align:center;" wx:if="{{identify==''}}">请上传名片或工牌</view>
+          </view>
+          <!-- upPhoto部分   -->
+          <view class="{{isShowPhoto?'showImg':'hideImg'}}" style="height:840px;">
+              <view class="photoBtn">
+                  <!-- <view class="take" bindtap="pic">拍摄照片</view> -->
+                  <view class="select" bindtap="pic">选择照片</view>
+              </view>
+              <button style="background:white;color:#48CFE7;height:88rpx;width:718rpx;margin:0 auto;" bindtap="cancle">取消</button>
+          </view>
+          <!-- 认证点击按钮 -->
+          <button class="btn" bindtap="match" wx:if="{{text=='点击认证'}}">{{text}}</button>
+          <button class="grey" wx:if="{{text=='待审核' ||  text=='已驳回'}}">{{text}}</button>
+          <!-- 拍摄要求 -->
+          <view class="attention" wx:if="{{rejectReason==''}}">拍摄要求:1文字清晰可见 2企业名称与资料中所填保持一致</view>
+          <view class="attention" style="" wx:if="{{text=='已驳回'}}">很抱歉,您的审核被驳回!<view style="color:#E35850;">驳回原因:{{rejectReason}} 请重新认证</view></view>
         </view>
         <!-- 审核成功后 -->
         <view class="success" wx:if="{{text=='已认证'}}" style="width:{{IDwidth}}px;height:{{IDheight}}px;background:white;">
@@ -65,9 +65,12 @@
     computed: {
       ...store.mapState(['identify','token','userMold','phoneHeight','phoneWidth']),
     },
-    onLoad(){
+    async onLoad(){
+      wx.showLoading({ title: '加载中...' })
       this.clearIdentify()
       this.getData()
+      wx.hideLoading()
+      
     },
     onShareAppMessage(res){
       if (res.from === 'menu') {

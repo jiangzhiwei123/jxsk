@@ -16,13 +16,19 @@ const state = {
   // 后面是否还有更多
   isMore:false,
   // 是否加载
-  isLoading:true
+  isLoading:true,
+  simActNum:Number
 }
 const mutations = {
+  // 更新活动的数量
+  updatedActNum(state,t){
+    state.simActNum=t
+  },
   // 更新缩略活动
   updateSimple(state, p) {
     state.simpleList = p
   },
+  // 清空缩略活动
   // 更新页数
   updatePage(state, p) {
     state.pageCount += p
@@ -89,6 +95,8 @@ const actions = {
     console.log(333333333333333333,state.totalPage)
     // 是否加载
     await commit('updateLoading',false)
+    // 更新活动的数量
+    commit('updatedActNum',state.simpleList.length)
   },
   async fetchSimple({state,commit}, type) {
     const simple = await SimpleActive.getAll()

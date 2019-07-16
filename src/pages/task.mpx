@@ -80,7 +80,9 @@
         shareId:Number,
         // 合作是否点击过
         isTeamBtn:false,
-        weChat:''
+        weChat:'',
+        // 接受首页传进来的id值
+        getSyFrom:''
     },
     // 转发功能
     onShareAppMessage(res) {
@@ -102,14 +104,17 @@
     // 页面隐藏的时候
     onLoad (p) { 
         this.getList(p)
-        // if(p.){
-
-        // }
+        this.getSyFrom = p.from
+        console.log("我是onLoad的时候打印的")
+        console.log(this.getSyFrom)
         // if(this.imgArray.length==1){
         //     console.log(343434343443)
         //     this.imgNumber=true
         // }
-        console.log(555555555555555555555,this.userMold)
+        console.log(555555555555555555555,p)
+    },
+    onShow(){
+        console.log("我是onShow的时候打印的")
     },
     getList(p){
         // 根据id获取发布的详细信息
@@ -209,10 +214,9 @@
             this.dataList.favorites = !this.dataList.favorites
             await this.dataList.favorites?this.save=1:this.save=0
             await this.changeCollect({ activeId:this.dataList.id, isSave:this.save })
-            // 改变收藏的状态方便加载首页传值
-            this.updateStatus(!this.dataList.favorites)
-            // 更新活动id
-            this.updateId(this.dataList.id)
+
+            await this.updateStatus(this.dataList.favorites)
+            await this.updateId(this.dataList.id)
             // this.getList(this.dataList)
             // wx.request({
             //     url: `${app.globalData.realm}/favorites/saveOrDelFavoritesHistory`,

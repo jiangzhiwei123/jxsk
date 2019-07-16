@@ -1,7 +1,7 @@
 <template>
     <view class="listBox">
         <!-- 有收藏的时候 -->
-        <view class="list" wx:for="{{collectList}}" bindtap="listClick(index)" wx:key="{{index}}" wx:if="{{collectList.length>0}}">
+        <view class="list" wx:for="{{realCollectList}}" bindtap="listClick(index)" wx:key="{{index}}" wx:if="{{haveData==1}}">
           <!-- 头像 -->
           <image class="userImg" src="{{item.userIcon}}"></image>
           <view class="text">
@@ -34,7 +34,7 @@
           </view>
         </view>
         <!-- 没有收藏的时候 -->
-        <view class="flex align-center justify-center" style="padding-top:400rpx;color:#48CFE7;font-size:36rpx;" wx:if="{{collectList.length==0}}">你暂时没有收藏</view>
+        <view class="flex align-center justify-center" style="padding-top:400rpx;color:#48CFE7;font-size:36rpx;" wx:if="{{haveData==0}}">你暂时没有收藏</view>
     </view>
 </template>
 
@@ -47,15 +47,17 @@
     data:{
       // collectList:[],
       save:Number,
-      activityId:""
+      activityId:"",
+      realCollectList:[]
     },
     computed: {
-      ...store.mapState(['token','collectList'])
+      ...store.mapState(['token','collectList','colectId','haveData','arrayDelId']),
     },
     methods: {
       ...store.mapActions(['changeCollect','lookCollect']),
+      ...store.mapMutations(['updatePageCollect','updateIfData','updateArrayId','updateDelId']),
       listClick(index){
-        const id = this.collectList[index].id
+        const id = this.realCollectList[index].id
         wx.navigateTo({
           url: `../pages/task?id=${id}`
         })
@@ -66,31 +68,22 @@
         // 弹出提示框
         wx.showModal({
           title: '提示',
-          content: '是否取消',
+          content: '是否取消此收藏',
           success(res) {
             if (res.confirm) {
-                  _this.collectList[index].favorites?_this.save=0:_this.save=1
-                  // wx.showLoading({ title: '加载中...' })
-                  _this.changeCollect({ activeId:_this.collectList[index].id, isSave:_this.save })
-                  // wx.hideLoading()
-                  _this.collectList.splice(index,1)
-                  // _this.lookCollect()
-            // this.simpleList[index].favorites=!this.simpleList[index].favorites
-              // wx.request({
-              //   url: `${app.globalData.realm}/favorites/saveOrDelFavoritesHistory`,
-              //   method: "POST",
-              //   header: {
-              //     'content-type': 'application/x-www-form-urlencoded',
-              //     'Authorization' :_this.token
-              //   },
-              //   data:{
-              //     activityId:_this.collectList[index].id,
-              //     isSave:_this.save
-              //   },
-              //   success: res => {
-              //     _this.onLoad()
-              //   }
-              // })
+              _this.updateDelId(_this.collectList[index].id)
+              console.log(88887777,_this.collectList[index].id)
+              _this.collectList[index].favorites?_this.save=0:_this.save=1
+              // wx.showLoading({ title: '加载中...' })
+              _this.changeCollect({ activeId:_this.collectList[index].id, isSave:_this.save })
+              // wx.hideLoading()
+              // 更新用户取消的收藏的活动的id
+              _this.updateArrayId(_this.collectList[index].id)
+              _this.collectList.splice(index,1)
+              if(_this.realCollectList.length==0){
+                _this.updateIfData(0)
+              } 
+              // _this.lookCollect()
             } else if (res.cancel) {
               console.log('用户点击取消')
             }
@@ -99,11 +92,42 @@
         
       }
     },
-    onLoad(){
+    async onLoad(){
+      console.log("我是刚刚加载的时候呀")
       wx.showLoading({ title: '加载中...' })
-      this.lookCollect()
+      await this.lookCollect()
       wx.hideLoading()
+      this.realCollectList = this.collectList
     },
+    async onShow(options){
+      // const cIndex = this.realCollectList.findIndex(item =>{
+      //   return item.id = this.colectId
+      // })
+      await this.lookCollect()
+      this.realCollectList=await this.collectList
+      console.log(666666666666,this.colectId)
+      console.log(666666666666,options)
+      // 在加载以后清空task页面选中的活动的id避免首页的出现冲突
+      // clearCollectId
+       // const cIndex = this.realCollectList.findIndex(item =>{
+      //   return item.id = this.colectId
+      // })
+      // console.log(666666666666,this.realCollectList)
+      // this.realCollectList.splice(cIndex,1)
+      // this.collectList.splice(cIndex,1)
+      // this.collectList[cIndex].favorites = false
+      // console.log(this.colectId)
+      // console.log(this.collectList[cIndex])
+
+
+      // this.collectList[index].favorites?
+      // this.collectList[]
+    },
+    // 在页面关闭的时候
+    // onHide(){
+    //   console.log('看看页面关闭的时候我打印了没有')
+    //   this.clearCollectId()
+    // },
     onShareAppMessage(res){
       if (res.from === 'menu') {
         // 来自页面内转发按钮

@@ -69,6 +69,8 @@
       this.checkRequest()
       this.requestImfor()
       wx.hideLoading();
+      // this.clearCollectId()
+      console.log("homeonshow")
     },
     computed: {
       ...store.mapState(['token','infoList'])
@@ -85,6 +87,7 @@
     },
     methods: {
       ...store.mapActions(['requestImfor']),
+      ...store.mapMutations(['clearCollectId']),
       checkRequest(){
         loadUserInfo.getAll()
       },

@@ -87,6 +87,24 @@
               'imageType':this.imageType
             },
             success(res) {
+              console.log(JSON.parse(res.data).status)
+              console.log(res)
+              if(JSON.parse(res.data).status==1009){
+                wx.hideLoading()
+                wx.showModal({
+                  title: '提示',
+                  content: '文件大小超出限制,请重新上传',
+                  showCancel:false,
+                  success (res) {
+                    if (res.confirm) {
+                      console.log('用户点击确定')
+                      wx.navigateBack({
+                        delta: 1
+                      })
+                    }
+                  }
+                })
+              }
               _this.userIcon = JSON.parse(res.data).data.imageUrl
               if(_this.page=="add"){
                 wx.redirectTo({

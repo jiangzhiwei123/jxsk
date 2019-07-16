@@ -1,7 +1,7 @@
 <template>
   <view class="publishPage" style="padding-top:20rpx;background:white;">
     <!-- 游客身份 -->
-    <view class="identity" wx:if="{{userMold == '游客' ||  userMold == ''}}">
+    <view class="identity haveHide {{(userMold == '游客' ||  userMold == '')?'haveShow':''}}">
       <view class="title">请选择用户身份</view>
       <view class="imgId">
         <view class="imgPart">
@@ -43,7 +43,7 @@
       </view>
     </view>
     <!-- 学生身份 -->
-    <view class="list" wx:if="{{userMold =='学生'}}">
+    <view class="list haveHide {{userMold =='学生'?'haveShow':''}}">
       <navigator url="../pages/supportDetail?url={{item.url}}&content={{item.content}}&text={{item.text}}" hover-class="none" wx:for="{{aList}}" wx:key="{{index}}">
           <view class="support">
               <image src="{{item.url}}"></image>
@@ -56,7 +56,7 @@
       </navigator>
     </view>
     <!-- 企业身份 -->
-    <view class="list" wx:if="{{userMold =='企业'}}">
+    <view class="list haveHide {{userMold =='企业'?'haveShow':''}}" >
       <navigator url="../pages/supportDetail?url={{item.url}}&content={{item.content}}&text={{item.text}}" hover-class="none" wx:for="{{list}}" wx:key="{{index}}">
           <view class="support">
               <image src="{{item.url}}"></image>
@@ -176,7 +176,12 @@
   })
 </script>
 <style lang="less" scoped>
-
+  .haveHide{
+    display:none;
+  }
+  .haveShow{
+    display: block;
+  }
   .list{
       width: 717rpx;
       // height: 444rpx;

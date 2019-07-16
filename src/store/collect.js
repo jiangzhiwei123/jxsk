@@ -12,22 +12,47 @@ const state = {
   // 我的收藏里查看收藏的列表
   collectList: [],
   // 给一个状态改变收藏的状态
-  collectStatus:'',
+  collectStatus:false,
   // 更新活动id
-  colectId:''
+  colectId:'',
+  // 判断数据里面是否有值
+  haveData:Number,
+  // 用来存储取消收藏的id
+  arrayDelId:[],
+  // 点击取消的活动id
+  delCollectId:''
 }
 const mutations = {
   updateCollect(state, c) {
     state.collectList = c
+  },
+  updateIfData(state, c) {
+    state.haveData = c
   },
   // 更新收藏状态
   updateStatus(state,p) {
     state.collectStatus = p
     console.log(5555566666)
   },
+  // 清空此时选中的活动id
+  clearCollectId(state){
+    state.colectId = ''
+  },
   // 更新活动id
   updateId(state,p) {
     state.colectId=p
+  },
+  // 往数组中添加id呀
+  updateArrayId(state,p) {
+    state.arrayDelId.push(p)
+  },
+  // 清空数组中的id防止重复
+  clearArrayId(state){
+    state.arrayDelId=[]
+  },
+  // 用于记录在我的收藏首页点击取消活动的id
+  updateDelId(state,p) {
+    state.delCollectId=p
   }
 }
 const actions = {
@@ -58,6 +83,11 @@ const actions = {
       // }
     })
     console.log('cccccccccccccccccc', res)
+    if(res.data.length==0){
+      context.commit('updateIfData',0)
+    }else{
+      context.commit('updateIfData',1)
+    }
     context.commit('updateCollect', res.data)
   }
 }

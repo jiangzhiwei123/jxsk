@@ -97,6 +97,9 @@
     </view>
     <!-- 列表部分 -->
     <view class="listBox">
+      <!-- 如果simpList为空的话则显示 -->
+      <view wx:if="{{simActNum==0}}" style="color:#48CFE7;font-size:15px;
+		text-align: center;margin-top:200rpx;">暂无符合条件的活动</view>
       <view class="list" wx:for="{{simpleList}}" wx:key="{{index}}"  data-num="{{index}}" bindtap="jupmDetail(index)">
         <!-- 头像 -->
         <image src="{{item.userIcon}}" class="userImg" style="width:74rpx;height:74rpx;border-radius:50%;"></image>
@@ -175,10 +178,12 @@
       duration: 1000
       // 判断累加还是赋值
       // isConcat:false
-      // clickType:''
+      // clickType:'',
+      // 判断列表中是否有活动
+      // simpNumber:Number
     },
     computed:{
-      ...store.mapState(['provinces','token','userMold','address','addressCode','userMold','activeType','clickType','noticeList','simpleList','userMold','pageCount','totalPage','isLoading','collectStatus','colectId','invite']),
+      ...store.mapState(['provinces','token','userMold','address','addressCode','userMold','activeType','clickType','noticeList','simpleList','simActNum','userMold','pageCount','totalPage','isLoading','collectStatus','colectId','invite','collectPageId','collectStatus','delCollectId','arrayDelId']),
     },
     /**
      * 页面上拉触底事件的处理函数
@@ -257,7 +262,7 @@
           // console.log(this.modalList)
       },
       ...store.mapActions(['fetchProvince','fetchNotice','fetchSimple','fetchSimpType','activePro','changeCollect','requestImfor','userType']),
-      ...store.mapMutations(['getToken','updateAddress','updateAddressCode','updateclickType','updatePage','updateLoading','updateSimple','clearPage']),
+      ...store.mapMutations(['getToken','updateAddress','updateAddressCode','updateclickType','updatePage','updateLoading','updateSimple','clearPage','updatePageCollect','updateStatus','clearCollectId','clearArrayId']),
       dqClick(){
         this.getList()
       },
@@ -299,7 +304,7 @@
         this.checkRequest()
         const id =  this.simpleList[index].id
         wx.navigateTo({
-          url: `../pages/task?id=${id}`
+          url: `../pages/task?id=${id}&from=shouye`
         })
       },
       showModal(){
@@ -318,8 +323,13 @@
         await this.simpleList[index].favorites?this.save=1:this.save=0
         // wx.showLoading({ title: '加载中...' })
         await this.changeCollect({ activeId:this.simpleList[index].id, isSave:this.save }).then(
-          console.log(123456789)
+          console.log("看看我是不是收藏以后的东西")
         )
+        // if(this.collectStatus){
+        //   this.updateStatus(false)
+        // }else if(!this.collectStatus){
+        //   this.updateStatus(true)
+        // }
         // 删除 可以实时改变颜色 但是每次都刷新 用户体验不好
         // this.updateSimple([])
         // // 初始化页码
@@ -379,22 +389,42 @@
       //   console.log('我爱你')
       // }
     },
+    onHide(){
+      this.clearCollectId()
+      this.clearArrayId()
+    },
     async onShow(){
+      
         // wx.showLoading({ title: '加载中...' })
         // await this.fetchSimple('')
-        console.log(1231132132132132123)
+        console.log("1231132132132132123")
+        console.log("yayayayay")
+        for(var i=0;i<this.arrayDelId.length;i++){
+          this.simpleList[this.simpleList.findIndex(item =>{
+          return item.id == this.arrayDelId[i]
+        })].favorites=false
+        }
+        
         // 公告数据请求
         await this.fetchNotice()
         // 地区数据请求
         await this.fetchProvince()
         // await this.updateSimple([])
-        const coIndex =  this.simpleList.findIndex(item =>{
-        return item.id == this.colectId
-      })
-      this.simpleList[coIndex].favorites=!this.collectStatus
-      console.log(66666666,coIndex)
-      console.log(66666666,this.collectStatus)
-        // wx.hideLoading()
+        // this.activePro({name:"",id:'',rows:10,page:1})
+        // await this.updateSimple([])
+        // const coIndex =await 
+        this.simpleList[this.simpleList.findIndex(item =>{
+          return item.id == this.colectId
+        })].favorites=this.collectStatus
+      // const delIndex =this.simpleList.findIndex(item=>{
+      //   return item.id == this.delCollectId
+      // })
+      // this.simpleList[delIndex].favorites=false
+      // this.activePro({name:"",id:this.addressCode,rows:10,page:1})
+      // await this.activePro({name:'',id:'',rows:10,page:1}).then(
+      //   console.log('李冰雨鸭呀呀呀呀')
+      // )
+      //   // wx.hideLoading()
         // 请求详情数据
       // this.fetchSimple("")
       // this.fetchUser()
@@ -448,8 +478,6 @@
       //   }
       // })
     }
-
-
   })
 </script>
 <style lang="less" scoped>
