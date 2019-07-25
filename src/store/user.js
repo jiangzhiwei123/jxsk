@@ -12,7 +12,12 @@ const state = {
   // 用户类型
   userMold: '',
   teamData: '',
-  infoList: []
+  infoList: [],
+  userData:[],
+  // 用户联系方式
+  userContact:'',
+  // 用户的练习类型
+  contactType:''
 }
 const mutations = {
   // 更新用户
@@ -26,7 +31,15 @@ const mutations = {
   // 更新用户信息列表
   updateInfo(state, u) {
     state.infoList = u
+  },
+  updateContact(state, u) {
+    state.userContact = u
+  },
+  updateContactType(state, u) {
+    state.contactType = u
   }
+  // 更用户信息
+
 }
 const actions = {
   // 获取用户信息

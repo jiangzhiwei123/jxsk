@@ -19,7 +19,8 @@ const actions = {
     // 获取地区数据名字
     const provinces = await Province.getAll()
     // 在最前面添加一个不限地区
-    const newProvinces = provinces.data.unshift({ code: 10, name: '全国', provinceName: null, cityName: null })
+    // const newProvinces = provinces.data.unshift({ code: 10, name: '全国', provinceName: null, cityName: null })
+    const newProvinces = provinces.data
     console.log(3333333333, newProvinces)
     const a = provinces.data.map(item => {
       item.selected = false

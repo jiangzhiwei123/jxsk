@@ -127,10 +127,24 @@
             <view class="{{isShowPhoto?'showImg':'hideImg'}}" style="padding-top:{{relHeight}}px">
                 <view class="photoBtn">
                     <!-- <view class="take" bindtap="pic">拍摄照片</view> -->
-                    <view class="select" bindtap="pic">选择照片</view>
+                    <view class="select" catchtap="pic">选择照片</view>
                 </view>
                 <button style="background:white;color:#48CFE7;height:88rpx;width:718rpx;margin:0 auto;" bindtap="cancle">取消</button>
             </view>
+            <!-- 用户选择联系方式 -->
+            <!-- <view class="address" style="margin-bottom:20rpx;">
+                <view style="flex:1;">联系方式</view>
+                <picker bindchange="PickerChangeSex" value="{{contactIndex}}" range="{{contact}}" style="margin-right:40rpx;" wx:if="{{!contactIndex}}">
+                <view class="picker" style="color:black;">
+                    {{contactIndex?contact[contactIndex]:'请选择联系方式'}}
+                </view>
+                </picker>
+                <image class="icon" src="../images/下拉按钮(公告）.png" wx:if="{{!contactIndex}}"></image>
+                <view wx:if="{{contactIndex}}" style="margin-right:40rpx;">
+                    <input type="text" placeholder="请输入联系方式" bindblur="getContact" focus="{{contactIndex}}">
+                </view>
+                <view  wx:if="{{contactIndex}}" bindtap="toThree">返回</view>
+            </view> -->
             <!-- 学生提供资源说明 -->
             <view class="explain" wx:if="{{userMold=='学生'}}">
                 <view class="inputTitle">提供资源说明</view>
@@ -175,6 +189,8 @@
   var app =  getApp();
   createPage({
         data:{
+            contactIndex:null,
+            contact:['QQ','微信','手机号'],
             // isHide:false,
             // // 输入框view是否显示
             isConText:true,
@@ -215,7 +231,7 @@
 
         },
         computed:{
-            ...store.mapState(['imgUrl','codeArr','label','idArr','token','codeArr','userMold','LabelArr','provinceName','supTitle','supNeed','supreSource','firstNr','secondNr','thirdNr','fourthNr','fifthNr','sixNr','sevenNr']),
+            ...store.mapState(['imgUrl','codeArr','label','idArr','token','codeArr','userMold','LabelArr','provinceName','supTitle','supNeed','supreSource','firstNr','secondNr','thirdNr','fourthNr','fifthNr','sixNr','sevenNr','userContact','contactType']),
         },
         onShareAppMessage(res){
             if (res.from === 'menu') {
@@ -228,6 +244,30 @@
             }
         },
         methods: {
+            // 获取用户输入的联系方式
+            getContact(e){
+                this.updateContact(e.detail.value)
+                console.log(888888888888,this.userContact)
+            },
+            toThree(){
+                this.contactIndex=null
+                this.updateContact('')
+                this.updateContactType('')
+            },
+            PickerChangeSex(e){
+                this.contactIndex = e.detail.value
+                if(e.detail.value==0){
+                    this.updateContactType('QQ')
+                    console.log(this.contactType)
+                }else if(e.detail.value==1){
+                    this.updateContactType('微信')
+                    console.log(this.contactType)
+                }else if(e.detail.value==2){
+                    this.updateContactType('电话')
+                    console.log(this.contactType)
+                }
+                // console.log(e)
+            },
             // 键盘按下的时候
             // 'updateFirst','updateSecond','updateThird','updateFourth','updateFifth','updateSix'
             keydownFirst(e){
@@ -348,8 +388,8 @@
             //     this.isHide =false
             // },
             // 提交以后清空状态值里面的图片
-            ...store.mapMutations(['clearImg','clearCode','selectLabel','clearId','updateLabelArr','updateSupTitle','updateSource','updateNeed','clearThree','clearProvinceName','clearImg','updateFirst','updateSecond','updateThird','updateFourth','updateFifth','updateSix','updateSeven']),
-            ...store.mapActions(['fetchLabel']),
+            ...store.mapMutations(['clearImg','clearCode','selectLabel','clearId','updateLabelArr','updateSupTitle','updateSource','updateNeed','clearThree','clearProvinceName','clearImg','updateFirst','updateSecond','updateThird','updateFourth','updateFifth','updateSix','updateSeven','updateContact','updateContactType']),
+            ...store.mapActions(['fetchLabel','requestImfor']),
             // 照片
             pic: function (options) {
                 this.isShowPhoto=false
@@ -417,12 +457,22 @@
                     wx.showModal({
                     title: '提示',
                     content: '合作标题不能为空',
+                    showCancel:false,
                     success(res) {
                         if (res.confirm) {
                         console.log('用户点击确定')
-                        } else if (res.cancel) {
-                        console.log('用户点击取消')
-                        }
+                        } 
+                    }
+                    })
+                }else if(this.nameArray.length==0){
+                    wx.showModal({
+                    title: '提示',
+                    content: '请选择合作区域',
+                    showCancel:false,
+                    success(res) {
+                        if (res.confirm) {
+                        console.log('用户点击确定')
+                        } 
                     }
                     })
                 }else{
@@ -539,6 +589,11 @@
         },
         // 从子页面2返回到子页面1，会触发子页面2的onUnload()
         onLoad (e) {
+            // 获取用户信息
+            // this.requestImfor()
+            // this.contact[0]=this.infoList.qqNum
+            // this.contact[1]=this.infoList.wechat
+            // this.contact[2]=this.infoList.phone
             this.getSystem()
             // this.clearImg()
             this.clearCode()

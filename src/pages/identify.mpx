@@ -2,7 +2,7 @@
     <view>
       <view style="background:white;height:{{setHeight}}px;" id="myView" wx:if="{{userMold=='企业'}}">
         <!-- 审核主体 -->
-        <view class="identify {{isShowPhoto?'indexFixed':''}}" wx:if="{{text!='已认证'}}">
+        <view class="identify {{isShowPhoto?'indexFixed':''}}" wx:if="{{isMatch==0}}">
           <!-- 标题 -->
           <view class="title">认证企业身份</view>
           <view class="head">加v表示,提升公信力,信息审核更易过</view>
@@ -32,10 +32,12 @@
           <view class="attention" style="" wx:if="{{text=='已驳回'}}">很抱歉,您的审核被驳回!<view style="color:#E35850;">驳回原因:{{rejectReason}} 请重新认证</view></view>
         </view>
         <!-- 审核成功后 -->
-        <view class="success" wx:if="{{text=='已认证'}}" style="width:{{IDwidth}}px;height:{{IDheight}}px;background:white;">
+        <view class="success" wx:if="{{isMatch==1}}" style="width:{{IDwidth}}px;height:{{IDheight}}px;background:white;">
           <view class="pic"></view>
           <view class="text">企业身份认证成功</view>
           <view class="warn">加V标识,提升公信力,信息审核更易通过</view>
+          <!-- <view>内容 : {{contents}}</view>
+          <view bindtap='copyText' data-text="{{contents}}">复制</view> -->
         </view>
       </view>
       <view class="flex align-center justify-center" style="background:white;padding-top:400rpx;color:#48CFE7;" wx:if="{{userMold=='学生'}}">
@@ -51,12 +53,15 @@
   var app = getApp();
   createPage({
     data:{
+      // contents:'这是一段可复制的文字,粘贴后看到效果',
       isShowPhoto:false,
       text:'点击认证',
       // textStatus:'',
       // 驳回原因
       rejectReason:'',
       setHeight:Number,
+      // 判断是否认证
+      isMatch:Number
       // // 屏幕宽度
       // IDwidth:Number,
       // // 获取屏幕高度
@@ -66,11 +71,10 @@
       ...store.mapState(['identify','token','userMold','phoneHeight','phoneWidth']),
     },
     async onLoad(){
-      wx.showLoading({ title: '加载中...' })
       this.clearIdentify()
-      this.getData()
-      wx.hideLoading()
-      
+      wx.showLoading({ title: '加载中...' })
+      await this.getData()
+      wx.hideLoading()    
     },
     onShareAppMessage(res){
       if (res.from === 'menu') {
@@ -83,6 +87,22 @@
       }
     },
     methods: {
+      // 复制
+      // copyText(e){
+      //   console.log(e)
+      //   wx.setClipboardData({
+      //     data:e.currentTarget.dataset.text,
+      //     success(res){
+      //       wx.getClipboardData({
+      //         success: (result)=>{
+      //           wx.showToast({
+      //             title: '复制成功'
+      //           })
+      //         }
+      //       })
+      //     }
+      //   })
+      // },
       ...store.mapMutations(['clearIdentify','updateHeight','updateWidth']),
       // 提交认证
       match(){
@@ -121,7 +141,13 @@
       async getData(){
         const res = await Http.get({url:'/auth/myAuth'})
         this.rejectReason = res.data.rejectReason
-        this.text = res.data.status
+        this.text = await res.data.status
+        if(res.data.status=="已认证"){
+          this.isMatch=1
+        }else{
+          this.isMatch=0
+        }
+        console.log(55555,res)
       },
       // 上传图片
       upImg(){

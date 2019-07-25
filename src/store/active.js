@@ -32,12 +32,24 @@ const state = {
   // 邀请码
   invite:Number,
   // 邀请码
-  codeNum:''
+  codeNum:'',
+  // 地区数量
+  addArray:Number,
+  isAllAdd:Number,
+  // 点击合作以后返回地数据
+  TeamWorkData:[]
 }
 const mutations = {
   // 更新需求文本框的内容
   updateFirst(state,t){
     state.firstNr=t
+  },
+  // 点击合作以后返回地数据
+  updateTeamWorkData(state,t){
+    state.TeamWorkData=t
+  },
+  clearTeamWorkData(state){
+    state.TeamWorkData=[]
   },
   // 更新需求文本框的内容
   updateSecond(state,t){
@@ -111,22 +123,31 @@ const mutations = {
   // 清除邀请码
   clearInvite(state){
     state.invite = ''
+  },
+  updateAdd(state,t){
+    state.addArray = t
   }
 }
 const actions = {
   // 根据传入的id获取详情页面
   async taskData(context, id) {
-    let res = await Http.get({
+    const res = await Http.get({
       url: '/activity/loadParticularsActivityInfo',
       data: {
         id: id
       }
     })
-    console.log(666666666666666, res)
+    // 更新活动的地址
+    context.commit('updateAdd', res.data.astrictAdds)
     // 更新详情数据
     context.commit('updateDatalist', res.data)
     // 更新详情id
     context.commit('updateActiveId', res.data.id)
+    if(res.data.astrictAdds.length==0){
+      store.state.isAllAdd=1
+    }else{
+      store.state.isAllAdd=res.data.astrictAdds[0].code
+    }
     // 更新合作头像
     if (res.data.partnerIcons.length === 1) {
       store.state.widthImg = 80
@@ -135,6 +156,17 @@ const actions = {
     }
     context.commit('updateImg', res.data.partnerIcons)
     console.log(res.data.id)
+  },
+  async TeamWork(context,activityId){
+    const res = await Http.get({
+      url:'/sysuser/loadUserWechatByCode',
+      data:{
+          activityId,
+          code:store.state.isAllAdd
+      }
+    })
+    console.log(5252525252,res)
+    context.commit('updateTeamWorkData',res)
   },
   // 用户转发
   async ShareActive(context, delId) {

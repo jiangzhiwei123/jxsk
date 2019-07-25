@@ -8,7 +8,7 @@
     <view class="headBanner" style="margin-bottom:24rpx;">
       <swiper indicator-dots="{{!indicatorDots}}"
       autoplay="{{!autoplay}}" interval="{{interval}}" duration="{{duration}}" style="height:375rpx;" indicator-color="#fff" indicator-active-color="#48CFE7">
-      <block wx:for="{{imgUrls}}" wx:key="{{index}}">
+      <block wx:for="{{realBanner.length>0?realBanner:imgUrls}}" wx:key="{{index}}">
         <swiper-item>
           <image src="{{item}}" class="slide-image bannerImg"/>
         </swiper-item>
@@ -42,7 +42,7 @@
       <view class="navBot">
         <view class="newLeft">最新消息</view>
         <swiper class="newCon" style="width:527rpx;overflow:auto;height:100%;"
-        autoplay="{{autoplay}}" interval="{{interval}}" duration="{{duration}}" vertical>
+        autoplay="{{!autoplay}}" interval="{{interval}}" duration="{{duration}}" vertical>
           <block wx:for="{{noticeList}}" wx:key="{{index}}" class="box" bindtap="showModal">
            <swiper-item  bindtap="showNotice" data-target="Modal" data-id="{{index}}">
               <view style="font-size: 28rpx;color:#46595c;font-weight: bold;">{{item.title}}</view>
@@ -111,7 +111,7 @@
             <!-- 姓名 省份 日期 -->
             <view class="person">
               <view class="name">{{item.userName}}</view>
-              <view class="province" wx:for="{{item.astrictAdds}}" wx:key="{{item.astrictAdds}}">{{item}}</view>
+              <view class="province" wx:for="{{item.astrictAdds}}" wx:key="{{index}}">{{item.provinceName}}</view>
               <view class="time" style="margin-top:2px;">{{item.beginTime}}</view>
             </view>
           </view>
@@ -154,8 +154,8 @@
       menuFixed:false,
       menuTop:Number,
       // noticeList:[],
-      autoplay:true,
-      interval:5000,
+      // autoplay:true,
+      // interval:5000,
       // 点击传过去的值
       simpleId:'',
       listId:'',
@@ -183,12 +183,13 @@
       // simpNumber:Number
     },
     computed:{
-      ...store.mapState(['provinces','token','userMold','address','addressCode','userMold','activeType','clickType','noticeList','simpleList','simActNum','userMold','pageCount','totalPage','isLoading','collectStatus','colectId','invite','collectPageId','collectStatus','delCollectId','arrayDelId']),
+      ...store.mapState(['provinces','token','userMold','address','addressCode','userMold','activeType','clickType','noticeList','simpleList','simActNum','userMold','pageCount','totalPage','isLoading','collectStatus','colectId','invite','collectPageId','collectStatus','delCollectId','arrayDelId','bannerArr','realBanner']),
     },
     /**
      * 页面上拉触底事件的处理函数
      */
     onReachBottom: function () {
+      this.fetchBanner()
       // 显示加载图标
       wx.showLoading({
         title: '玩命加载中',
@@ -261,12 +262,14 @@
           // console.log(this.modalId)
           // console.log(this.modalList)
       },
-      ...store.mapActions(['fetchProvince','fetchNotice','fetchSimple','fetchSimpType','activePro','changeCollect','requestImfor','userType']),
-      ...store.mapMutations(['getToken','updateAddress','updateAddressCode','updateclickType','updatePage','updateLoading','updateSimple','clearPage','updatePageCollect','updateStatus','clearCollectId','clearArrayId']),
+      ...store.mapActions(['fetchProvince','fetchNotice','fetchSimple','fetchSimpType','activePro','changeCollect','requestImfor','userType','fetchBanner']),
+      ...store.mapMutations(['getToken','updateAddress','updateAddressCode','updateclickType','updatePage','updateLoading','updateSimple','clearPage','updatePageCollect','updateStatus','clearCollectId','clearArrayId','clearBanner']),
       dqClick(){
         this.getList()
       },
       navClick(e){
+          // 更新banner
+          this.fetchBanner()
           this.currentTab=e.target.dataset.current
           if(this.currentTab==0){
             this.updateclickType('')
@@ -347,6 +350,7 @@
       }
     },
     async onLoad(options){    
+      // this.clearBanner()
       console.log(11223344556677,options)
       if(options.type=='active'){
             wx.showModal({
@@ -377,7 +381,8 @@
         this.inviteIndex = this.invite
       } 
       // console.log(898989,this.inviteIndex)
-      console.log(898989,this.invite)
+      // 加载背景图片
+      this.fetchBanner()
       // 现在用不到
       // if(this.invite==1){
       //   // console.log(898989,this.invite)
@@ -394,7 +399,8 @@
       this.clearArrayId()
     },
     async onShow(){
-      
+        // await this.clearBanner()
+        // this.fetchBanner()
         // wx.showLoading({ title: '加载中...' })
         // await this.fetchSimple('')
         console.log("1231132132132132123")
@@ -542,7 +548,7 @@
       z-index: 999;
   }
   .page{
-    background: #F2F5F5;
+    // background: #F2F5F5;
     .headBanner{
       .bannerImg{
         width: 100vw;

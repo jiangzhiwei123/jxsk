@@ -13,7 +13,7 @@
               <view class="person" style="flex-wrap:wrap;">
                 <view class="name">{{item.userName}}</view>
                 <view wx:for="{{item.astrictAdds}}" wx:key="{{index}}">
-                  <view class="province">{{item}}</view>
+                  <view class="province">{{item.provinceName}}</view>
                 </view>
                 <view class="time" style="margin-top:4rpx;">{{item.beginTime}}</view>
               </view>
@@ -63,7 +63,7 @@
         })
       },
       // 收藏的接口
-      async clickCollect(index){
+      clickCollect(index){
         var _this=this
         // 弹出提示框
         wx.showModal({

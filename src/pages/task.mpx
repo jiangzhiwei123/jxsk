@@ -16,7 +16,7 @@
             <view class="conHead">{{dataList.activityTitle}}</view>
             <view class="conAddress">
                 <view></view>
-                <view wx:for="{{dataList.astrictAdds}}" wx:key="{{index}}">{{item}}</view>
+                <view wx:for="{{dataList.astrictAdds}}" wx:key="{{index}}">{{item.provinceName}}</view>
             </view>
             <view class="conText">
                 <view wx:for="{{dataList.labels}}" wx:key="{{index}}">{{item.labelName}}</view>
@@ -26,11 +26,30 @@
                 <view>{{dataList.browseQty}}</view>
                 <view>{{dataList.beginTime}}</view>
             </view>
+            <!-- QQ号 -->
             <view class="conTack">
-                <view></view>
-                <view wx:if="{{dataList.weChat!=null}}">QQ/微信:{{dataList.weChat}}</view>
-                <view>点击合作后时候显示</view>
+                <view class="logo"></view>
+                <view class="{{dataList.weChat!=null||TeamWorkData.wechat!=null?'center':''}}" wx:if="{{dataList.weChat!=null||TeamWorkData.wechat!=null}}" >
+                    <!-- 微信 -->
+                    <view style="margin-bottom:8rpx;display:flex;justify-content:space-between;" wx:if="{{dataList.weChat||TeamWorkData.wechat}}">
+                        <view  >微信:{{dataList.weChat?dataList.weChat:TeamWorkData.wechat}}</view>
+                        <view  class="grey" bindtap="copyTextWx">一键粘贴微信号</view>
+                    </view>
+                    <!-- QQ号 -->
+                    <view style="display:flex;justify-content:space-between;" wx:if="{{dataList.qqNum||TeamWorkData.qqnum}}">
+                        <view >QQ:{{dataList.qqNum?dataList.qqNum:TeamWorkData.qqnum}}</view>
+                        <view class="grey" bindtap="copyTextQq">一键粘贴qq号</view>
+                    </view>  
+                </view>
+                <view class="grey" wx:if="{{!dataList.weChat&&!TeamWorkData.wechat}}">点击合作后时候显示</view>
             </view>
+            <!-- 微信号 -->
+            <!-- <view class="conTack">
+                <view></view>
+                <view wx:if="{{dataList.weChat!=null}}" style="flex:1;">微信:{{dataList.weChat}}</view>
+                <view wx:if="{{dataList.weChat!=null}}" class="grey" bindtap="copyText">一键粘贴联系方式</view>
+                <view class="grey" wx:if="{{dataList.weChat==null}}">点击合作后时候显示</view>
+            </view> -->
         </view>
         <!-- 本方提供 -->
         <view class="support">
@@ -59,7 +78,7 @@
         <view class="btns">
             <button class="share" plain open-type='share' style="border:none;width:22px;height:22px;" bindtap="shareData"></button>
             <view class="{{dataList.favorites?'haveCollect':'collect'}}" bindtap='collectTask'></view>
-            <button disabled="{{dataList.weChat}}" bindtap="teamWork"  class="{{dataList.weChat?'isCheck':'noCheck'}}">我要合作</button>
+            <button disabled="{{dataList.weChat||TeamWorkData.wechat}}" bindtap="teamWork"  class="{{dataList.weChat||TeamWorkData.wechat?'isCheck':'noCheck'}}">我要合作</button>
         </view>
     </view>
 </template>
@@ -82,7 +101,11 @@
         isTeamBtn:false,
         weChat:'',
         // 接受首页传进来的id值
-        getSyFrom:''
+        getSyFrom:'',
+        // 活动地区code
+        activeCode:35,
+        // 地区随机数
+        ranNum:Number
     },
     // 转发功能
     onShareAppMessage(res) {
@@ -102,8 +125,10 @@
         }    
     },
     // 页面隐藏的时候
-    onLoad (p) { 
-        this.getList(p)
+    async onLoad (p) { 
+        wx.showLoading({title: '加载中',})
+        await this.taskData(p.id)
+        wx.hideLoading()
         this.getSyFrom = p.from
         console.log("我是onLoad的时候打印的")
         console.log(this.getSyFrom)
@@ -111,16 +136,55 @@
         //     console.log(343434343443)
         //     this.imgNumber=true
         // }
+        // this.ranNum=this.dataList.astrictAdds.length
+        console.log(77777777777777,this.dataList)
         console.log(555555555555555555555,p)
     },
     onShow(){
         console.log("我是onShow的时候打印的")
     },
+    onUnload(){
+        // 清空数据
+        this.clearTeamWorkData()
+        console.log("看看数据清空能不能走到我这里")
+    },
     getList(p){
         // 根据id获取发布的详细信息
-        this.taskData(p.id)
+        
     },
     methods: {
+        // 一键粘贴微信号
+        copyTextWx(e){
+            console.log(e)
+            wx.setClipboardData({
+            data:this.dataList.weChat?this.dataList.weChat:this.TeamWorkData.wechat,
+            success(res){
+                wx.getClipboardData({
+                success: (result)=>{
+                    wx.showToast({
+                    title: '复制成功'
+                    })
+                }
+                })
+            }
+            })
+        },
+        //一键粘贴QQ号
+        copyTextQq(e){
+            console.log(e)
+            wx.setClipboardData({
+            data:this.dataList.qqNum?this.dataList.qqNum:this.TeamWorkData.qqnum,
+            success(res){
+                wx.getClipboardData({
+                success: (result)=>{
+                    wx.showToast({
+                    title: '复制成功'
+                    })
+                }
+                })
+            }
+            })
+        },
         // 点击转发的时候
         async shareData(){
             this.shareId = await this.dataList.id
@@ -142,8 +206,8 @@
             //     }
             // })
         },
-        ...store.mapMutations(['updateStatus','updateId']),
-        ...store.mapActions(['StoreTeamWork','taskData','changeCollect','ShareActive']),
+        ...store.mapMutations(['updateStatus','updateId','clearTeamWorkData']),
+        ...store.mapActions(['StoreTeamWork','taskData','changeCollect','ShareActive','TeamWork']),
         // 点击图片预览放大
         biggerImg(index){
             console.log(this.dataList.imageUrl[index])
@@ -158,15 +222,19 @@
             this.isTeamBtn = true
             console.log(555555555555555555555,this.userMold)
             // this.StoreTeamWork(this.taskId)
-            const res = await Http.get({
-                url:'/user/loadUserWechatByUserId',
-                data:{
-                     activityId:this.dataList.id
-                }
-            })
-            this.teamData = res
-            this.weChat = res.wechat
-            this.taskData(this.dataList.id)     
+            // /sysuser/loadUserWechatByCode
+            // const res = await Http.get({
+            //     url:'/sysuser/loadUserWechatByCode',
+            //     data:{
+            //         activityId:this.dataList.id,
+            //         code:this.dataList.astrictAdds[0].code
+            //     }
+            // })
+            await this.TeamWork(this.dataList.id)
+            this.teamData = await this.TeamWorkData
+            console.log(111111111111,this.TeamWorkData)
+            // this.weChat = this.TeamWorkData.wechat
+            // this.taskData(this.dataList.id)     
             if(this.teamData.carrentParNum==3){
                 wx.showModal({
                     title: '提示',
@@ -237,7 +305,7 @@
         }
     },
     computed: {
-        ...store.mapState(['token','dataList','taskId','imgArray','userMold','wxChat','widthImg'])
+        ...store.mapState(['token','dataList','taskId','imgArray','userMold','wxChat','widthImg','contactType','addArray','TeamWorkData'])
     }
 
   })
@@ -359,25 +427,28 @@
                 border-radius: 10rpx;
                 view{
                     font-size: 28rpx;
-                    &:nth-of-type(1){
+                    // &:nth-of-type(2){
+                    //     flex:1;
+                    // }
+                }
+                .center{
+                    flex:1;
+                }
+                 .logo{
                         background-image: url("../images/联系方式.png");
                         background-size: 100% 100%;
                         width: 36rpx;
                         height: 38rpx;
                         margin-right: 20rpx;
                     }
-                    &:nth-of-type(2){
-                        flex:1;
-                    }
-                    &:nth-of-type(3){
-                       font-size: 22rpx;
-                       width: 222rpx;
-                       height: 42rpx;
-                       color:#6D8B91;
-                       line-height: 42rpx;
-                       text-align: center;
-                       background: #F0F3F3;
-                    }
+                .grey{      
+                    font-size: 22rpx;
+                    width: 222rpx;
+                    height: 42rpx;
+                    color:#6D8B91;
+                    line-height: 42rpx;
+                    text-align: center;
+                    background: #F0F3F3;
                 }
             }
         }
