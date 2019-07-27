@@ -5,7 +5,7 @@
                    imgSrc="{{src}}" bindload="cropperload"
                    bindimageload="loadimage"
     ></image-cropper>
-    <view class="button text-center text-white text-lg" bindtap="startCut">
+    <view class="{{isClick?'button':'white'}} text-center text-white text-lg" bindtap="startCut" disabled="{{isClick}}">
       确定
     </view>
 
@@ -22,7 +22,9 @@
     data: {
       src: '',
       userIcon:"",
-      imageType:""
+      imageType:"",
+      isClick:true,
+      count:0
     },
     computed: {
       ...store.mapState(['token'])
@@ -62,6 +64,10 @@
     },
     ...store.mapMutations(['addImg','clearImg','addIdentify']),
     startCut(e) {
+      this.count++
+      this.isClick = false
+      if(this.count<2){
+        console.log( this.count)
       var _this = this
       this.cropper.pushImg()
       this.cropper.getImg((e) => {
@@ -127,6 +133,8 @@
           })
           
       })
+      }
+      
 
     }
 
@@ -141,6 +149,22 @@
      */
     height: 100px;
     background: #48CFE7;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .white {
+    /**
+     * 为了兼容webstorm不兼容rpx单位
+     * webpack配置了px转rpx
+     * px会在编译阶段自动替换为rpx
+     */
+    height: 100px;
+    background: #ddd;
     position: absolute;
     bottom: 0;
     width: 100%;

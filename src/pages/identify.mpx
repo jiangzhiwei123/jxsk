@@ -8,7 +8,9 @@
           <view class="head">加v表示,提升公信力,信息审核更易过</view>
           <!-- 上传文件部分 -->
           <view class="bgColor" bindtap="upImg">
-            <image src="{{identify}}" wx:if="{{identify!=''}}" style="height:285rpx;width:430rpx;background-size:100% 100%;"></image>
+            <!-- width: 430px;
+      height: 285px; -->
+            <image src="{{identify}}" wx:if="{{identify!=''}}" style="height:100%;width:100%;background-size:100% 100%;" mode='scaleToFill'></image>
             <!-- 上传图片按钮 -->
             <view class="content" wx:if="{{identify==''}}">
               <view class="picture"></view>
@@ -17,13 +19,13 @@
             <view style="font-size:26rpx;color:rgba(107, 214, 234, 1);position:absolute;top:185rpx;left:112rpx;text-align:center;" wx:if="{{identify==''}}">请上传名片或工牌</view>
           </view>
           <!-- upPhoto部分   -->
-          <view class="{{isShowPhoto?'showImg':'hideImg'}}" style="height:840px;">
-              <view class="photoBtn">
+          <!-- <view class="{{isShowPhoto?'showImg':'hideImg'}}" style="height:840px;">
+              <view class="photoBtn"> -->
                   <!-- <view class="take" bindtap="pic">拍摄照片</view> -->
-                  <view class="select" bindtap="pic">选择照片</view>
+                  <!-- <view class="select" bindtap="pic">选择照片</view>
               </view>
               <button style="background:white;color:#48CFE7;height:88rpx;width:718rpx;margin:0 auto;" bindtap="cancle">取消</button>
-          </view>
+          </view> -->
           <!-- 认证点击按钮 -->
           <button class="btn" bindtap="match" wx:if="{{text=='点击认证'}}">{{text}}</button>
           <button class="grey" wx:if="{{text=='待审核' ||  text=='已驳回'}}">{{text}}</button>
@@ -61,7 +63,9 @@
       rejectReason:'',
       setHeight:Number,
       // 判断是否认证
-      isMatch:Number
+      isMatch:Number,
+      // 记录次数
+      count:0
       // // 屏幕宽度
       // IDwidth:Number,
       // // 获取屏幕高度
@@ -70,11 +74,11 @@
     computed: {
       ...store.mapState(['identify','token','userMold','phoneHeight','phoneWidth']),
     },
-    async onLoad(){
+    onLoad(){
       this.clearIdentify()
-      wx.showLoading({ title: '加载中...' })
-      await this.getData()
-      wx.hideLoading()    
+      // wx.showLoading({ title: '加载中...' })
+      this.getData()
+      // wx.hideLoading()    
     },
     onShareAppMessage(res){
       if (res.from === 'menu') {
@@ -103,11 +107,21 @@
       //     }
       //   })
       // },
-      ...store.mapMutations(['clearIdentify','updateHeight','updateWidth']),
+      ...store.mapMutations(['clearIdentify','updateHeight','updateWidth','updateIdenStatus']),
       // 提交认证
       match(){
         var _this = this
-           wx.showModal({
+        // 用于判断用户是否添加了照片
+        if(this.count<1){
+          wx.showModal({
+              title: '提示',
+              content: '请添加照片',
+              showCancel:false,
+              success(res) {
+              }
+          }) 
+        }else{
+          wx.showModal({
               title: '提示',
               content: '是否提交认证',
               success(res) {
@@ -120,7 +134,9 @@
                       console.log('用户点击取消')
                   }
               }
-          })   
+          })
+        }
+              
       },
       // 上传认证
       matchData(){
@@ -139,32 +155,23 @@
       },
       // 获取认证返回的数据
       async getData(){
+        // console.log("你砍我不是请求到数据了嘛")
         const res = await Http.get({url:'/auth/myAuth'})
-        this.rejectReason = res.data.rejectReason
-        this.text = await res.data.status
-        if(res.data.status=="已认证"){
+         if(!res.data){
+          this.isMatch=0
+          console.log("我的数据是空的")
+        }else  if(res.data.status=="已认证"){
           this.isMatch=1
         }else{
           this.isMatch=0
         }
-        console.log(55555,res)
+        this.rejectReason = res.data.rejectReason
+        this.text = await res.data.status
       },
       // 上传图片
       upImg(){
+          this.count++
           this.text= '点击认证'
-          var _this = this
-          // 获取系统信息
-          wx.getSystemInfo({
-            success(res) {
-                _this.setHeight = res.screenHeight
-            }
-          }),
-          this.isShowPhoto=true
-      },
-      cancle(){
-          this.isShowPhoto=false
-      },
-      pic: function (options) {
           this.isShowPhoto=false
           this.clearIdentify()
           // console.log(this.codeArr)
@@ -180,7 +187,21 @@
                   })
               }
           })
+          var _this = this
+          // 获取系统信息
+          wx.getSystemInfo({
+            success(res) {
+                _this.setHeight = res.screenHeight
+            }
+          }),
+          this.isShowPhoto=true
+      },
+      cancle(){
+          this.isShowPhoto=false
       }
+      // pic: function (options) {
+          
+      // }
     }
   })
 </script>

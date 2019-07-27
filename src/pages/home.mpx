@@ -18,20 +18,22 @@
               <view class="myPub"  bindtap="jumpDetial">
                 <image src="../images/发布 .png"></image>
                 <view>我的发布</view>
-                <view></view>
+                <view class="pic"></view>
               </view>
           <!-- </navigator> -->
           <!-- <navigator url="../pages/collect" hover-class="none"> -->
              <view class="myPub" bindtap="jumpCollect">
                 <image src="../images/收藏.png"></image>
                 <view>我的收藏</view>
-                <view></view>
+                <view class="pic"></view>
              </view>
           <!-- </navigator> -->
           <view class="myPub" bindtap="jumpIdentify">
             <image src="../images/资质认证 - 副本.png"></image>
-            <view>企业身份认证</view>
-            <view></view>
+            <view >企业身份认证</view>
+            <view style="margin-right:40rpx;color:#48cfe7;" wx:if="{{idenStatus=='已认证'&&userMold=='企业'}}">已认证</view>
+            <view style="margin-right:40rpx;color:#A7BABD;" wx:if="{{idenStatus=='未认证'&&userMold=='企业'}}">未认证</view>
+            <view class="pic"></view>
           </view>
           <view class="myPub" style="padding:10rpx 0 10rpx 0;">
             <image src="../images/客服.png"></image>
@@ -41,7 +43,7 @@
           <view class="myPub">
             <image src="../images/合作握手.png"></image>
             <view>商务合作</view>
-            <view></view>
+            <view class="pic"></view>
           </view>
           <view class="myPub" style="padding:10rpx 0 10rpx 0;">
             <image src="../images/意见反馈 (1).png"></image>
@@ -73,7 +75,7 @@
       console.log("homeonshow")
     },
     computed: {
-      ...store.mapState(['token','infoList'])
+      ...store.mapState(['token','infoList','idenStatus','idenStatus','userMold'])
     },
     onShareAppMessage(res){
       if (res.from === 'menu') {
@@ -189,14 +191,14 @@
               font-size: 28rpx;
               color:#46595C;
             }
-            &:nth-of-type(2){
+          }
+          .pic{
               background-image: url("../images/下拉按钮(公告）.png");
               background-size: 100% 100%;
               width: 13rpx;
               height: 26rpx;
               margin-right: 14rpx;
             }
-          }
           // &:nth-of-type(5){
           //   border-bottom:none;
           // }

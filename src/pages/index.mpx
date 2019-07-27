@@ -107,9 +107,13 @@
           <view class="title">【{{item.activityType}}】{{item.activityTitle}}</view>
           <view class="information">
             <!-- 认证图片 -->
-            <view style="width:92rpx;height:28rpx;" class="{{item.userStatus==='已认证'?'had':'noHad'}}"></view>
+            <!-- <view style="width:92rpx;height:28rpx;" class="{{item.userStatus==='已认证'?'had':'noHad'}}"></view> -->
+
             <!-- 姓名 省份 日期 -->
             <view class="person">
+              <!-- <view>11651616165</view> -->
+              <view class="picNo" wx:if="{{item.userStatus=='未认证'&&item.userType=='企业'}}"></view>
+              <view class="picYes" wx:if="{{item.userStatus=='已认证'&&item.userType=='企业'}}"></view>
               <view class="name">{{item.userName}}</view>
               <view class="province" wx:for="{{item.astrictAdds}}" wx:key="{{index}}">{{item.provinceName}}</view>
               <view class="time" style="margin-top:2px;">{{item.beginTime}}</view>
@@ -351,6 +355,7 @@
     },
     async onLoad(options){    
       // this.clearBanner()
+      // console.log("看看打印的数据",store.state.simpleList)
       console.log(11223344556677,options)
       if(options.type=='active'){
             wx.showModal({
@@ -751,16 +756,30 @@
             color:#A7BABD;
             display: flex;
             margin-bottom: 20rpx;
-            .had{
-              background-image: url("../images/认证(1).png");
-              background-size: 100% 100%;
-              margin-right: 14rpx;
+            // .had{
+            //   background-image: url("../images/认证(1).png");
+            //   background-size: 100% 100%;
+            //   margin-right: 14rpx;
+            // }
+            // .noHad{
+            //   display:none;
+            //   // background-image: url("../images/未认证.png");
+            //   // background-size: 100% 100%;
+            //   // margin-right: 14rpx;
+            // }
+            .picYes{
+                background-image: url("../images/认证(1).png");
+                background-size: 100% 100%;
+                width: 90rpx;
+                height: 28rpx;
+                margin-right: 14rpx;
             }
-            .noHad{
-              display:none;
-              // background-image: url("../images/未认证.png");
-              // background-size: 100% 100%;
-              // margin-right: 14rpx;
+            .picNo{
+                background-image: url("../images/未认证.png");
+                background-size: 100% 100%;
+                width: 90rpx;
+                height: 28rpx;
+                margin-right: 14rpx;
             }
             .person{
               flex:1;

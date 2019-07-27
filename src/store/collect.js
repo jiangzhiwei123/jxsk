@@ -20,7 +20,9 @@ const state = {
   // 用来存储取消收藏的id
   arrayDelId:[],
   // 点击取消的活动id
-  delCollectId:''
+  delCollectId:'',
+  // 认证状态
+  // idenStatus:''
 }
 const mutations = {
   updateCollect(state, c) {
@@ -54,6 +56,10 @@ const mutations = {
   updateDelId(state,p) {
     state.delCollectId=p
   }
+  // 存储认证状态
+  // updateIdenStatus(state,p) {
+  //   state.idenStatus=p
+  // }
 }
 const actions = {
   // 用户点击收藏的时候

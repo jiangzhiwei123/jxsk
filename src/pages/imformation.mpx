@@ -41,13 +41,13 @@
                     </view>
                 </view> -->
                 <!-- upPhoto部分   -->
-                <view class="{{isShowPhoto?'show':'hide'}}" style="height:{{screenHeight}}px;">
-                    <view class="photoBtn">
+                <!-- <view class="{{isShowPhoto?'show':'hide'}}" style="height:{{screenHeight}}px;">
+                    <view class="photoBtn"> -->
                         <!-- <view class="take" bindtap="pic">拍摄照片</view> -->
-                        <view class="select" bindtap="pic">选择照片</view>
+                        <!-- <view class="select" bindtap="pic">选择照片</view>
                     </view>
                     <button style="background:white;color:#48CFE7;height:88rpx;width:718rpx;margin:0 auto;" bindtap="cancle">取消</button>
-                </view>
+                </view> -->
                 <!-- 手机号部分 -->
                 <view class="nameBox">
                     <view class="titleText">手机号</view>
@@ -393,14 +393,26 @@
         //    console.log(e)
         },       
         upImg(){
+            wx.chooseImage({
+                count: 1, // 默认9
+                sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+                sourceType: ['album'], // 可以指定来源是相册还是相机，默认二者都有
+                success: function (res) {
+                    // 返回选定照片的本地文件路径列表，tempFilePath可以作为img标签的src属性显示图片
+                    const src = res.tempFilePaths[0]
+                    wx.redirectTo({
+                        url: `../pages/cropper?src=${src}&imageType=log&page=add`
+                    })
+                }
+            })
             var _this = this
             // 获取系统信息
             wx.getSystemInfo({
             success(res) {
                 _this.screenHeight = res.windowHeight
             }
-            }),
-            this.isShowPhoto=true
+            })
+            // this.isShowPhoto=true
         },
         cancle(){
             this.isShowPhoto=false
@@ -429,21 +441,10 @@
                 this.userName_focus = true
             } 
         },
-        // 照片
-        pic: function (options) {
-            wx.chooseImage({
-                count: 1, // 默认9
-                sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
-                sourceType: ['album'], // 可以指定来源是相册还是相机，默认二者都有
-                success: function (res) {
-                    // 返回选定照片的本地文件路径列表，tempFilePath可以作为img标签的src属性显示图片
-                    const src = res.tempFilePaths[0]
-                    wx.redirectTo({
-                        url: `../pages/cropper?src=${src}&imageType=log&page=add`
-                    })
-                }
-            })
-        },
+        // // 照片
+        // pic: function (options) {
+            
+        // },
         fail: function (res) {
             // console.log(res.errMsg)
         }

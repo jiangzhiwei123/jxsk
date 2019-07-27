@@ -37,9 +37,19 @@ const state = {
   addArray:Number,
   isAllAdd:Number,
   // 点击合作以后返回地数据
-  TeamWorkData:[]
+  TeamWorkData:[],
+  // 计算用户发布的图片数量
+  Scount:0
 }
 const mutations = {
+  // 清空图片张数
+  clearAcount(state){
+    state.Scount=0
+  },
+  // 更新用户发布的图片数量
+  addAcount(state){
+    state.Scount++
+  },
   // 更新需求文本框的内容
   updateFirst(state,t){
     state.firstNr=t

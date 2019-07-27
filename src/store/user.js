@@ -17,9 +17,16 @@ const state = {
   // 用户联系方式
   userContact:'',
   // 用户的练习类型
-  contactType:''
+  contactType:'',
+  // 用户认证状太
+  idenStatus:'',
+  // 更新用户的身份 为了效果
+  userStatus:Number
 }
 const mutations = {
+  updateStatusType(state, u) {
+    state.userStatus = u
+  },
   // 更新用户
   updateUser(state, u) {
     state.userMold = u
@@ -37,6 +44,9 @@ const mutations = {
   },
   updateContactType(state, u) {
     state.contactType = u
+  },
+  updateIdenStatus(state, u) {
+    state.idenStatus = u
   }
   // 更用户信息
 
@@ -126,6 +136,14 @@ const actions = {
       url: '/user/loadUserInfo'
     })
     context.commit('updateInfo', res.data)
+    context.commit('updateIdenStatus', res.data.status)
+    if(res.data.userType=='企业'){
+      context.commit('updateStatusType', 1)
+    }else if(res.data.userType=='学生'){
+      context.commit('updateStatusType', 2)
+    }else{
+      context.commit('updateStatusType', 3)
+    }
     if (res.data.userType === '游客') {
       context.commit('updateUser', '')
     } else {

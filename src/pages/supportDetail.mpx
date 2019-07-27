@@ -1,6 +1,6 @@
 <template>
     <form class="detail"  bindsubmit="formSubmit">
-        <view class="content {{isShowPhoto?'indexFixed':''}}" style="margin-top:20rpx;">
+        <view class="content" style="margin-top:20rpx;">
             <!-- title部分 -->
             <view class="title">
                 <image src="{{list.url}}"></image>
@@ -124,13 +124,13 @@
                 </view>
             </view>
             <!-- upPhoto部分   -->
-            <view class="{{isShowPhoto?'showImg':'hideImg'}}" style="padding-top:{{relHeight}}px">
-                <view class="photoBtn">
+            <!-- <view class="{{isShowPhoto?'showImg':'hideImg'}}" style="padding-top:{{relHeight}}px">
+                <view class="photoBtn"> -->
                     <!-- <view class="take" bindtap="pic">拍摄照片</view> -->
-                    <view class="select" catchtap="pic">选择照片</view>
+                    <!-- <view class="select" catchtap="pic">选择照片</view>
                 </view>
                 <button style="background:white;color:#48CFE7;height:88rpx;width:718rpx;margin:0 auto;" bindtap="cancle">取消</button>
-            </view>
+            </view> -->
             <!-- 用户选择联系方式 -->
             <!-- <view class="address" style="margin-bottom:20rpx;">
                 <view style="flex:1;">联系方式</view>
@@ -177,7 +177,7 @@
                 </view>
             </view>
         </view>
-        <button class="publishBtn" bindtap="submitData" formType="submit" wx:if="{{!isShowPhoto}}">保存并发布</button>
+        <button class="publishBtn" bindtap="submitData" formType="submit">保存并发布</button>
     </form>
 </template>
 
@@ -197,7 +197,7 @@
             // 案例类型
             typeCase:'',
             screenHeight:Number,
-            isShowPhoto:false,
+            // isShowPhoto:false,
             descArea: '',
             descSup: '',
             // markCurrent:Number,
@@ -231,7 +231,7 @@
 
         },
         computed:{
-            ...store.mapState(['imgUrl','codeArr','label','idArr','token','codeArr','userMold','LabelArr','provinceName','supTitle','supNeed','supreSource','firstNr','secondNr','thirdNr','fourthNr','fifthNr','sixNr','sevenNr','userContact','contactType']),
+            ...store.mapState(['imgUrl','codeArr','label','idArr','token','codeArr','userMold','LabelArr','provinceName','supTitle','supNeed','supreSource','firstNr','secondNr','thirdNr','fourthNr','fifthNr','sixNr','sevenNr','userContact','contactType','Scount']),
         },
         onShareAppMessage(res){
             if (res.from === 'menu') {
@@ -388,29 +388,18 @@
             //     this.isHide =false
             // },
             // 提交以后清空状态值里面的图片
-            ...store.mapMutations(['clearImg','clearCode','selectLabel','clearId','updateLabelArr','updateSupTitle','updateSource','updateNeed','clearThree','clearProvinceName','clearImg','updateFirst','updateSecond','updateThird','updateFourth','updateFifth','updateSix','updateSeven','updateContact','updateContactType']),
+            ...store.mapMutations(['clearImg','clearCode','selectLabel','clearId','updateLabelArr','updateSupTitle','updateSource','updateNeed','clearThree','clearProvinceName','clearImg','updateFirst','updateSecond','updateThird','updateFourth','updateFifth','updateSix','updateSeven','updateContact','updateContactType','addAcount','clearAcount']),
             ...store.mapActions(['fetchLabel','requestImfor']),
             // 照片
-            pic: function (options) {
-                this.isShowPhoto=false
-                console.log(this.codeArr)
-                wx.chooseImage({
-                    count: 1, // 默认9
-                    sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
-                    sourceType: ['album'], // 可以指定来源是相册还是相机，默认二者都有
-                    success: function (res) {
-                        // 返回选定照片的本地文件路径列表，tempFilePath可以作为img标签的src属性显示图片
-                        const src = res.tempFilePaths[0]
-                        wx.navigateTo({
-                        url: `../pages/cropper?src=${src}&imageType=image&page=support`
-                        })
-                    }
-                })
-            },
+            // pic: function (options) {
+            //     
+            //     console.log(this.codeArr)
+               
+            // },
             // 上传图片
             upImg(){
-                this.count++
-                if(this.imgUrl.length==2 && this.count>2){
+                this.addAcount()
+                if(this.imgUrl.length==2 && this.Scount>2){
                     wx.showModal({
                         title: '提示',
                             content: '最多只能只能上传两张图片',
@@ -424,6 +413,20 @@
                             }
                     })
                     return 
+                }else{
+                    //  this.isShowPhoto=false
+                     wx.chooseImage({
+                        count: 1, // 默认9
+                        sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+                        sourceType: ['album'], // 可以指定来源是相册还是相机，默认二者都有
+                        success: function (res) {
+                            // 返回选定照片的本地文件路径列表，tempFilePath可以作为img标签的src属性显示图片
+                            const src = res.tempFilePaths[0]
+                            wx.navigateTo({
+                            url: `../pages/cropper?src=${src}&imageType=image&page=support`
+                            })
+                        }
+                    })
                 }
                 var _this = this
                 console.log(this.imgUrl.length)
@@ -432,8 +435,8 @@
                 success(res) {
                     _this.screenHeight = res.windowHeight
                 }
-                }),
-                this.isShowPhoto=true
+                })
+                // this.isShowPhoto=true
             },
             cancle(){
                 this.isShowPhoto=false
@@ -478,7 +481,7 @@
                 }else{
                     // 提醒用户是否发布
                     // 弹出提示框
-                    this.count=0
+                    // this.count=0
                     var _this = this
                     wx.showModal({
                         title: '提示',
@@ -486,6 +489,7 @@
                         success(res) {
                             //  var _this=this
                             if (res.confirm) {
+                                _this.clearAcount()
                                 _this.submit()
                                 // 清空图片
                                 _this.clearImg()
@@ -627,22 +631,16 @@
                 this.typeCase='https://jxt-1255675207.cos.ap-chengdu.myqcloud.com/example/case1.jpg'
             }
             this.clearProvinceName()
-            console.log(66666666666666666666666,e)
             this.imageUrl = e.userIco
             // 获取标签数据
             this.fetchLabel(this.changType(this.list.text))
             // 弹窗显示
-    //          state.firstNr = '1.需求资源描述 : '
-    // state.secondNr = '2.时间限制 : '
-    // state.thirdNr = '3.学校限制 : '
-    // state.fourthNr = '4.其他限制 : '
-    // state.fifthNr = '5.提供资源类型(资金或其他) : '
-    // state.sixNr = '6.其他补充 : '
             // 'firstNr','secondNr','thirdNr','fourthNr','fifthNr','sixNr',
             if(this.supTitle!=''||this.firstNr!='1.需求资源描述 : '||this.secondNr!='2.时间限制 : '||this.thirdNr!='3.学校限制 : '||this.fourthNr!='4.其他限制 : '||this.fifthNr!='1.提供资源类型(资金或其他) : '||this.sixNr!='2.其他补充 : '||this.sevenNr!='1.活动内容 : '){
                 console.log(777777777777777)
                 this.ifShow()
             }
+             console.log(66666666666666666666666,e)
             
             // console.log(this.changType(this.list.text))
             // this .updateLabelArr(this.list.text)
@@ -650,6 +648,7 @@
         onShow(){   
             // 数据刷新加载
             this.nameArray = this.provinceName  
+            console.log("看看发动需求onload")
         },
 
   })

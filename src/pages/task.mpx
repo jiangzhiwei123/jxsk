@@ -6,7 +6,8 @@
             <view class="means">
                 <view class="top">
                     <view class="name">{{dataList.userName}}</view>
-                    <view class="pic" wx:if="{{dataList.status=='已认证'}}"></view>
+                    <view class="picNo" wx:if="{{dataList.status=='未认证'&&dataList.userType=='企业'}}"></view>
+                    <view class="picYes" wx:if="{{dataList.status=='已认证'&&dataList.userType=='企业'}}"></view>
                 </view>
                 <view class="bot">{{dataList.position}}</view>
             </view>
@@ -131,7 +132,7 @@
         wx.hideLoading()
         this.getSyFrom = p.from
         console.log("我是onLoad的时候打印的")
-        console.log(this.getSyFrom)
+        console.log(this.dataList)
         // if(this.imgArray.length==1){
         //     console.log(343434343443)
         //     this.imgNumber=true
@@ -344,11 +345,19 @@
                        color:#46595C;
                        margin-right: 25rpx;
                    } 
-                    .pic{
+                    .picYes{
                         background-image: url("../images/认证(1).png");
                         background-size: 100% 100%;
-                        width: 60rpx;
-                        height: 20rpx;
+                        width: 90rpx;
+                        height: 28rpx;
+                        margin-top: 2rpx;
+                    }
+                    .picNo{
+                        background-image: url("../images/未认证.png");
+                        background-size: 100% 100%;
+                        width: 90rpx;
+                        height: 28rpx;
+                        margin-top: 2rpx;
                     }
                 }
                 .bot{

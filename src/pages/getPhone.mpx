@@ -188,6 +188,7 @@
     padding-top: 131rpx;
     padding-bottom: 107rpx;
     text-align: center;
+    height: 100vh;
     .title{
       color:rgba(72, 207, 231, 1);
       font-weight: bold;
