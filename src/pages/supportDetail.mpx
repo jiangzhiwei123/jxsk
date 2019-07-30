@@ -41,31 +41,6 @@
                     <image class="icon" src="../images/下拉按钮(公告）.png"></image>
                 </view>
             </navigator>
-            <!-- 具体范围 -->
-            <!-- <view class="address" bindtap="iconClick">
-                <view>具体范围</view>
-                <view></view>
-                <view class="{{isRotate?'on':''}}">具体范围</view>
-                <view class="icon {{isRotate?'showRotate':''}}"></view>
-            </view> -->
-            <!-- 具体范围2.0版本 -->
-            <!-- <view class="{{isRotate?'show':'hide'}}">
-                <view class="showTop">
-                    <view class="pullCon">
-                    <checkbox-group>
-                        <label class="checkbox" wx:for="{{items}}" wx:key="{{index}}">
-                            <checkbox value="{{item.name}}" checked="{{item.checked}}" />
-                            {{item.value}}
-                        </label>
-                    </checkbox-group>
-                    <input type="text" placeholder="请输入学校名字" placeholder-style="font-size:24rpx;color:#A7BABD;padding:22rpx 0;">
-                </view>
-                <view class="btns">
-                    <view class="redirt">重置</view>
-                    <view class="conf">确认</view>
-                </view>
-                </view>
-            </view> -->
             <!-- 企业需求资源说明 -->
             <view class="explain"  wx:if="{{userMold=='企业'}}">
                 <view class="inputTitle" bindtap="bbbbbbbbbbb">需求资源说明</view>
@@ -231,7 +206,7 @@
 
         },
         computed:{
-            ...store.mapState(['imgUrl','codeArr','label','idArr','token','codeArr','userMold','LabelArr','provinceName','supTitle','supNeed','supreSource','firstNr','secondNr','thirdNr','fourthNr','fifthNr','sixNr','sevenNr','userContact','contactType','Scount']),
+            ...store.mapState(['imgUrl','codeArr','label','idArr','token','codeArr','userMold','LabelArr','provinceName','supTitle','supNeed','supreSource','firstNr','secondNr','thirdNr','fourthNr','fifthNr','sixNr','sevenNr','userContact','contactType','Scount','canclick']),
         },
         onShareAppMessage(res){
             if (res.from === 'menu') {
@@ -388,7 +363,7 @@
             //     this.isHide =false
             // },
             // 提交以后清空状态值里面的图片
-            ...store.mapMutations(['clearImg','clearCode','selectLabel','clearId','updateLabelArr','updateSupTitle','updateSource','updateNeed','clearThree','clearProvinceName','clearImg','updateFirst','updateSecond','updateThird','updateFourth','updateFifth','updateSix','updateSeven','updateContact','updateContactType','addAcount','clearAcount']),
+            ...store.mapMutations(['clearImg','clearCode','selectLabel','clearId','updateLabelArr','updateSupTitle','updateSource','updateNeed','clearThree','clearProvinceName','clearImg','updateFirst','updateSecond','updateThird','updateFourth','updateFifth','updateSix','updateSeven','updateContact','updateContactType','addAcount','clearAcount','updateCanclick']),
             ...store.mapActions(['fetchLabel','requestImfor']),
             // 照片
             // pic: function (options) {
@@ -399,6 +374,7 @@
             // 上传图片
             upImg(){
                 this.addAcount()
+                console.log("看看图片状态可点击是否成功")
                 if(this.imgUrl.length==2 && this.Scount>2){
                     wx.showModal({
                         title: '提示',
@@ -413,7 +389,7 @@
                             }
                     })
                     return 
-                }else{
+                }else if(this.canclick==0){
                     //  this.isShowPhoto=false
                      wx.chooseImage({
                         count: 1, // 默认9
@@ -436,6 +412,8 @@
                     _this.screenHeight = res.windowHeight
                 }
                 })
+                // 点击改变是否可点击的状态
+                this.updateCanclick(1)
                 // this.isShowPhoto=true
             },
             cancle(){
@@ -646,6 +624,7 @@
             // this .updateLabelArr(this.list.text)
         },
         onShow(){   
+            this.updateCanclick(0)
             // 数据刷新加载
             this.nameArray = this.provinceName  
             console.log("看看发动需求onload")

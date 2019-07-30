@@ -39,6 +39,14 @@
         path: '/pages/index'
       }
     },
+    methods: {
+      ...store.mapMutations(['updateCanclick']),
+    },
+    onUnload(){
+      // 页面卸载的时候改变传图的可点击状态
+      console.log("看看我是否卸载了")
+      this.updateCanclick(0)
+    },
     onLoad(options) {
       // 获取到image-cropper对象
       this.cropper = this.selectComponent('#image-cropper')

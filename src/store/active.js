@@ -39,9 +39,15 @@ const state = {
   // 点击合作以后返回地数据
   TeamWorkData:[],
   // 计算用户发布的图片数量
-  Scount:0
+  Scount:0,
+  // 记录是否可点击上传图片的按钮
+  canclick:0
 }
 const mutations = {
+  // 改变可点击的状态
+  updateCanclick(state,t){
+    state.canclick=t
+  },
   // 清空图片张数
   clearAcount(state){
     state.Scount=0

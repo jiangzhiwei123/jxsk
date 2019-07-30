@@ -85,11 +85,8 @@
       wx.hideLoading()
       // loadUserInfo.getAll()
     },
-    async onShow(){
-      await this.requestImfor()
-      // if(this.userMold==='游客'){
-
-      // }
+    onShow(){
+      this.requestImfor()
     },
     onShareAppMessage(res){
       if (res.from === 'menu') {

@@ -1,6 +1,6 @@
 <template>
   <view>
-    <image src="{{caseImg}}" class="picture"></image>
+    <image src="{{caseImg}}" class="picture" mode="widthFix"></image>
   </view>
 </template>
 
